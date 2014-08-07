@@ -1,0 +1,34 @@
+{
+  "name": "laboard",
+  "version": "0.0.0",
+  "authors": [
+    "Julien Bianchi <julien.bianchi@pmsipilot.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.0",
+    "angular-route": "~1.2.16",
+    "angular-ui-router": "~0.2.10",
+    "angular-gravatar": "~0.1.4",
+    "angular-loading-bar": "0.2.*",
+    "angular-animate": "~1.2.16",
+    "angular-draggable": "https://github.com/fatlinesofcode/ngDraggable.git",
+    "angular-bootstrap": "~0.11.0",
+    "angular-marked": "Hypercubed/angular-marked#~0.0.12",
+    "moment": "~2.6.0",
+    "restangular": "~1.4.0",
+    "authenticateJS": "~0.1.1",
+    "bootstrap": "~3.1.1",
+    "font-awesome": "~4.0.3",
+    "font-awesome-animation": "~0.0.5",
+    "jquery": "~2.1.1"
+  }
+}

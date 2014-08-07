@@ -1,0 +1,101 @@
+// TwBS
+@import "../../bower_components/bootstrap/less/bootstrap";
+
+@font-size-base: 13px;
+@font-family-sans-serif: 'Source Sans Pro', sans-serif;
+
+@line-height-base: 20px;
+@line-height-computed: 20px;
+
+@headings-font-weight: 300;
+
+@font-size-h1: floor((@font-size-base * 2.2));
+@font-size-h2: floor((@font-size-base * 1.8));
+@font-size-h3: ceil((@font-size-base * 1.4));
+@font-size-h4: ceil((@font-size-base * 1.25));
+@font-size-h5: @font-size-base;
+@font-size-h6: ceil((@font-size-base * 0.85));
+
+@border-radius-base: 2px;
+@border-radius-large: 2px;
+@border-radius-small: 2px;
+
+@grid-columns: 15;
+@grid-gutter-width: 0;
+
+@panel-body-padding: 5px;
+
+// Font Awesome
+@import "../../bower_components/font-awesome/less/font-awesome";
+
+@fa-font-path: "../font";
+
+@import "scrollbar";
+@import "buttons";
+@import "dock";
+@import "issue";
+@import "navbar";
+@import "panel";
+@import "form";
+
+body {
+  .custom-scrollbar;
+}
+
+body, a, a:active, a:visited, a:hover {
+  color: @text-color;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+.main {
+  position: absolute;
+  top: 55px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 15px;
+    overflow: auto;
+  }
+}
+
+.login {
+  margin: 15px auto;
+  width: 50%;
+}
+
+.spinner-container {
+  width: 80px;
+  text-align: center;
+  margin: 15px auto;
+
+  .fa-spinner {
+    .fa-5x;
+
+    float: none;
+  }
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+[data-ng-click], [data-toggle] {
+  cursor: pointer;
+}
+
+.alert {
+  .fa {
+    float: left;
+    margin-right: 15px;
+  }
+}

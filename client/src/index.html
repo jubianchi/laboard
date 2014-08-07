@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org" id="ng-app" data-ng-app="laboard-frontend">
+<head>
+    <meta charset="utf-8">
+    <title>Laboard</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="assets/images/logo.ico" />
+    <link rel="stylesheet" type="text/css" href="assets/styles/font-awesome-animation.css" />
+    <link rel="stylesheet" type="text/css" href="assets/styles/loading-bar.css" />
+    <link rel="stylesheet" type="text/css" href="assets/styles/main.css" />
+</head>
+
+<body>
+
+<div class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img src="/assets/images/logo.png"/>
+            <a class="navbar-brand" data-ng-bind="project.path_with_namespace"></a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">
+                <li class="dropdown">
+                    <a class="dropdown-toggle pointer" data-toggle="dropdown">
+                        <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
+                        {{ user.name }}
+                        <b class="fa fa-caret-down"></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li data-ng-if="project">
+                            <a data-ng-click="create()"><i class="fa fa-plus"></i> Add column</a>
+                        </li>
+                        <li data-ng-if="project">
+                            <a data-ng-click="switch()"><i class="fa fa-exchange"></i> Switch project</a>
+                        </li>
+
+                        <li class="divider" data-ng-if="project"></li>
+
+                        <li>
+                            <a class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Déconnexion</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="main" data-ui-view></div>
+
+<script src="assets/js/vendor.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

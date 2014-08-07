@@ -1,0 +1,8 @@
+config/client.js
+config/server.json
+node_modules
+bower_components
+/database
+client/public
+client/data
+*.log
