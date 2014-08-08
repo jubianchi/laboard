@@ -3,15 +3,20 @@ angular.module('laboard-frontend')
         function() {
             return {
                 restrict: 'A',
-                link: function($scope, $element) {
+                link: function($scope, $element, $attrs) {
                     var padding = $element.attr('data-column-padding') || 85,
-                        bodyPadding = $element.attr('data-column-body-padding') || 41;
+                        bodyPadding = $element.attr('data-column-body-padding') || 41,
+                        prop = 'height';
+
+                    if(typeof $attrs.columnFluid !== "undefined") {
+                        prop = 'max-' + prop;
+                    }
 
                     var resize = function() {
                         $element
-                            .height($(window).height() - padding)
+                            .css(prop, $(window).height() - padding)
                             .children('.panel-body')
-                                .height($element.height() - bodyPadding);
+                                .css(prop, $(window).height() - padding - bodyPadding);
                     };
 
                     resize();

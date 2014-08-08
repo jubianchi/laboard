@@ -1,0 +1,4 @@
+{
+    "gitlab_url": "http://gitlab.example.com",
+    "data_dir": "../data"
+}

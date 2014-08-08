@@ -20,3 +20,4 @@ application
 require('./service/logger')(application);
 require('./service/auth')(application);
 require('./service/router')(application);
+require('./service/gitlab')(application);

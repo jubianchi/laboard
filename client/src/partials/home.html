@@ -1,19 +1,19 @@
 <div class="content clearfix">
     <div data-ng-if="!project">
-        <div data-column data-column-padding="85" data-column-body-padding="75" class="panel panel-default" style="width: 50%; margin: 0 auto;">
+        <div data-column data-column-padding="85" data-column-body-padding="75" data-column-fluid class="panel panel-default" style="width: 50%; margin: 0 auto;">
             <div class="panel-heading">
                 Projects
                 <span data-ng-if="projects.all.length">({{projects.all.length}} <span data-ng-if="projects.all.length == 0">project</span><span data-ng-if="projects.all.length > 0">projects</span>)</span>
             </div>
 
-            <input type="text" placeholder="Search project" data-ng-model="queryProject" class="search form-control" data-ng-if="projects.all" data-auto-focus/>
+            <input type="text" placeholder="Search project" data-ng-model="queryProject" class="search form-control" data-auto-focus/>
 
             <div class="panel-body" style="padding: 0; overflow: hidden; overflow-y: auto" data-loading="projects.all">
                 <table class="table table-striped table-hover" style="margin: 0;">
                     <tbody>
-                        <tr data-ng-repeat="p in projects.all | filter:queryProject | orderBy:'-last_activity_at'">
+                        <tr data-ng-repeat="p in projects.all | filter:queryProject | orderBy:'-last_activity_at' track by $id(p)">
                             <td data-ng-click="$root.project = p">
-                                <strong>{{p.path_with_namespace}}</strong>
+                                <strong>{{ p.path_with_namespace }}</strong>
                                 <br data-ng-if="p.description"/>
                                 <small data-ng-bind="p.description"></small>
                             </td>
@@ -35,7 +35,7 @@
         <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')">
             <div class="panel-heading">
                 {{column.title}}
-                <span data-ng-if="column.issues.length">({{column.issues.length}} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)</span>
+                <span data-ng-if="column.issues.length">({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)</span>
                 <div class="btn-group" data-ng-prevent-drag="true">
                     <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
@@ -59,9 +59,9 @@
                     <p>Drop some issues in the column.</p>
                 </div>
 
-                <div data-ng-repeat="issue in column.issues | orderBy:'-updated_at' track by issue.id" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column, $data, $index, $event)">
+                <div data-ng-repeat="issue in column.issues | orderBy:'-updated_at' track by $id(issue)" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column, $data, $index, $event)">
                     <div class="panel-heading">
-                        <a href="http://gitlab/{{project.path_with_namespace}}/issues/{{issue.iid}}" target="_blank" data-ng-prevent-drag>#{{issue.iid}}</a>
+                        <a href="http://gitlab/{{ ::project.path_with_namespace }}/issues/{{ ::issue.iid }}" target="_blank" data-ng-prevent-drag>#{{ ::issue.iid }}</a>
                         <div class="btn-group" data-ng-prevent-drag>
                             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
@@ -81,13 +81,13 @@
 
                         <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
                         <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
-                        <p>{{issue.title}}</p>
+                        <p>{{ ::issue.title }}</p>
                     </div>
                     <div class="panel-footer">
-                        <moment datetime="issue.created_at" data-tooltip="{{issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss'}}" data-tooltip-placement="bottom"></moment>
+                        <moment datetime="issue.created_at" data-tooltip="{{ ::issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
                         <strong>
-                            {{issue.milestone.title}}
-                            <small><moment datetime="issue.milestone.due_date" data-tooltip="{{issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss'}}" data-tooltip-placement="bottom"></moment></small>
+                            {{ ::issue.milestone.title }}
+                            <small><moment datetime="issue.milestone.due_date" data-tooltip="{{ ::issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>
                         </strong>
                     </div>
                 </div>

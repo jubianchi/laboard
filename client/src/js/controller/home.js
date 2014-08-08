@@ -6,8 +6,9 @@ angular.module('laboard-frontend')
                 column.issues.push(data);
                 data.to = column.title;
 
-                IssuesRepository.move(data);
-                $scope.theme(data, null);
+                IssuesRepository.move(data).then(function(issue) {
+                    $scope.theme(issue, null);
+                });
             };
 
             $scope.drag = function(column, data, index, evt) {

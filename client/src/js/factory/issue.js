@@ -30,7 +30,6 @@ angular.module('laboard-frontend')
                             .then(
                                 function(issue) {
                                     self.all[issue.id] = issue;
-                                    console.log(issue);
 
                                     deferred.resolve(issue);
                                 },

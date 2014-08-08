@@ -58,4 +58,5 @@ module.exports = function(application) {
 
     require('../controller/auth.js')(router, authenticated, application);
     require('../controller/gitlab.js')(router, authenticated, application);
+    require('../controller/board.js')(router, authenticated, application);
 };

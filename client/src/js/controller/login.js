@@ -16,7 +16,7 @@ angular.module('laboard-frontend')
                 $state.go('login');
             });
 
-            $scope.switch = function() {
+            $scope.switchProject = function() {
                 $rootScope.project = null;
 
                 $state.go('home');
@@ -33,7 +33,8 @@ angular.module('laboard-frontend')
                             $scope.save = function () {
                                 var column = {
                                     title: $scope.title,
-                                    theme: $scope.theme
+                                    theme: $scope.theme,
+                                    issues: []
                                 };
 
                                 ColumnsRepository.add(column)
