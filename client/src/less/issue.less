@@ -20,15 +20,30 @@
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 
+    & > .panel-heading {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
     &:first-child {
       border-top-left-radius: @panel-border-radius;
       border-bottom-left-radius: @panel-border-radius;
+
+      & > .panel-heading {
+        border-top-left-radius: @panel-border-radius - 1;
+      }
     }
 
     &:nth-last-child(1) {
       border-right: 1px solid @panel-default-border;
       border-top-right-radius: @panel-border-radius;
       border-bottom-right-radius: @panel-border-radius;
+
+      & > .panel-heading {
+        border-top-right-radius: @panel-border-radius - 1;
+      }
     }
 
     &.panel-default {

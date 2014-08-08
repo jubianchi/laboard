@@ -5,7 +5,7 @@ angular.module('laboard-frontend')
                 restrict: 'A',
                 link: function($scope, $element, $attrs) {
                     var padding = $element.attr('data-column-padding') || 85,
-                        bodyPadding = $element.attr('data-column-body-padding') || 41,
+                        bodyPadding = $element.attr('data-column-body-padding') || 43,
                         prop = 'height';
 
                     if(typeof $attrs.columnFluid !== "undefined") {
