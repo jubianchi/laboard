@@ -19,8 +19,8 @@ angular.module('laboard-frontend')
     ]);
 
 angular.module('laboard-frontend')
-    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer',
-        function(Restangular, $state, $rootScope, Auth, Referer) {
+    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal',
+        function(Restangular, $state, $rootScope, Auth, Referer, ColumnsRepository, $modal) {
             Restangular.setErrorInterceptor(function(response) {
                 if(response.status === 401) {
                     $rootScope.project = null;
@@ -55,5 +55,38 @@ angular.module('laboard-frontend')
                     isFirstRun = false;
                 }
             });
+
+            $rootScope.switchProject = function() {
+                $rootScope.project = null;
+
+                $state.go('home');
+            };
+
+            $rootScope.create = function() {
+                $modal
+                    .open({
+                        templateUrl: 'partials/column/modal.html',
+                        controller: function($scope, $modalInstance) {
+                            $scope.theme = 'default';
+                            $scope.error = false;
+
+                            $scope.save = function () {
+                                var column = {
+                                    title: $scope.title,
+                                    theme: $scope.theme,
+                                    issues: []
+                                };
+
+                                ColumnsRepository.add(column)
+                                    .then(
+                                        $modalInstance.close,
+                                        function() {
+                                            $scope.error = true;
+                                        }
+                                    );
+                            };
+                        }
+                    });
+            };
         }
     ]);

@@ -15,38 +15,5 @@ angular.module('laboard-frontend')
 
                 $state.go('login');
             });
-
-            $scope.switchProject = function() {
-                $rootScope.project = null;
-
-                $state.go('home');
-            };
-
-            $scope.create = function() {
-                $modal
-                    .open({
-                        templateUrl: 'partials/column/modal.html',
-                        controller: function($scope, $modalInstance) {
-                            $scope.theme = 'default';
-                            $scope.error = false;
-
-                            $scope.save = function () {
-                                var column = {
-                                    title: $scope.title,
-                                    theme: $scope.theme,
-                                    issues: []
-                                };
-
-                                ColumnsRepository.add(column)
-                                    .then(
-                                    $modalInstance.close,
-                                    function() {
-                                        $scope.error = true;
-                                    }
-                                );
-                            };
-                        }
-                    });
-            };
         }
     ]);

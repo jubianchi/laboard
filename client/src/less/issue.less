@@ -9,9 +9,9 @@
 .column {
   .panel;
 
-  &[class*='panel-'] {
-    .panel;
+  margin-bottom: 0px;
 
+  &[class*='panel-'] {
     border-width: 1px;
     border-style: solid;
     border-right: none;
@@ -87,17 +87,24 @@
 
       .alert {
         .fade;
+
+        opacity: 0!important;
       }
     }
 
     .alert {
       .fade;
-      .in;
 
-      margin: 0;
+      display: none;
       border-left: none;
       border-right: none;
       border-top: none;
+
+      &.in {
+        display: block;
+        -webkit-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+      }
     }
   }
 
@@ -106,6 +113,11 @@
       .pull-right;
     }
   }
+}
+
+@-webkit-keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .issue {

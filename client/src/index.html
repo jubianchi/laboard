@@ -15,27 +15,30 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <img src="/assets/images/logo.png"/>
-            <a class="navbar-brand">{{ ::project.path_with_namespace }}</a>
+            <a class="navbar-brand">{{ project.path_with_namespace }}</a>
         </div>
 
         <div class="collapse navbar-collapse">
+            <form class="navbar-form navbar-left">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch">
+                    <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
+                </div>
+            </form>
+
+            <div class="btn-group navbar-left" data-ng-if="project">
+                <button type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+                <button type="button" class="btn btn-default navbar-btn" data-ng-click="create()"><i class="fa fa-plus"></i></button>
+            </div>
+
             <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">
                 <li class="dropdown">
                     <a class="dropdown-toggle pointer" data-toggle="dropdown">
-                        <img class="avatar" data-gravatar-src="::user.email" data-gravatar-size="100">
-                        {{ ::user.name }}
+                        <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
+                        {{ user.name }}
                         <b class="fa fa-caret-down"></b>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li data-ng-if="project">
-                            <a data-ng-click="create()"><i class="fa fa-plus"></i> Add column</a>
-                        </li>
-                        <li data-ng-if="project">
-                            <a data-ng-click="switchProject()"><i class="fa fa-exchange"></i> Switch project</a>
-                        </li>
-
-                        <li class="divider" data-ng-if="project"></li>
-
                         <li>
                             <a class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Déconnexion</a>
                         </li>

@@ -1,17 +1,15 @@
 <div class="content clearfix">
     <div data-ng-if="!project">
-        <div data-column data-column-padding="85" data-column-body-padding="77" data-column-fluid class="panel panel-default" style="width: 50%; margin: 0 auto;">
+        <div data-column data-column-padding="70" data-column-body-padding="77" data-column-fluid class="panel panel-default" style="width: 50%; margin: 0 auto;">
             <div class="panel-heading">
                 Projects
                 <span data-ng-if="projects.all.length">({{projects.all.length}} <span data-ng-if="projects.all.length == 0">project</span><span data-ng-if="projects.all.length > 0">projects</span>)</span>
             </div>
 
-            <input type="text" placeholder="Search project" data-ng-model="queryProject" class="search form-control" data-auto-focus/>
-
             <div class="panel-body" style="padding: 0; overflow: hidden; overflow-y: auto" data-loading="projects.all">
                 <table class="table table-striped table-hover" style="margin: 0;">
                     <tbody>
-                        <tr data-ng-repeat="p in projects.all | filter:queryProject | orderBy:'-last_activity_at' track by $id(p)">
+                        <tr data-ng-repeat="p in projects.all | filter:globalSearch | orderBy:'-last_activity_at' track by $id(p)">
                             <td data-ng-click="$root.project = p">
                                 <strong>{{ p.path_with_namespace }}</strong>
                                 <br data-ng-if="p.description"/>
@@ -32,7 +30,7 @@
             <p>To get started, <a data-ng-click="create()" class="alert-link">create some columns</a> for your projet or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
         </div>
 
-        <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')">
+        <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')" data-ng-controller="ColumnController">
             <div class="panel-heading">
                 {{column.title}}
                 <span data-ng-if="column.issues.length">({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)</span>
@@ -42,24 +40,24 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li><a data-ng-click="edit(column)" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                        <li><a data-ng-click="remove(column)" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
-                        <li><a data-ng-click="move(column, -1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
-                        <li><a data-ng-click="move(column, +1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
+                        <li><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
+                        <li><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
+                        <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
+                        <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop(column, $data, $index, $event)">
+            <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)">
                 <div data-loading="column.issues"></div>
-                <div class="alert alert-default" data-ng-if="column.issues && !column.issues.length">
+                <div class="alert alert-default" data-ng-class="{in: column.issues && !column.issues.length}">
                     <i class="fa fa-bug fa-3x"></i>
                     <h3>No issues</h3>
 
                     <p>Drop some issues in the column.</p>
                 </div>
 
-                <div data-ng-repeat="issue in column.issues | orderBy:'-updated_at' track by $id(issue)" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column, $data, $index, $event)">
+                <div data-ng-repeat="issue in column.issues | filter:globalSearch | orderBy:'-updated_at' track by $id(issue)" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column)" data-ng-controller="IssueController">
                     <div class="panel-heading">
                         <a href="http://gitlab/{{ ::project.path_with_namespace }}/issues/{{ ::issue.iid }}" target="_blank" data-ng-prevent-drag>#{{ ::issue.iid }}</a>
                         <div class="btn-group" data-ng-prevent-drag>
@@ -68,10 +66,10 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                <li><a data-ng-click="theme(issue, 'info')" class="faa-parent animated-hover"><i class="fa fa-info-circle faa-tada text-info"></i> Info</a></li>
-                                <li><a data-ng-click="theme(issue, 'warning')" class="faa-parent animated-hover"><i class="fa fa-pause faa-tada text-warning"></i> Pause</a></li>
-                                <li><a data-ng-click="theme(issue, 'success')" class="faa-parent animated-hover"><i class="fa fa-check faa-tada animated-hover text-success"></i> Check</a></li>
-                                <li><a data-ng-click="theme(issue, 'danger')" class="faa-parent animated-hover"><i class="fa fa-times faa-tada animated-hover text-danger"></i> Reject</a></li>
+                                <li><a data-ng-click="theme('info')" class="faa-parent animated-hover"><i class="fa fa-info-circle faa-tada text-info"></i> Info</a></li>
+                                <li><a data-ng-click="theme('warning')" class="faa-parent animated-hover"><i class="fa fa-pause faa-tada text-warning"></i> Pause</a></li>
+                                <li><a data-ng-click="theme('success')" class="faa-parent animated-hover"><i class="fa fa-check faa-tada animated-hover text-success"></i> Check</a></li>
+                                <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-times faa-tada animated-hover text-danger"></i> Reject</a></li>
                             </ul>
                         </div>
                     </div>
