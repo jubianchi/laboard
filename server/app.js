@@ -17,6 +17,18 @@ application
         next();
     });
 
+application.socket = function(srv) {
+    application.io = require('socket.io')(srv);
+
+    application.io.sockets.on('connection', function (socket) {
+        socket.emit('message', { message: 'welcome to the chat' });
+
+        socket.on('send', function (data) {
+            application.io.sockets.emit('message', data);
+        });
+    });
+};
+
 require('./service/logger')(application);
 require('./service/auth')(application);
 require('./service/router')(application);

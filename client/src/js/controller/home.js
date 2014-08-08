@@ -7,7 +7,10 @@ angular.module('laboard-frontend')
                 data.to = column.title;
 
                 IssuesRepository.move(data).then(function(issue) {
-                    $scope.theme(issue, null);
+                    var old = issue.theme;
+
+                    issue.theme = null;
+                    $scope.theme(issue, old);
                 });
             };
 
@@ -38,8 +41,6 @@ angular.module('laboard-frontend')
                 ColumnsRepository.edit(column)
                     .then(
                         function() {
-                            console.log('moved ' + column.title + ' to ' + column.position + '(' + step + ')');
-
                             $scope.columns.all.forEach(function(col) {
                                 if(col === column) return;
 
@@ -136,6 +137,22 @@ angular.module('laboard-frontend')
 
             $scope.columns = ColumnsRepository;
 
+            $scope.fillColumns = function(column) {
+                if (IssuesRepository.all) {
+                    var issues = [];
+
+                    IssuesRepository.all.forEach(function(issue) {
+                        if (issue.labels.indexOf(column.title.toLowerCase()) > -1) {
+                            if (!column.issues) column.issues = [];
+
+                            issues.push(issue);
+                        }
+                    });
+
+                    column.issues = issues;
+                }
+            };
+
             $scope.$watch(
                 function() {
                     return $scope.columns.all;
@@ -143,28 +160,16 @@ angular.module('laboard-frontend')
                 function() {
                     if ($scope.columns.all) {
                         $scope.columns.all.forEach(function(column) {
-                            var handle = function() {
-                                if (IssuesRepository.all) {
-                                    IssuesRepository.all.forEach(function(issue) {
-                                        if (issue.labels.indexOf(column.title.toLowerCase()) > -1) {
-                                            if (!column.issues) column.issues = [];
-
-                                            column.issues.push(issue);
-                                        }
-                                    });
-
-                                    if (!column.issues) column.issues = [];
-                                }
-                            };
-
                             if (IssuesRepository.all) {
-                                IssuesRepository.all.then(handle);
+                                $scope.fillColumns(column);
                             } else {
                                 $scope.$watch(
                                     function() {
                                         return IssuesRepository.all;
                                     },
-                                    handle
+                                    function() {
+                                        $scope.fillColumns(column);
+                                    }
                                 )
                             }
                         });
@@ -176,5 +181,17 @@ angular.module('laboard-frontend')
                 .success(function(data) {
                     $rootScope.members = $compile(data);
                 });
+
+            socket.on('issue', function(data) {
+                if ($rootScope.project.path_with_namespace === data.namespace + '/' + data.project) {
+                    $rootScope.$apply(function() {
+                        IssuesRepository.add(data.issue);
+
+                        $scope.columns.all.forEach(function(column) {
+                           $scope.fillColumns(column);
+                        });
+                    });
+                }
+            });
         }
     ]);

@@ -9,19 +9,39 @@ angular.module('laboard-frontend')
                                 repository.all = [];
 
                                 _.sortBy(issues, 'iid').forEach(function(issue) {
-                                    issue.labels.forEach(function(label) {
-                                        if (/^state:/.test(label)) {
-                                            issue.theme = label.replace(/^state:/, '');
-                                        }
-                                    });
-
-                                    repository.all[issue.id] = issue;
+                                    repository.add(issue);
                                 });
                             }
                         );
                 },
                 repository = {
                     all: null,
+                    add: function(issue) {
+                        issue.theme = null;
+                        issue.labels.forEach(function(label) {
+                            if (/^state:/.test(label)) {
+                                issue.theme = label.replace(/^state:/, '');
+                            }
+                        });
+
+                        var self = this,
+                            added = false;
+
+                        if(!self.all) {
+                            self.all = [];
+                        }
+
+                        self.all.forEach(function(value, key) {
+                            if(value.id === issue.id) {
+                                self.all[key] = _.assign(self.all[key], issue);
+                                added = true;
+                            }
+                        });
+
+                        if(added === false && issue.id) {
+                            self.all.push(issue);
+                        }
+                    },
                     edit: function(issue) {
                         var self = this,
                             deferred = $q.defer();
@@ -29,7 +49,7 @@ angular.module('laboard-frontend')
                         issue.put()
                             .then(
                                 function(issue) {
-                                    self.all[issue.id] = issue;
+                                    self.add(issue);
 
                                     deferred.resolve(issue);
                                 },

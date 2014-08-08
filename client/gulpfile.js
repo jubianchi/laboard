@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     path = require('path'),
     prefix = require('gulp-autoprefixer');
+    http = require('http');
 
 gulp.task('font-awesome', function() {
     gulp.src('bower_components/font-awesome/fonts/*')
@@ -35,7 +36,8 @@ gulp.task('libs', function() {
         'bower_components/bootstrap/dist/js/bootstrap.js',
         'bower_components/angular-draggable/ngDraggable.js',
         'bower_components/angular-bootstrap/ui-bootstrap.js',
-        'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
+        'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+        'bower_components/socket.io-client/socket.io.js'
     ])
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest('public/assets/js'));
@@ -99,9 +101,14 @@ gulp.task('server', connect.server({
     port: 4242,
     livereload: true,
     middleware: function(connect, opt) {
+        var app = require('../server/app.js'),
+            srv = http.Server(connect);
+
+        app.socket(srv.listen(4343));
+
         return [
             function(req, res, next) {
-                require('../server/app.js').handle(req, res, next);
+                app.handle(req, res, next);
             }
         ]
     }

@@ -106,7 +106,18 @@ module.exports = function(router, authenticated, application) {
                     req,
                     res,
                     function(body) {
-                        res.response.ok(formatIssue(body));
+                        var issue = formatIssue(body);
+
+                        application.io.sockets.emit(
+                            'issue',
+                            {
+                                namespace: req.params.ns,
+                                project: req.params.name,
+                                issue: issue
+                            }
+                        );
+
+                        res.response.ok(issue);
                     }
                 )
             );
