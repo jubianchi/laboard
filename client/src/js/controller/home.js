@@ -7,10 +7,7 @@ angular.module('laboard-frontend')
                 data.to = column.title;
 
                 IssuesRepository.move(data).then(function(issue) {
-                    var old = issue.theme;
-
-                    issue.theme = null;
-                    $scope.theme(issue, old);
+                    $scope.theme(issue, null);
                 });
             };
 
