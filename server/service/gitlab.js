@@ -75,7 +75,7 @@ module.exports = function(application) {
             all: function(token, callback) {
                 var url = this.url();
 
-                return client.get(token, url, callback);
+                return client.get(token, url, {'per_page': 100}, callback);
             }
         },
         issue: {
@@ -103,7 +103,7 @@ module.exports = function(application) {
             all: function(token, namespace, project, callback) {
                 var url = this.url(namespace, project);
 
-                return client.get(token, url, callback);
+                return client.get(token, url, {'per_page': 100}, callback);
             },
 
             persist: function(token, namespace, project, issue, callback) {
