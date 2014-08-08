@@ -17,13 +17,6 @@ angular.module('laboard-frontend')
                 repository = {
                     all: null,
                     add: function(issue) {
-                        issue.theme = null;
-                        issue.labels.forEach(function(label) {
-                            if (/^state:/.test(label)) {
-                                issue.theme = label.replace(/^state:/, '');
-                            }
-                        });
-
                         var self = this,
                             added = false;
 
@@ -46,6 +39,14 @@ angular.module('laboard-frontend')
                         var self = this,
                             deferred = $q.defer();
 
+                        self.all.forEach(function(value, key) {
+                            if(value.id === issue.id) {
+                                $rootScope.$apply(function() {
+                                    issue = _.assign(self.all[key], issue);
+                                });
+                            }
+                        });
+
                         issue.put()
                             .then(
                                 function(issue) {
@@ -61,32 +62,40 @@ angular.module('laboard-frontend')
                         return deferred.promise;
                     },
                     move: function(issue) {
-                        if (!issue.from || !issue.to) return;
+                        var self = this,
+                            deferred = $q.defer();
 
-                        issue.labels.forEach(function(label, key) {
-                            if (label === issue.from.toLowerCase()) {
-                                issue.labels.splice(key, 1);
-                            }
-                        });
+                        issue.customPUT(issue, 'move')
+                            .then(
+                                function(issue) {
+                                    self.add(issue);
 
-                        issue.labels.push(issue.to.toLowerCase());
+                                    deferred.resolve(issue);
+                                },
+                                function(err) {
+                                    deferred.reject(err);
+                                }
+                            );
 
-                        return this.edit(issue);
+                        return deferred.promise;
                     },
-                    theme: function(issue, old) {
-                        old = 'state:' + (old || 'default');
+                    theme: function(issue) {
+                        var self = this,
+                            deferred = $q.defer();
 
-                        issue.labels.forEach(function(label, key) {
-                            if ([old, 'state:' + issue.theme].indexOf(label) > -1) {
-                                issue.labels.splice(key, 1);
-                            }
-                        });
+                        issue.customPUT(issue, 'theme')
+                            .then(
+                                function(issue) {
+                                    self.add(issue);
 
-                        if (issue.theme) {
-                            issue.labels.push('state:' + issue.theme);
-                        }
+                                    deferred.resolve(issue);
+                                },
+                                function(err) {
+                                    deferred.reject(err);
+                                }
+                            );
 
-                        return this.edit(issue);
+                        return deferred.promise;
                     }
                 };
 

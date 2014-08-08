@@ -53,6 +53,10 @@ module.exports = function(application) {
             res.error(err, 401);
         };
 
+        res.error.notAcceptable = function(err) {
+            res.error(err, 406);
+        };
+
         next();
     });
 

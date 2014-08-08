@@ -4,7 +4,7 @@ angular.module('laboard-frontend')
             return {
                 restrict: 'A',
                 link: function($scope, $element, $attrs) {
-                    var padding = $element.attr('data-column-padding') || 85,
+                    var padding = $element.attr('data-column-padding') || 70,
                         bodyPadding = $element.attr('data-column-body-padding') || 43,
                         prop = 'height';
 
