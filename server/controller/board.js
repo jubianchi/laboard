@@ -32,6 +32,7 @@ module.exports = function(router, authenticated, application) {
             if (!columns[column.title]) {
                 columns[column.title] = {
                     title: column.title,
+                    closable: !!column.closable,
                     position: column.position || 0,
                     theme: column.theme || 'default'
                 };
@@ -61,6 +62,7 @@ module.exports = function(router, authenticated, application) {
             if (columns[column.title]) {
                 if (typeof column.theme !== "undefined") columns[column.title].theme = column.theme;
                 if (typeof column.position !== "undefined") columns[column.title].position = column.position;
+                if (typeof column.closable !== "undefined") columns[column.title].closable = !!column.closable;
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 

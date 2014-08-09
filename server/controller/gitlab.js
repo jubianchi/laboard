@@ -247,4 +247,36 @@ module.exports = function(router, authenticated, application) {
             }
         }
     );
+
+    router.put('/projects/:ns/:name/issues/:id/close',
+        authenticated,
+        function(req, res) {
+            var issue = req.body;
+            
+            application.gitlab.issue.close(
+                req.user.private_token,
+                req.params.ns,
+                req.params.name,
+                issue,
+                callback(
+                    req,
+                    res,
+                    function(body) {
+                        var issue = formatIssue(body);
+
+                        application.io.sockets.emit(
+                            'issue.close',
+                            {
+                                namespace: req.params.ns,
+                                project: req.params.name,
+                                issue: issue
+                            }
+                        );
+
+                        res.response.ok(issue);
+                    }
+                )
+            );
+        }
+    );
 };

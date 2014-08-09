@@ -57,10 +57,13 @@ angular.module('laboard-frontend')
                         templateUrl: 'partials/column/modal.html',
                         controller: function($scope, $modalInstance) {
                             $scope.edit = true;
+                            $scope.closable = column.closable || false;
                             $scope.theme = column.theme || 'default';
+                            $scope.title = column.title;
 
                             $scope.save = function () {
                                 column.theme = $scope.theme;
+                                column.closable = $scope.closable;
 
                                 ColumnsRepository.edit(column)
                                     .then(
@@ -155,6 +158,17 @@ angular.module('laboard-frontend')
                             }
                         });
                 }
+            };
+
+            $scope.close = function(issue) {
+                IssuesRepository.close(issue)
+                    .then(function() {
+                        var key = $scope.column.issues.indexOf(issue);
+
+                        if (key > -1) {
+                            $scope.column.issues.splice(key, 1);
+                        }
+                    });
             };
 
             $scope.$watch(

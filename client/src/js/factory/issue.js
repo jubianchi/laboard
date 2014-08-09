@@ -94,6 +94,24 @@ angular.module('laboard-frontend')
                             );
 
                         return deferred.promise;
+                    },
+                    close: function(issue) {
+                        var self = this,
+                            deferred = $q.defer();
+
+                        issue.customPUT(issue, 'close')
+                            .then(
+                                function(issue) {
+                                    self.add(issue);
+
+                                    deferred.resolve(issue);
+                                },
+                                function(err) {
+                                    deferred.reject(err);
+                                }
+                            );
+
+                        return deferred.promise;
                     }
                 };
 

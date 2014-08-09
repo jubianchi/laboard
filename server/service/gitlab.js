@@ -110,6 +110,14 @@ module.exports = function(application) {
                 var url = this.url(namespace, project, issue.id);
 
                 return client.put(token, url, issue, callback);
+            },
+
+            close: function(token, namespace, project, issue, callback) {
+                var url = this.url(namespace, project, issue.id);
+
+                issue.state_event = 'close';
+
+                return client.put(token, url, issue, callback);
             }
         }
     };

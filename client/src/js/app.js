@@ -90,11 +90,13 @@ angular.module('laboard-frontend')
                         controller: function($scope, $modalInstance) {
                             $scope.theme = 'default';
                             $scope.error = false;
+                            $scope.closable = false;
 
                             $scope.save = function () {
                                 var column = {
                                     title: $scope.title,
                                     theme: $scope.theme,
+                                    closable: $scope.closable,
                                     issues: []
                                 };
 
