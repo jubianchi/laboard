@@ -26,8 +26,8 @@
             </form>
 
             <div class="btn-group navbar-left" data-ng-if="project">
-                <button type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
-                <button type="button" class="btn btn-default navbar-btn" data-ng-click="create()"><i class="fa fa-plus"></i></button>
+                <button data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+                <button data-tooltip="Create a new column" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="create()"><i class="fa fa-plus"></i></button>
             </div>
 
             <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">

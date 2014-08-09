@@ -126,23 +126,35 @@ angular.module('laboard-frontend')
                     if (!issue.column) issues.push(issue);
                 });
 
-                $modal
-                    .open({
-                        templateUrl: 'partials/issue/modal.html',
-                        controller: function($scope, $modalInstance) {
-                            $scope.issues = issues;
-                            $scope.import = function(issue) {
-                                if (!column.issues) column.issues = [];
-                                if (!issue.labels) issue.labels = [];
+                if (issues.length) {
+                    $modal
+                        .open({
+                            templateUrl: 'partials/issue/modal.html',
+                            controller: function($scope, $modalInstance) {
+                                $scope.issues = issues;
+                                $scope.import = function(issue) {
+                                    if (!column.issues) column.issues = [];
+                                    if (!issue.labels) issue.labels = [];
 
-                                issue.labels.push('column:' + column.title.toLowerCase());
-                                IssuesRepository.edit(issue)
-                                    .then(function(issue) {
-                                        column.issues.push(issue);
-                                    });
+                                    issue.labels.push('column:' + column.title.toLowerCase());
+                                    IssuesRepository.edit(issue)
+                                        .then(function() {
+                                            var index = issues.indexOf(issue);
+
+                                            if (index > -1) {
+                                                issues.splice(index, 1);
+                                            }
+
+                                            column.issues.push(issue);
+
+                                            if (issues.length === 0) {
+                                                $modalInstance.close();
+                                            }
+                                        });
+                                }
                             }
-                        }
-                    });
+                        });
+                }
             };
 
             $scope.$watch(
