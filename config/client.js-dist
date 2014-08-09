@@ -1,0 +1,7 @@
+angular.module('laboard-frontend')
+    .constant(
+        'LABOARD_CONFIG',
+        {
+            gitlabUrl: 'http://gitlab.example.com'
+        }
+    );

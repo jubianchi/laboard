@@ -41,9 +41,7 @@ angular.module('laboard-frontend')
 
                         self.all.forEach(function(value, key) {
                             if(value.id === issue.id) {
-                                $rootScope.$apply(function() {
-                                    issue = _.assign(self.all[key], issue);
-                                });
+                                issue = _.assign(self.all[key], issue);
                             }
                         });
 
@@ -100,8 +98,6 @@ angular.module('laboard-frontend')
                 };
 
             $rootScope.$watch('project', function() {
-                repository.all = null;
-
                 if ($rootScope.project) {
                     fetch();
                 }

@@ -1,27 +1,4 @@
-<div class="content clearfix">
-    <div data-ng-if="!project">
-        <div data-column data-column-padding="70" data-column-body-padding="77" data-column-fluid class="panel panel-default" style="width: 50%; margin: 0 auto;">
-            <div class="panel-heading">
-                Projects
-                <span data-ng-if="projects.all.length">({{projects.all.length}} <span data-ng-if="projects.all.length == 0">project</span><span data-ng-if="projects.all.length > 0">projects</span>)</span>
-            </div>
-
-            <div class="panel-body" style="padding: 0; overflow: hidden; overflow-y: auto" data-loading="projects.all">
-                <table class="table table-striped table-hover" style="margin: 0;">
-                    <tbody>
-                        <tr data-ng-repeat="p in projects.all | filter:globalSearch | orderBy:'-last_activity_at' track by $id(p)">
-                            <td data-ng-click="$root.project = p">
-                                <strong>{{ p.path_with_namespace }}</strong>
-                                <br data-ng-if="p.description"/>
-                                <small data-ng-bind="p.description"></small>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
+<div class="content clearfix" data-ng-init="switchProject()">
     <div data-ui-view data-loading="columns.all" data-ng-if="project">
         <div class="alert alert-warning" data-ng-if="columns.all && !columns.all.length">
             <i class="fa fa-bars fa-4x fa-rotate-90"></i>
@@ -44,6 +21,10 @@
                         <li><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
                         <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
                         <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
+                        <li class="divider"></li>
+                        <li><a data-ng-click="import()" class="faa-parent animated-hover"><i class="fa fa-arrow-circle-down faa-float"></i> Import issues</a></li>
+                        <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
+                        <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
                     </ul>
                 </div>
             </div>
@@ -59,7 +40,7 @@
 
                 <div data-ng-repeat="issue in column.issues | filter:globalSearch | orderBy:'-updated_at' track by $id(issue)" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column)" data-ng-controller="IssueController">
                     <div class="panel-heading">
-                        <a href="http://gitlab/{{ ::project.path_with_namespace }}/issues/{{ ::issue.iid }}" target="_blank" data-ng-prevent-drag>#{{ ::issue.iid }}</a>
+                        <a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ ::project.path_with_namespace }}/issues/{{ ::issue.iid }}" target="_blank" data-ng-prevent-drag>#{{ ::issue.iid }}</a>
                         <div class="btn-group" data-ng-prevent-drag>
                             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>

@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('HomeController', [
-        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', '$compile', '$http', 'IssuesRepository',
-        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $compile, $http, IssuesRepository) {
+        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal',
+        function($scope, $rootScope, Restangular, ColumnsRepository, $modal) {
             $scope.create = function() {
                 $modal
                     .open({

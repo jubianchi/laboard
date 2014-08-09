@@ -118,6 +118,33 @@ angular.module('laboard-frontend')
                 $scope.column.issues = issues;
             };
 
+            $scope.import = function() {
+                var issues = [],
+                    column = $scope.column;
+
+                IssuesRepository.all.forEach(function(issue) {
+                    if (!issue.column) issues.push(issue);
+                });
+
+                $modal
+                    .open({
+                        templateUrl: 'partials/issue/modal.html',
+                        controller: function($scope, $modalInstance) {
+                            $scope.issues = issues;
+                            $scope.import = function(issue) {
+                                if (!column.issues) column.issues = [];
+                                if (!issue.labels) issue.labels = [];
+
+                                issue.labels.push('column:' + column.title.toLowerCase());
+                                IssuesRepository.edit(issue)
+                                    .then(function(issue) {
+                                        column.issues.push(issue);
+                                    });
+                            }
+                        }
+                    });
+            };
+
             $scope.$watch(
                 function() {
                     return IssuesRepository.all;

@@ -19,8 +19,8 @@ angular.module('laboard-frontend')
     ]);
 
 angular.module('laboard-frontend')
-    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal',
-        function(Restangular, $state, $rootScope, Auth, Referer, ColumnsRepository, $modal) {
+    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal', 'LABOARD_CONFIG',
+        function(Restangular, $state, $rootScope, Auth, Referer, ColumnsRepository, $modal, LABOARD_CONFIG) {
             Restangular.setErrorInterceptor(function(response) {
                 if(response.status === 401) {
                     $rootScope.project = null;
@@ -56,10 +56,31 @@ angular.module('laboard-frontend')
                 }
             });
 
+            var modal;
             $rootScope.switchProject = function() {
-                $rootScope.project = null;
+                var open = function() {
+                    modal = $modal
+                        .open({
+                            templateUrl: 'partials/project/modal.html',
+                            backdrop: !!$rootScope.project || 'static',
+                            keyboard: !!$rootScope.project
+                        });
 
-                $state.go('home');
+                    modal.result
+                        .then(function(project) {
+                            if(!project) {
+                                open();
+                            }
+                        });
+                };
+
+                open();
+            };
+
+            $rootScope.selectProject = function(project) {
+                $rootScope.project = project;
+
+                if (modal) modal.close($rootScope.project)
             };
 
             $rootScope.create = function() {
@@ -88,5 +109,7 @@ angular.module('laboard-frontend')
                         }
                     });
             };
+
+            $rootScope.LABOARD_CONFIG = LABOARD_CONFIG;
         }
     ]);

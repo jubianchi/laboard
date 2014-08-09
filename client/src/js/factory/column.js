@@ -87,8 +87,6 @@ angular.module('laboard-frontend')
                 };
 
             $rootScope.$watch('project', function() {
-                repository.all = null;
-
                 if ($rootScope.project) {
                     fetch();
                 }

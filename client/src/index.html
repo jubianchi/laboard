@@ -15,11 +15,10 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <img src="/assets/images/logo.png"/>
-            <a class="navbar-brand">{{ project.path_with_namespace }}</a>
+            <a target="_blank" class="navbar-brand" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}">{{ project.path_with_namespace }}</a>
         </div>
 
-        <div class="collapse navbar-collapse">
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-left" data-ng-show="project">
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch">
                     <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
@@ -45,7 +44,6 @@
                     </ul>
                 </li>
             </ul>
-        </div>
     </div>
 </div>
 
