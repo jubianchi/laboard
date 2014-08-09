@@ -82,6 +82,7 @@
     }
 
     &.drag-enter {
+      -webkit-transition: all .5s;
       transition: all .5s;
       background-color: lighten(@panel-default-border, 10%);
 
@@ -185,20 +186,32 @@
   }
 
   .panel-heading {
+    a {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 85%;
+      white-space: nowrap;
+    }
+
     .btn-group {
       .pull-right;
     }
   }
 
   .panel-footer {
+    border-top-width: 0;
+
     strong {
       .pull-right;
     }
   }
 
   .panel-body {
-    padding: @panel-body-padding;
-    min-height: 65px;
+    -webkit-transition: height .5s, min-height .5s, padding .5s;
+    transition: height .5s, min-height .5s, padding .5s;
+    height: 0;
+    padding: 0 @panel-body-padding;
+    overflow: hidden;
 
     p {
       text-overflow: ellipsis;
@@ -206,7 +219,21 @@
     }
   }
 
-  &.dragging{
+  &:hover:not(.dragging) {
+    .panel-body {
+      -webkit-transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
+      transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
+      height: 65px;
+      min-height: 65px;
+      padding: @panel-body-padding;
+    }
+
+    .panel-footer {
+      border-top-width: 1px;
+    }
+  }
+
+  &.dragging {
     width: percentage((2 / @grid-columns));
     opacity: 0.5;
     transform: rotate(3deg);
