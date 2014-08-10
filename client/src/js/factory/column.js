@@ -62,6 +62,23 @@ angular.module('laboard-frontend')
 
                         return deferred.promise;
                     },
+                    move: function(column) {
+                        var deferred = $q.defer();
+
+                        column.id = column.title;
+
+                        column.customPUT(column, 'move')
+                            .then(
+                            function(column) {
+                                deferred.resolve(column);
+                            },
+                            function(err) {
+                                deferred.reject(err);
+                            }
+                        );
+
+                        return deferred.promise;
+                    },
                     remove: function(column) {
                         var self = this,
                             deferred = $q.defer();

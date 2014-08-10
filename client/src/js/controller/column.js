@@ -22,7 +22,7 @@ angular.module('laboard-frontend')
             $scope.move = function(step) {
                 $scope.column.position += step;
 
-                ColumnsRepository.edit($scope.column)
+                ColumnsRepository.move($scope.column)
                     .then(
                         function() {
                             $scope.columns.all.forEach(function(column) {
@@ -31,7 +31,7 @@ angular.module('laboard-frontend')
                                 if (column.position === $scope.column.position) {
                                     column.position += -step;
 
-                                    ColumnsRepository.edit(column)
+                                    ColumnsRepository.move(column)
                                         .then(
                                             function() {},
                                             function() {
@@ -194,6 +194,19 @@ angular.module('laboard-frontend')
                             IssuesRepository.add(data.issue);
 
                             $scope.fill();
+                        }
+                    );
+                }
+            );
+
+            socket.on(
+                'column.move',
+                function(data) {
+                    if (data.column.title !== $scope.column.title) return;
+
+                    $rootScope.$apply(
+                        function() {
+                            $scope.column.position = data.to;
                         }
                     );
                 }

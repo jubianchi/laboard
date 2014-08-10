@@ -9,8 +9,12 @@
 
         <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')" data-ng-controller="ColumnController">
             <div class="panel-heading">
-                {{column.title}}
-                <span data-ng-if="column.issues.length">({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)</span>
+                <strong>{{column.title}}</strong>
+                <small data-ng-if="column.issues.length" class="text-muted">
+                    ({{ column.issues.length }}
+                    <span data-ng-if="column.issues.length == 0">issue</span>
+                    <span data-ng-if="column.issues.length > 0">issues</span>)
+                </small>
                 <div class="btn-group" data-ng-prevent-drag="true">
                     <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>

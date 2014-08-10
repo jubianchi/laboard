@@ -252,7 +252,7 @@ module.exports = function(router, authenticated, application) {
         authenticated,
         function(req, res) {
             var issue = req.body;
-            
+
             application.gitlab.issue.close(
                 req.user.private_token,
                 req.params.ns,

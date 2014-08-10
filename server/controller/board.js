@@ -75,6 +75,40 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
+    router.put('/projects/:ns/:name/columns/:id/move',
+        authenticated,
+        function(req, res) {
+            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+                columns = JSON.parse(fs.readFileSync(file)),
+                from = columns[req.params.id].position,
+                to =  req.body.position;
+
+
+            if (typeof req.body.position === 'undefined') {
+                res.error.notAcceptable({
+                    message: 'Not acceptable'
+                });
+            } else {
+                columns[req.params.id].position = to;
+
+                fs.writeFileSync(file, JSON.stringify(columns));
+
+                application.io.sockets.emit(
+                    'column.move',
+                    {
+                        namespace: req.params.ns,
+                        project: req.params.name,
+                        from: from,
+                        to: to,
+                        column: columns[req.params.id]
+                    }
+                );
+
+                res.response.ok(columns[req.params.id]);
+            }
+        }
+    );
+
     router.delete('/projects/:ns/:name/columns',
         authenticated,
         function(req, res) {
