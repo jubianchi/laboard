@@ -62,9 +62,18 @@ module.exports = function(router, authenticated, application) {
             if (columns[column.title]) {
                 if (typeof column.theme !== "undefined") columns[column.title].theme = column.theme;
                 if (typeof column.position !== "undefined") columns[column.title].position = column.position;
-                if (typeof column.closable !== "undefined") columns[column.title].closable = !!column.closable;
+                if (typeof column.closable !== "undefined") columns[column.title].closable = column.closable;
 
                 fs.writeFileSync(file, JSON.stringify(columns));
+
+                application.io.sockets.emit(
+                    'column.edit',
+                    {
+                        namespace: req.params.ns,
+                        project: req.params.name,
+                        column: columns[column.title]
+                    }
+                );
 
                 res.response.ok(column);
             } else {

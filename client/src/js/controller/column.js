@@ -57,7 +57,7 @@ angular.module('laboard-frontend')
                         templateUrl: 'partials/column/modal.html',
                         controller: function($scope, $modalInstance) {
                             $scope.edit = true;
-                            $scope.closable = column.closable || false;
+                            $scope.closable = parseInt(column.closable, 10) || false;
                             $scope.theme = column.theme || 'default';
                             $scope.title = column.title;
 
@@ -207,6 +207,20 @@ angular.module('laboard-frontend')
                     $rootScope.$apply(
                         function() {
                             $scope.column.position = data.to;
+                        }
+                    );
+                }
+            );
+
+            socket.on(
+                'column.edit',
+                function(data) {
+                    if (data.column.title !== $scope.column.title) return;
+
+                    $rootScope.$apply(
+                        function() {
+                            $scope.column.closable = data.column.closable || false;
+                            $scope.column.theme = data.column.theme || 'default';
                         }
                     );
                 }

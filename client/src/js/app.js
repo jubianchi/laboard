@@ -96,7 +96,7 @@ angular.module('laboard-frontend')
                                 var column = {
                                     title: $scope.title,
                                     theme: $scope.theme,
-                                    closable: $scope.closable,
+                                    closable: parseInt(column.closable, 10) || false,
                                     issues: []
                                 };
 
