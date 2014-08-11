@@ -156,16 +156,16 @@ module.exports = function(router, authenticated, application) {
     router.put('/projects/:ns/:name/issues/:id/move',
         authenticated,
         function(req, res) {
-            var issue = req.body,
-                from = issue.from.toLowerCase(),
-                to = issue.to.toLowerCase();
+            var issue = req.body;
 
-            if (!issue.from || !issue.to) {
+            if (!issue.from && !issue.to) {
                 res.error.notAcceptable({
                     message: 'Not acceptable'
                 });
             } else {
-                var old = 'column:' + from,
+                var from = (issue.from || '').toLowerCase(),
+                    to = (issue.to || '').toLowerCase(),
+                    old = 'column:' + from,
                     nw = 'column:' + to;
 
                 issue.labels.forEach(function(label, key) {

@@ -79,7 +79,7 @@ angular.module('laboard-frontend')
                     });
             };
 
-            $scope.remove = function() {
+            $scope.delete = function() {
                 ColumnsRepository.remove($scope.column);
             };
 
@@ -162,6 +162,20 @@ angular.module('laboard-frontend')
 
             $scope.close = function(issue) {
                 IssuesRepository.close(issue)
+                    .then(function() {
+                        var key = $scope.column.issues.indexOf(issue);
+
+                        if (key > -1) {
+                            $scope.column.issues.splice(key, 1);
+                        }
+                    });
+            };
+
+            $scope.remove = function(issue) {
+                issue.from = $scope.column.title;
+                issue.to = null;
+
+                IssuesRepository.move(issue)
                     .then(function() {
                         var key = $scope.column.issues.indexOf(issue);
 

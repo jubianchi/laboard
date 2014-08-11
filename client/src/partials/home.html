@@ -17,8 +17,8 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                        <li><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
+                        <li><a data-ng-click="delete()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
+                        <li><a data-ng-click="drop()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
                         <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
                         <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                         <li class="divider"></li>
@@ -54,7 +54,8 @@
                                 <li><a data-ng-click="theme('warning')" class="faa-parent animated-hover"><i class="fa fa-pause faa-tada text-warning"></i> Pause</a></li>
                                 <li><a data-ng-click="theme('success')" class="faa-parent animated-hover"><i class="fa fa-check faa-tada animated-hover text-success"></i> Check</a></li>
                                 <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-times faa-tada animated-hover text-danger"></i> Reject</a></li>
-                                <li class="divider" data-ng-if="column.closable"></li>
+                                <li class="divider"></li>
+                                <li><a data-ng-click="remove(issue)" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-tada animated-hover text-warning"></i> Remove</a></li>
                                 <li><a data-ng-click="close(issue)" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover text-danger"></i> Close</a></li>
                             </ul>
                         </div>
