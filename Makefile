@@ -1,7 +1,7 @@
 server: install config/server.json
 	cd client && gulp
 
-install: client/node_modules client/bower_components server/node_modules
+install: client/public server/node_modules
 
 .PHONY: server install
 
