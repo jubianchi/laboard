@@ -60,6 +60,10 @@ module.exports = function(router, authenticated, application) {
                 issue.labels.push('theme:' + issue.theme)
             }
 
+            if (issue.labels.length === 0) {
+                issue.labels = [''];
+            }
+
             return issue;
         };
 
@@ -182,6 +186,7 @@ module.exports = function(router, authenticated, application) {
         authenticated,
         function(req, res) {
             var issue = req.body;
+            delete issue['access_token'];
 
             if (!issue.from && !issue.to) {
                 res.error.notAcceptable({
@@ -240,6 +245,7 @@ module.exports = function(router, authenticated, application) {
         authenticated,
         function(req, res) {
             var issue = req.body;
+            delete issue['access_token'];
 
             if (!issue.before && !issue.after) {
                 res.error.notAcceptable({
