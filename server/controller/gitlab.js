@@ -34,15 +34,30 @@ module.exports = function(router, authenticated, application) {
             issue.column = null;
             issue.theme = null;
 
-            (issue.labels || []).forEach(function(label) {
+            (issue.labels || []).forEach(function(label, key) {
                 if (/^column:/.test(label)) {
                     issue.column = label.replace(/^column:/, '');
+                    delete issue.labels[key];
                 }
 
                 if (/^theme:/.test(label)) {
                     issue.theme = label.replace(/^theme:/, '');
+                    delete issue.labels[key];
                 }
             });
+
+            issue.labels = _.filter(issue.labels, function(v) { return v && v.length > 0; });
+
+            return issue;
+        },
+        formatTags = function(issue) {
+            if (issue.column) {
+                issue.labels.push('column:' + issue.column)
+            }
+
+            if (issue.theme) {
+                issue.labels.push('theme:' + issue.theme)
+            }
 
             return issue;
         };
@@ -115,7 +130,7 @@ module.exports = function(router, authenticated, application) {
                 req.user.private_token,
                 req.params.ns,
                 req.params.name,
-                issue,
+                formatTags(issue),
                 callback(
                     req,
                     res,
@@ -150,23 +165,27 @@ module.exports = function(router, authenticated, application) {
                     message: 'Not acceptable'
                 });
             } else {
-                var old = 'column:' + from;
-
-                if (from === to) return;
+                var old = 'column:' + from,
+                    nw = 'column:' + to;
 
                 issue.labels.forEach(function(label, key) {
-                    if ([old, 'column:' + to].indexOf(label) > -1) {
+                    if ([old, nw].indexOf(label) > -1) {
                         issue.labels.splice(key, 1);
                     }
                 });
 
-                issue.labels.push('column:' + to);
+                if (from !== to && to) {
+                    issue.labels.push(nw);
+                    issue.column = to;
+                } else {
+                    issue.column = null;
+                }
 
                 application.gitlab.issue.persist(
                     req.user.private_token,
                     req.params.ns,
                     req.params.name,
-                    issue,
+                    formatTags(issue),
                     callback(
                         req,
                         res,
@@ -204,25 +223,27 @@ module.exports = function(router, authenticated, application) {
             } else {
                 var before = (issue.before || '').toLowerCase(),
                     after = (issue.after || '').toLowerCase(),
-                    old = 'theme:' + (before || 'default');
-
-                if (before === after) return;
+                    old = 'theme:' + (before || 'default'),
+                    nw = 'theme:' + (after || 'default');
 
                 issue.labels.forEach(function(label, key) {
-                    if ([old, 'theme:' + after].indexOf(label) > -1) {
+                    if ([old, nw].indexOf(label) > -1) {
                         issue.labels.splice(key, 1);
                     }
                 });
 
-                if (after) {
-                    issue.labels.push('theme:' + after);
+                if (before !== after && after) {
+                    issue.labels.push(nw);
+                    issue.theme = after;
+                } else {
+                    issue.theme = null;
                 }
 
                 application.gitlab.issue.persist(
                     req.user.private_token,
                     req.params.ns,
                     req.params.name,
-                    issue,
+                    formatTags(issue),
                     callback(
                         req,
                         res,
@@ -257,7 +278,7 @@ module.exports = function(router, authenticated, application) {
                 req.user.private_token,
                 req.params.ns,
                 req.params.name,
-                issue,
+                formatTags(issue),
                 callback(
                     req,
                     res,
