@@ -24,7 +24,7 @@ if(cluster.isMaster) {
 
     app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 
-    var server = app.listen(4242, function() {
+    var server = app.listen(app.config.port, function() {
         app.logger.info('Listening on port %d', server.address().port);
     });
 
