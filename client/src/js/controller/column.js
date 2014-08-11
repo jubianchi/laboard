@@ -3,8 +3,18 @@ angular.module('laboard-frontend')
         '$scope', '$rootScope', 'ColumnsRepository', '$modal', 'IssuesRepository',
         function($scope, $rootScope, ColumnsRepository, $modal, IssuesRepository) {
             $scope.drop = function(issue) {
-                $scope.column.issues.push(issue);
+                var from = issue.from;
+                issue.from = issue.from.title;
                 issue.to = $scope.column.title;
+
+                if (issue.from === issue.to || !issue.to || !issue.from) return;
+
+                $scope.column.issues.push(issue);
+
+                var key = from.issues.indexOf($scope.issue);
+                if (key > -1) {
+                    from.issues.splice(key, 1);
+                }
 
                 IssuesRepository.move(issue)
                     .then(
@@ -12,8 +22,15 @@ angular.module('laboard-frontend')
                             if (issue.theme) {
                                 issue.before = issue.theme;
                                 issue.after = null;
-
                                 IssuesRepository.theme(issue);
+                            }
+                        },
+                        function() {
+                            from.issues.push(issue);
+
+                            var key = $scope.column.issues.indexOf($scope.issue);
+                            if (key > -1) {
+                                $scope.column.issues.splice(key, 1);
                             }
                         }
                     );

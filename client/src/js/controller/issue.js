@@ -3,12 +3,7 @@ angular.module('laboard-frontend')
         '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', '$compile', '$http', 'IssuesRepository',
         function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $compile, $http, IssuesRepository) {
             $scope.drag = function(column) {
-                var key = column.issues.indexOf($scope.issue);
-                $scope.issue.from = column.title;
-
-                if (key > -1) {
-                    column.issues.splice(key, 1);
-                }
+                $scope.issue.from = column;
             };
 
             $scope.theme = function(theme) {
