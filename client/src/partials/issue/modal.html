@@ -20,10 +20,14 @@
             <tr data-ng-repeat="issue in issues | filter:issueSearch | orderBy:'-created_at' track by $id(issue)">
                 <td data-ng-click="import(issue)">
                     <strong>#{{ issue.iid }}</strong> - {{ issue.title }}
-                    <br/>
-                    <small class="pull-right">
-                        <moment datetime="issue.created_at" data-tooltip="{{ ::issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
-                    </small>
+
+                    <div style="margin-top: 15px;">
+                        Created <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
+                        <strong class="pull-right">
+                            {{ issue.milestone.title }}
+                            <small><moment datetime="issue.milestone.due_date" data-tooltip="{{ issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>
+                        </strong>
+                    </div>
                 </td>
             </tr>
         </tbody>
