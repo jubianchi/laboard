@@ -18,4 +18,4 @@ client/bower_components:
 	cd client && bower install
 
 server/node_modules:
-	cd client && npm install
+	cd server && npm install
