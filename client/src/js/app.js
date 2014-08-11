@@ -12,7 +12,7 @@ angular.module('laboard-frontend',[
 angular.module('laboard-frontend')
     .config([
         'cfpLoadingBarProvider',
-        function(cfpLoadingBarProvider, markedProvider) {
+        function(cfpLoadingBarProvider) {
             cfpLoadingBarProvider.includeSpinner = false;
             cfpLoadingBarProvider.includeBar = true;
         }
@@ -96,7 +96,7 @@ angular.module('laboard-frontend')
                                 var column = {
                                     title: $scope.title,
                                     theme: $scope.theme,
-                                    closable: parseInt(column.closable, 10) || false,
+                                    closable: parseInt($scope.closable, 10) || false,
                                     issues: []
                                 };
 
