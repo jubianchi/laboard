@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     concat = require('gulp-concat'),
     path = require('path'),
-    prefix = require('gulp-autoprefixer');
+    prefix = require('gulp-autoprefixer'),
     http = require('http');
 
 gulp.task('font-awesome', function() {

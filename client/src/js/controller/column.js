@@ -196,7 +196,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            socket.on(
+            $rootScope.socket.on(
                 'issue.move',
                 function(data) {
                     var index = [data.from, data.to].indexOf($scope.column.title.toLowerCase());
@@ -213,7 +213,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            socket.on(
+            $rootScope.socket.on(
                 'column.move',
                 function(data) {
                     if (data.column.title !== $scope.column.title) return;
@@ -226,7 +226,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            socket.on(
+            $rootScope.socket.on(
                 'column.edit',
                 function(data) {
                     if (data.column.title !== $scope.column.title) return;

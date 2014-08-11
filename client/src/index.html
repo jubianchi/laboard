@@ -18,39 +18,38 @@
             <a target="_blank" class="navbar-brand" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}">{{ project.path_with_namespace }}</a>
         </div>
 
-            <form class="navbar-form navbar-left" data-ng-show="project">
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch">
-                    <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
-                </div>
-            </form>
-
-            <div class="btn-group navbar-left" data-ng-if="project">
-                <button data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
-                <button data-tooltip="Create a new column" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="create()"><i class="fa fa-plus"></i></button>
+        <form class="navbar-form navbar-left" data-ng-show="project">
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch">
+                <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
             </div>
+        </form>
 
-            <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">
-                <li class="dropdown">
-                    <a class="dropdown-toggle pointer" data-toggle="dropdown">
-                        <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
-                        {{ user.name }}
-                        <b class="fa fa-caret-down"></b>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li>
-                            <a class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Déconnexion</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="btn-group navbar-left" data-ng-if="project">
+            <button data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+            <button data-tooltip="Create a new column" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="create()"><i class="fa fa-plus"></i></button>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">
+            <li class="dropdown">
+                <a class="dropdown-toggle pointer" data-toggle="dropdown">
+                    <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
+                    {{ user.name }}
+                    <b class="fa fa-caret-down"></b>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Déconnexion</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>
 
 <div class="main" data-ui-view></div>
 
 <script src="assets/js/vendor.js"></script>
-<script>var socket = io(location.protocol + '//' + location.hostname + ':4343');</script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

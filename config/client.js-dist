@@ -2,6 +2,7 @@ angular.module('laboard-frontend')
     .constant(
         'LABOARD_CONFIG',
         {
-            gitlabUrl: 'http://gitlab.example.com'
+            gitlabUrl: 'http://gitlab.example.com',
+            socketIoPort: '4343',
         }
     );

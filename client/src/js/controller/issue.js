@@ -29,7 +29,7 @@ angular.module('laboard-frontend')
                     );
             };
 
-            socket.on(
+            $rootScope.socket.on(
                 'issue.theme',
                 function(data) {
                     if (data.issue.id !== $scope.issue.id) return;
