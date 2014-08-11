@@ -32,6 +32,7 @@ angular.module('laboard-frontend')
             $rootScope.socket.on(
                 'issue.theme',
                 function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
                     if (data.issue.id !== $scope.issue.id) return;
 
                     $rootScope.$apply(

@@ -199,6 +199,8 @@ angular.module('laboard-frontend')
             $rootScope.socket.on(
                 'issue.move',
                 function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
+
                     var index = [data.from, data.to].indexOf($scope.column.title.toLowerCase());
 
                     if (index === -1) return;
@@ -216,6 +218,7 @@ angular.module('laboard-frontend')
             $rootScope.socket.on(
                 'column.move',
                 function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
                     if (data.column.title !== $scope.column.title) return;
 
                     $rootScope.$apply(
@@ -229,6 +232,7 @@ angular.module('laboard-frontend')
             $rootScope.socket.on(
                 'column.edit',
                 function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
                     if (data.column.title !== $scope.column.title) return;
 
                     $rootScope.$apply(
