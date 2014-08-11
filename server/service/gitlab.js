@@ -72,10 +72,14 @@ module.exports = function(application) {
                 return client.get(token, url, callback);
             },
 
-            all: function(token, callback) {
+            all: function(token, callback, params) {
                 var url = this.url();
 
-                return client.get(token, url, {'per_page': 100}, callback);
+                if (!params.per_page) {
+                    params.per_page = 100;
+                }
+
+                return client.get(token, url, params, callback);
             }
         },
         issue: {

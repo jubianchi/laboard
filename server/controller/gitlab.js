@@ -1,7 +1,8 @@
 var _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    request = require('request');
+    request = require('request'),
+    q = require('q');
 
 module.exports = function(router, authenticated, application) {
     var callback = function(req, res, callback) {
@@ -65,29 +66,53 @@ module.exports = function(router, authenticated, application) {
     router.get('/projects',
         authenticated,
         function(req, res) {
-            application.gitlab.project.all(
-                req.user.private_token,
-                function (err, resp, body) {
-                    var response = callback(
-                        req,
-                        res,
-                        function(body) {
-                            var projects = _.filter(
-                                body,
-                                function(project) {
-                                    return project.issues_enabled;
-                                }
-                            );
+            var projects = [],
+                page = 0,
+                fetch = function(deferred) {
+                    application.gitlab.project.all(
+                        req.user.private_token,
+                        function (err, resp, body) {
+                            if (err) {
+                                deferred.reject();
+                            } else {
+                                callback(
+                                    req,
+                                    res,
+                                    function(body) {
+                                        if(body.length > 0) {
+                                            projects = projects.concat(
+                                                _.filter(
+                                                    body,
+                                                    function(project) {
+                                                        return !!project.issues_enabled;
+                                                    }
+                                                ).map(function(project) {
+                                                        return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id'])
+                                                    })
+                                            );
 
-                            res.response.ok(projects.map(function(project) {
-                                return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id'])
-                            }));
+                                            fetch(deferred);
+                                        } else {
+                                            deferred.resolve(projects);
+                                        }
+                                    }
+                                )(err, resp, body);
+                            }
+                        },
+                        {
+                            page: (++page)
                         }
                     );
 
-                    response(err, resp, body);
-                }
-            );
+                    return deferred.promise;
+                };
+
+            fetch(q.defer())
+                .then(
+                    function(projects) {
+                        res.response.ok(projects);
+                    }
+                );
         }
     );
 
