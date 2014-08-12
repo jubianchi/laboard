@@ -6,6 +6,8 @@ angular.module('laboard-frontend')
                     var regex = new RegExp(query, 'i');
 
                     return function(issue) {
+                        if (!issue.milestone) return;
+
                         try {
                             return semver.satisfies(issue.milestone.title, query)
                         } catch(e) {
