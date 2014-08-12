@@ -1,5 +1,5 @@
 <div class="content clearfix" data-ng-init="switchProject()">
-    <div data-ui-view data-loading="columns.all" data-ng-if="project">
+    <div data-ui-view data-loading="columns.all" data-ng-if="project" class="clearfix">
         <div class="alert alert-warning" data-ng-if="columns.all && !columns.all.length">
             <i class="fa fa-bars fa-4x fa-rotate-90"></i>
             <h3>No columns</h3>
@@ -9,7 +9,9 @@
 
         <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')" data-ng-controller="ColumnController">
             <div class="panel-heading">
-                <strong>{{column.title}}</strong> <small data-ng-if="column.issues" class="text-muted">({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)
+                <strong>{{column.title}}</strong>
+                <small data-ng-if="column.issues" class="text-muted">
+                    ({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)
                 </small>
                 <div class="btn-group" data-ng-prevent-drag="true">
                     <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
