@@ -3,7 +3,7 @@
         <strong>{{column.title}}</strong>
 
         <small data-ng-if="column.issues" class="text-muted">
-            ({{ column.issues.length }} <span data-ng-if="column.issues.length <= 1">issue</span><span data-ng-if="column.issues.length > 1">issues</span>)
+            ({{ (column.issues | search:globalSearch).length }} <span data-ng-if="(column.issues | search:globalSearch).length <= 1">issue</span><span data-ng-if="(column.issues | search:globalSearch).length > 1">issues</span>)
         </small>
 
         <div class="btn-group" data-ng-prevent-drag="true">
@@ -25,6 +25,6 @@
     </div>
 
     <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="column.issues">
-        <div data-ng-repeat="issue in column.issues | filter:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'partials/issue/issue.html'"></div>
+        <div data-ng-repeat="issue in column.issues | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'partials/issue/issue.html'"></div>
     </div>
 </div>

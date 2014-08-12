@@ -27,7 +27,7 @@
     "restangular": "~1.4.0",
     "authenticateJS": "~0.1.1",
     "bootstrap": "~3.1.1",
-    "font-awesome": "~4.0.3",
+    "font-awesome": "~4.1.0",
     "font-awesome-animation": "~0.0.5",
     "jquery": "~2.1.1",
     "socket.io-client": "automattic/socket.io-client#~1.0.6"

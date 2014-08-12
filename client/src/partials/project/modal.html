@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">
         Projects
-        <small data-ng-if="projects.all.length">({{projects.all.length}} <span data-ng-if="projects.all.length == 0">project</span><span data-ng-if="projects.all.length > 0">projects</span>)</small>
+        <small data-ng-if="projects.all.length">({{ (projects.all | search:projectSearch).length }} <span data-ng-if="(projects.all | search:projectSearch).length <= 1">project</span><span data-ng-if="(projects.all | search:projectSearch).length > 1">projects</span>)</small>
     </h3>
 </div>
 

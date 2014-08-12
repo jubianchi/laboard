@@ -112,6 +112,10 @@ angular.module('laboard-frontend')
                     });
             };
 
+            $rootScope.focusSearch = function() {
+                $('[data-ng-model=globalSearch]').focus();
+            };
+
             $rootScope.LABOARD_CONFIG = LABOARD_CONFIG;
             $rootScope.socket = io(location.protocol + '//' + location.hostname + ':' + (LABOARD_CONFIG.socketIoPort || location.port));
         }
