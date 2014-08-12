@@ -4,6 +4,11 @@ angular.module('laboard-frontend')
         function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $compile, $http, IssuesRepository) {
             $scope.drag = function(column) {
                 $scope.issue.from = column;
+
+                var key = column.issues.indexOf($scope.issue);
+                if (key > -1) {
+                    column.issues.splice(key, 1);
+                }
             };
 
             $scope.theme = function(theme) {

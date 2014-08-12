@@ -1,5 +1,5 @@
-<div class="content clearfix" data-ng-init="switchProject()">
-    <div data-ui-view data-loading="columns.all" data-ng-if="project" class="clearfix">
+<div data-ng-init="switchProject()" data-loading="columns.all">
+    <div data-ng-if="project">
         <div class="alert alert-warning" data-ng-if="columns.all && !columns.all.length">
             <i class="fa fa-bars fa-4x fa-rotate-90"></i>
             <h3>No columns</h3>
@@ -7,78 +7,6 @@
             <p>To get started, <a data-ng-click="create()" class="alert-link">create some columns</a> for your projet or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
         </div>
 
-        <div data-column class="column col-md-3" data-ng-repeat="column in columns.all | orderBy:'position' track by column.title" data-ng-class="'panel-' + (column.theme || 'default')" data-ng-controller="ColumnController">
-            <div class="panel-heading">
-                <strong>{{column.title}}</strong>
-                <small data-ng-if="column.issues" class="text-muted">
-                    ({{ column.issues.length }} <span data-ng-if="column.issues.length == 0">issue</span><span data-ng-if="column.issues.length > 0">issues</span>)
-                </small>
-                <div class="btn-group" data-ng-prevent-drag="true">
-                    <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                        <li><a data-ng-click="delete()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
-                        <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
-                        <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
-                        <li class="divider"></li>
-                        <li><a data-ng-click="import()" class="faa-parent animated-hover"><i class="fa fa-arrow-circle-down faa-float"></i> Import issues</a></li>
-                        <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
-                        <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)">
-                <div data-loading="column.issues"></div>
-
-                <div class="alert alert-default" data-ng-class="{in: column.issues && !column.issues.length}">
-                    <i class="fa fa-bug fa-3x"></i>
-                    <h3>No issues</h3>
-
-                    <p>Drop some issues in the column.</p>
-                </div>
-
-                <div data-ng-repeat="issue in column.issues | filter:globalSearch | orderBy:'-updated_at' track by $id(issue)" class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag(column)" data-ng-controller="IssueController">
-                    <div class="panel-heading clearfix">
-                        <a class="pull-left" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank" data-ng-prevent-drag>
-                            <strong>#{{ issue.iid }}</strong> {{ issue.title }}
-                        </a>
-                        <div class="btn-group" data-ng-prevent-drag>
-                            <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                <li><a data-ng-click="theme('info')" class="faa-parent animated-hover"><i class="fa fa-info-circle faa-tada text-info"></i> Info</a></li>
-                                <li><a data-ng-click="theme('warning')" class="faa-parent animated-hover"><i class="fa fa-pause faa-tada text-warning"></i> Pause</a></li>
-                                <li><a data-ng-click="theme('success')" class="faa-parent animated-hover"><i class="fa fa-check faa-tada animated-hover text-success"></i> Check</a></li>
-                                <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-times faa-tada animated-hover text-danger"></i> Reject</a></li>
-                                <li class="divider"></li>
-                                <li><a data-ng-click="remove(issue)" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada animated-hover text-warning"></i> Unpin</a></li>
-                                <li><a data-ng-click="close(issue)" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover text-danger"></i> Close</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panel-body clearfix">
-                        <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
-                        <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
-
-                        <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
-                        <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
-                        <p>{{ issue.title }}</p>
-                    </div>
-                    <div class="panel-footer">
-                        <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
-                        <strong>
-                            {{ issue.milestone.title }}
-                            <small><moment datetime="issue.milestone.due_date" data-tooltip="{{ issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>
-                        </strong>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="column-container" data-ng-include="'partials/column/column.html'" data-ng-repeat="column in columns.all | orderBy:'position' track by $id(column)"></div>
     </div>
 </div>
