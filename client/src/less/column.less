@@ -14,8 +14,18 @@
   border-bottom: none;
 
   & > .panel-heading {
+    .clearfix;
+  }
+
+  & > .panel-heading > strong {
+    display: block;
     text-overflow: ellipsis;
     overflow: hidden;
+    max-width: 100%;
+  }
+
+  & > .panel-heading > small {
+    .pull-left;
   }
 
   &[class*='panel-'] {
