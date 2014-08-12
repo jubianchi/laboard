@@ -20,13 +20,15 @@
 
         <form class="navbar-form navbar-left" data-ng-show="project">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch" data-ng-mouseenter="globalSearchHelp = true" data-ng-mouseleave="globalSearchHelp = false" data-ng-keyup="globalSearchHelp = false">
-                <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
-                <div class="dropdown" data-ng-class="{open: globalSearchHelp}" data-ng-mouseenter="globalSearchHelp = true" data-ng-mouseleave="globalSearchHelp = false">
+                <div class="dropdown">
+                    <input type="text" class="form-control dropdown-toggle" placeholder="Global search" data-ng-model="globalSearch">
+                    <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times"></i></span>
                     <ul class="dropdown-menu">
-                        <li><a data-ng-click="globalSearch = '@'; focusSearch()"><i class="fa fa-user"></i> Search assignees and authors</a></li>
-                        <li><a data-ng-click="globalSearch = '#'; focusSearch()"><i class="fa fa-slack"></i> Search issue numbers</a></li>
-                        <li><a data-ng-click="globalSearch = ':'; focusSearch()"><i class="fa fa-crosshairs"></i> Search milestones</a></li>
+                        <li class="dropdown-toggle"><a data-ng-click="globalSearch = '@'; focusSearch()"><i class="fa fa-user"></i> Search assignees and authors</a></li>
+                        <li class="dropdown-toggle"><a data-ng-click="globalSearch = '@from '; focusSearch()"><i class="fa fa-user"></i> Search authors</a></li>
+                        <li class="dropdown-toggle"><a data-ng-click="globalSearch = '@to '; focusSearch()"><i class="fa fa-user"></i> Search assignees</a></li>
+                        <li class="dropdown-toggle"><a data-ng-click="globalSearch = '#'; focusSearch()"><i class="fa fa-slack"></i> Search issue numbers</a></li>
+                        <li class="dropdown-toggle"><a data-ng-click="globalSearch = ':'; focusSearch()"><i class="fa fa-crosshairs"></i> Search milestones (semver)</a></li>
                     </ul>
                 </div>
             </div>
