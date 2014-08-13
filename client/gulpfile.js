@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     path = require('path'),
     prefix = require('gulp-autoprefixer'),
+    exec = require('child_process').exec,
     http = require('http');
 
 gulp.task('font-awesome', function() {
@@ -19,29 +20,39 @@ gulp.task('bootstrap', function() {
         .pipe(connect.reload());
 });
 
-var libs;
-gulp.task('libs', function() {
-    gulp.src(libs = [
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/lodash/dist/lodash.js',
-        'bower_components/angular/angular.js',
-        'bower_components/angular-route/angular-route.js',
-        'bower_components/angular-ui-router/release/angular-ui-router.js',
-        'bower_components/restangular/dist/restangular.js',
-        'bower_components/angular-gravatar/build/md5.js',
-        'bower_components/angular-gravatar/build/angular-gravatar.js',
-        'bower_components/angular-loading-bar/build/loading-bar.js',
-        'bower_components/moment/moment.js',
-        'bower_components/authenticateJS/build/authenticate.js',
-        'bower_components/bootstrap/dist/js/bootstrap.js',
-        'bower_components/angular-draggable/ngDraggable.js',
-        'bower_components/angular-bootstrap/ui-bootstrap.js',
-        'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-        'bower_components/socket.io-client/socket.io.js',
-        'bower_components/node-semver/semver.browser.js'
-    ])
-        .pipe(concat('vendor.js'))
-        .pipe(gulp.dest('public/assets/js'));
+var libs = [
+    'bower_components/jquery/dist/jquery.js',
+    'bower_components/lodash/dist/lodash.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-route/angular-route.js',
+    'bower_components/angular-ui-router/release/angular-ui-router.js',
+    'bower_components/restangular/dist/restangular.js',
+    'bower_components/angular-gravatar/build/md5.js',
+    'bower_components/angular-gravatar/build/angular-gravatar.js',
+    'bower_components/angular-loading-bar/build/loading-bar.js',
+    'bower_components/moment/moment.js',
+    'bower_components/authenticateJS/build/authenticate.js',
+    'bower_components/bootstrap/dist/js/bootstrap.js',
+    'bower_components/angular-draggable/ngDraggable.js',
+    'bower_components/angular-bootstrap/ui-bootstrap.js',
+    'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+    'bower_components/socket.io-client/socket.io.js',
+    'bower_components/node-semver/semver.browser.js'
+];
+gulp.task('libs', function(cb) {
+    exec(
+        'cd bower_components/node-semver && make semver.browser.js',
+        function (err, stdout, stderr) {
+            console.log(stdout);
+            console.log(stderr);
+
+            gulp.src(libs)
+                .pipe(concat('vendor.js'))
+                .pipe(gulp.dest('public/assets/js'));
+
+            cb(err);
+        }
+    );
 
     gulp.src([
         'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
@@ -84,7 +95,7 @@ gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
 gulp.task('watch', ['server'], function() {
     var watched = {
         js: js,
-        libs: libs,
+        libs: libs.concat(['bower_components/node-semver/semver.js']),
         less: ['src/less/**/*.less'],
         'font-awesome': ['bower_components/font-awesome/fonts/*'],
         bootstrap: ['bower_components/bootstrap/fonts/*'],
