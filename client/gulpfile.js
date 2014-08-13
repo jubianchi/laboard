@@ -49,22 +49,22 @@ gulp.task('libs', function(cb) {
                 .pipe(concat('vendor.js'))
                 .pipe(gulp.dest('public/assets/js'));
 
+            gulp.src([
+                'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
+                'bower_components/angular-loading-bar/build/loading-bar.css'
+            ])
+                .pipe(gulp.dest('public/assets/styles'));
+
+            gulp.src([
+                'bower_components/nyancat/nyancat.gif',
+                'bower_components/nyancat/nyancat.mp3',
+                'bower_components/nyancat/nyancat.ogg'
+            ])
+                .pipe(gulp.dest('public/assets'));
+
             cb(err);
         }
     );
-
-    gulp.src([
-        'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
-        'bower_components/angular-loading-bar/build/loading-bar.css'
-    ])
-        .pipe(gulp.dest('public/assets/styles'));
-
-    gulp.src([
-        'bower_components/nyancat/nyancat.gif',
-        'bower_components/nyancat/nyancat.mp3',
-        'bower_components/nyancat/nyancat.ogg'
-    ])
-        .pipe(gulp.dest('public/assets'));
 });
 
 gulp.task('less', function() {
