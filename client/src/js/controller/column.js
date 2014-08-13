@@ -96,7 +96,10 @@ angular.module('laboard-frontend')
             };
 
             $scope.delete = function() {
-                return ColumnsRepository.remove($scope.column);
+                ColumnsRepository.remove($scope.column)
+                    .then(function() {
+                        $scope.column.issues.forEach($scope.unpin);
+                    });
             };
 
             $scope.create = function() {

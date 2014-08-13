@@ -37,6 +37,15 @@ module.exports = function(router, authenticated, application) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
+                application.io.sockets.emit(
+                    'column.new',
+                    {
+                        namespace: req.params.ns,
+                        project: req.params.name,
+                        column: columns[column.title]
+                    }
+                );
+
                 res.response.created(column);
             } else {
                 res.error.conflict({
@@ -133,6 +142,15 @@ module.exports = function(router, authenticated, application) {
                 delete columns[column.title];
 
                 fs.writeFileSync(file, JSON.stringify(columns));
+
+                application.io.sockets.emit(
+                    'column.remove',
+                    {
+                        namespace: req.params.ns,
+                        project: req.params.name,
+                        column: col
+                    }
+                );
 
                 res.response.ok(col);
             } else {

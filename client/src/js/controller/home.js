@@ -41,5 +41,35 @@ angular.module('laboard-frontend')
             };
 
             $scope.columns = ColumnsRepository;
+
+            $rootScope.socket.on(
+                'column.new',
+                function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
+
+                    $rootScope.$apply(
+                        function() {
+                            ColumnsRepository.all.push(data.column);
+                        }
+                    );
+                }
+            );
+
+            $rootScope.socket.on(
+                'column.remove',
+                function(data) {
+                    if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
+
+                    $rootScope.$apply(
+                        function() {
+                            ColumnsRepository.all.forEach(function(value, key) {
+                                if(value.title === data.column.title) {
+                                    ColumnsRepository.all.splice(key, 1);
+                                }
+                            });
+                        }
+                    );
+                }
+            );
         }
     ]);
