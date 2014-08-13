@@ -22,7 +22,7 @@ config:
 config/server.json:
 	@cp config/server.json-dist config/server.json
 	@sed -i "s#http://gitlab.example.com#$(GITLAB_URL)#" config/server.json
-	@sed -i "s#"port": 80#"port": $(LABOARD_PORT)#" config/server.json
+	@sed -i "s#\"port\": 80#\"port\": $(LABOARD_PORT)#" config/server.json
 
 config/client.js:
 	@cp config/client.js-dist config/client.js
