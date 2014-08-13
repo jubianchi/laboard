@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .filter('search', [
-        '$filter',
-        function($filter) {
+        '$filter', '$rootScope',
+        function($filter, $rootScope) {
             var searchMilestone = function(query) {
                     var regex = new RegExp(query, 'i');
 
@@ -61,6 +61,9 @@ angular.module('laboard-frontend')
                             } else if (/^@to /.test(query)) {
                                 search = searchAssignee;
                                 query = query.replace(/^@to /, '');
+                            } else if (/^@me$/.test(query)) {
+                                search = searchPeople;
+                                query = $rootScope.user.username;
                             } else {
                                 search = searchPeople;
                                 query = query.replace(/^@/, '');
