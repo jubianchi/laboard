@@ -36,8 +36,7 @@ var libs = [
     'bower_components/angular-draggable/ngDraggable.js',
     'bower_components/angular-bootstrap/ui-bootstrap.js',
     'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-    'bower_components/socket.io-client/socket.io.js',
-    'bower_components/node-semver/semver.browser.js'
+    'bower_components/socket.io-client/socket.io.js'
 ];
 gulp.task('libs', function(cb) {
     exec(
@@ -59,6 +58,13 @@ gulp.task('libs', function(cb) {
         'bower_components/angular-loading-bar/build/loading-bar.css'
     ])
         .pipe(gulp.dest('public/assets/styles'));
+
+    gulp.src([
+        'bower_components/nyancat/nyancat.gif',
+        'bower_components/nyancat/nyancat.mp3',
+        'bower_components/nyancat/nyancat.ogg'
+    ])
+        .pipe(gulp.dest('public/assets'));
 });
 
 gulp.task('less', function() {
