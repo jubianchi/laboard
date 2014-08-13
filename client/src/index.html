@@ -21,7 +21,7 @@
         <form class="navbar-form navbar-left" data-ng-show="project">
             <div class="form-group has-feedback">
                 <div class="dropdown">
-                    <input type="text" class="form-control dropdown-toggle" placeholder="Global search" data-ng-model="globalSearch">
+                    <input type="text" class="form-control dropdown-toggle" placeholder="Global search" data-ng-model="globalSearch" data-ng-disabled="issues.all.length == 0">
                     <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times-circle"></i></span>
                     <ul class="dropdown-menu">
                         <li class="dropdown-toggle"><a data-ng-click="globalSearch = '@'; focusSearch()"><i class="fa fa-user fa-fw"></i> Search assignees and authors</a></li>

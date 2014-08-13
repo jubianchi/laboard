@@ -9,6 +9,8 @@ angular.module('laboard-frontend')
                         if (!issue.milestone) return;
 
                         try {
+                            if (/^[\w\s]+$/.test(query)) throw new Error();
+
                             return semver.satisfies(issue.milestone.title, query)
                         } catch(e) {
                             return regex.test(issue.milestone.title);
@@ -48,7 +50,7 @@ angular.module('laboard-frontend')
                 };
 
             return function(values, query) {
-                if(query) {
+                if(query && values) {
                     if (/^(@|#|:)/.test(query)) {
                         var search;
 
@@ -77,7 +79,7 @@ angular.module('laboard-frontend')
                     }
                 }
 
-                return values;
+                return values || [];
             };
         }
     ]);
