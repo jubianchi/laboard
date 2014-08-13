@@ -2,37 +2,41 @@ angular.module('laboard-frontend')
     .filter('search', [
         '$filter', '$rootScope',
         function($filter, $rootScope) {
-            var searchMilestone = function(query) {
-                    var regex = new RegExp(query, 'i');
+            var escape = function(str) {
+                    return str.replace(/[.^$*+?()[{\\|\]-]/g, '\\$&');
+                },
+                searchMilestone = function(query) {
+                    var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
                         if (!issue.milestone) return;
 
-                        try {
-                            if (/^[\w\s]+$/.test(query)) throw new Error();
-
-                            return semver.satisfies(issue.milestone.title, query)
-                        } catch(e) {
-                            return regex.test(issue.milestone.title);
+                        if (/^[\w\s]+$/.test(query) === false) {
+                            try {
+                                return semver.satisfies(issue.milestone.title, query)
+                            } catch(e) {}
                         }
+
+                        console.log(regex, issue.milestone.title, regex.test(issue.milestone.title));
+                        return regex.test(issue.milestone.title);
                     };
                 },
                 searchAuthor = function(query) {
-                    var regex = new RegExp(query, 'i');
+                    var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
                         return issue.author && (regex.test(issue.author.username) || regex.test(issue.author.name));
                     };
                 },
                 searchAssignee = function(query) {
-                    var regex = new RegExp(query, 'i');
+                    var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
                         return issue.assignee && (regex.test(issue.assignee.username) || regex.test(issue.assignee.name));
                     };
                 },
                 searchPeople = function(query) {
-                    var regex = new RegExp(query, 'i');
+                    var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
                         return (
@@ -42,7 +46,7 @@ angular.module('laboard-frontend')
                     };
                 },
                 searchNumber = function(query) {
-                    var regex = new RegExp(query, 'i');
+                    var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
                         return regex.test(issue.iid);
