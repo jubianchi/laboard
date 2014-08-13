@@ -14,13 +14,14 @@ module.exports = function(application) {
                         application.config.gitlab_url + '/api/v3/user?private_token=' + token.private_token,
                         function (err, resp, body) {
                             if (err) {
-                                req.res.error(err);
+                                done(err);
 
                                 return;
                             }
 
                             if (resp.statusCode !== 200) {
-                                req.res.error.unauthorized(body);
+                                req.res.status(resp.statusCode);
+                                done(err);
 
                                 return;
                             }
