@@ -162,7 +162,7 @@ module.exports = function(router, authenticated, application) {
                         var issue = formatIssue(body);
 
                         application.io.sockets.emit(
-                            'issue',
+                            'issue.move',
                             {
                                 namespace: req.params.ns,
                                 project: req.params.name,

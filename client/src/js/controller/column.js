@@ -220,7 +220,7 @@ angular.module('laboard-frontend')
                 function(data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
 
-                    var index = [data.from, data.to].indexOf($scope.column.title.toLowerCase());
+                    var index = [data.from, data.to, data.issue.column].indexOf($scope.column.title.toLowerCase());
 
                     if (index === -1) return;
 
