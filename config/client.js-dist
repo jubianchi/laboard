@@ -3,6 +3,6 @@ angular.module('laboard-frontend')
         'LABOARD_CONFIG',
         {
             gitlabUrl: 'http://gitlab.example.com',
-            socketIoPort: 80,
+            socketIoPort: 80
         }
     );

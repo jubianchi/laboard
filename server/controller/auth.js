@@ -64,7 +64,7 @@ module.exports = function(router, authenticated, application) {
                     }
                 );
             } else {
-                error.unauthorized({
+                res.error.unauthorized({
                     message: 'Unauthorized'
                 });
             }
