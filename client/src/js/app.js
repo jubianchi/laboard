@@ -19,8 +19,8 @@ angular.module('laboard-frontend')
     ]);
 
 angular.module('laboard-frontend')
-    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal', 'LABOARD_CONFIG',
-        function(Restangular, $state, $rootScope, Auth, Referer, ColumnsRepository, $modal, LABOARD_CONFIG) {
+    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal', 'LABOARD_CONFIG', 'IssuesRepository',
+        function(Restangular, $state, $rootScope, Auth, Referer, ColumnsRepository, $modal, LABOARD_CONFIG, IssuesRepository) {
             Restangular.setErrorInterceptor(function(response) {
                 if(response.status === 401) {
                     $rootScope.project = null;
@@ -70,6 +70,9 @@ angular.module('laboard-frontend')
                         .then(function(project) {
                             if(!project) {
                                 open();
+                            } else {
+                                ColumnsRepository.all = null;
+                                IssuesRepository.all = null;
                             }
                         });
                 };
