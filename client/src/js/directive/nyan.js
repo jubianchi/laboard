@@ -17,33 +17,34 @@ angular.module('laboard-frontend')
                                 left: '-100px',
                                 bottom: 0
                             });
-
-                            konami_index = 0;
-                            $(document).keydown(handler);
                         },
                         start = function() {
                             reset();
 
                             sound.get(0).volume = 0.5;
                             sound.get(0).play();
-                            img.show().animate(
+                            img.animate(
                                 {
-                                    "left": "+=" + parseInt(doc.width() + img.width()) + "px",
-                                    "bottom": "+=" + parseInt(doc.height() + img.height()) + "px"
+                                    "left": parseInt(doc.width() + img.width()),
+                                    "bottom": parseInt(doc.height() + img.height())
                                 },
-                                9000,
-                                function() {
-                                    img.remove();
-                                    sound.remove();
+                                {
+                                    queue: false,
+                                    duration: 9000,
+                                    complete: function() {
+                                        img.remove();
+                                        sound.remove();
 
-                                    reset();
+                                        konami_index = 0;
+                                        doc.on('keydown', handler);
+                                    }
                                 }
                             );
                         },
                         handler = function(e) {
                             if (e.keyCode === konami_keys[konami_index++]) {
                                 if (konami_index === konami_keys.length) {
-                                    $(document).unbind('keydown', arguments.callee);
+                                    doc.off('keydown', handler);
 
                                     body.append(img);
                                     body.append(sound);
@@ -55,7 +56,7 @@ angular.module('laboard-frontend')
                             }
                         };
 
-                    $(document).keydown(handler);
+                    doc.on('keydown', handler);
                 }
             };
         }
