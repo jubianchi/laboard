@@ -1,5 +1,5 @@
 {
     "gitlab_url": "http://gitlab.example.com",
     "data_dir": "../data",
-    "port": 4242
+    "port": 80
 }
