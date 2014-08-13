@@ -32,7 +32,8 @@
     "jquery": "~2.1.1",
     "socket.io-client": "automattic/socket.io-client#~1.0.6",
     "node-semver": "https://github.com/npm/node-semver.git",
-    "nyancat": "https://github.com/jfix/nyancat.git"
+    "nyancat": "https://github.com/jfix/nyancat.git",
+    "lodash": "~2.4.1"
   },
   "resolutions": {
     "angular": "~1.3.0"

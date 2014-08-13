@@ -1,5 +1,4 @@
 var express = require('express'),
-    _ = require('underscore'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     application = module.exports = express();

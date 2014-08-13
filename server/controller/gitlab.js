@@ -1,7 +1,4 @@
-var _ = require('underscore'),
-    fs = require('fs'),
-    path = require('path'),
-    request = require('request'),
+var _ = require('lodash'),
     q = require('q');
 
 module.exports = function(router, authenticated, application) {
@@ -47,7 +44,7 @@ module.exports = function(router, authenticated, application) {
                 }
             });
 
-            issue.labels = _.filter(issue.labels, function(v) { return v && v.length > 0; });
+            issue.labels = issue.labels.filter(function(v) { return v && v.length > 0; });
 
             return issue;
         },
@@ -85,14 +82,13 @@ module.exports = function(router, authenticated, application) {
                                     function(body) {
                                         if(body.length > 0) {
                                             projects = projects.concat(
-                                                _.filter(
-                                                    body,
+                                                body.filter(
                                                     function(project) {
                                                         return !!project.issues_enabled;
                                                     }
                                                 ).map(function(project) {
-                                                        return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id'])
-                                                    })
+                                                    return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id'])
+                                                })
                                             );
 
                                             fetch(deferred);
@@ -132,8 +128,7 @@ module.exports = function(router, authenticated, application) {
                         req,
                         res,
                         function(body) {
-                            var issues = _.filter(
-                                body,
+                            var issues = body.filter(
                                 function(issue) {
                                     return issue.state !== 'closed';
                                 }

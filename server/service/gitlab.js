@@ -1,5 +1,4 @@
-var _ = require('underscore'),
-    request = require('request');
+var request = require('request');
 
 module.exports = function(application) {
     var base = application.config.gitlab_url + '/api/v3',

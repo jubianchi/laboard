@@ -1,7 +1,5 @@
-var _ = require('underscore'),
-    fs = require('fs'),
-    path = require('path'),
-    request = require('request');
+var _ = require('lodash'),
+    fs = require('fs');
 
 module.exports = function(router, authenticated, application) {
     router.get('/projects/:ns/:name/columns',
