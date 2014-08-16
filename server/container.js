@@ -26,7 +26,7 @@ jimple
     .share('auth', function(container) {
         var Auth = require('./lib/auth');
 
-        return new Auth(container.get('config').gitlab_url, container.get('http.client'));
+        return new Auth(container.get('config').gitlab_url, container.get('gitlab'));
     })
     .share('router', function(container) {
         var Router = require('./lib/router'),
@@ -43,7 +43,7 @@ jimple
     .share('server.websocket', function(container) {
         var Websocket = require('./lib/server/websocket');
 
-        return new Websocket(container.get('logger'));
+        return new Websocket(container.get('gitlab'), container.get('gitlab.projects'), container.get('logger'));
     })
     .share('server.http', function(container) {
         var Server = require('./lib/server/http');
@@ -80,9 +80,10 @@ jimple
         return application;
     })
     .share('server', function(container) {
-        var http = container.get('server.http');
+        var http = container.get('server.http'),
+            server = http.start(container.get('app')).server;
 
-        container.get('server.websocket').start(http.start(container.get('app')).server);
+        container.get('server.websocket').start(server);
 
         return http;
     })

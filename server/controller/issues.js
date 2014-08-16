@@ -79,7 +79,7 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
-                        container.get('socket').sockets.emit(
+                        container.get('server.websocket').broadcast(
                             'issue.move',
                             {
                                 namespace: req.params.ns,
@@ -132,7 +132,7 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
-                            container.get('socket').sockets.emit(
+                            container.get('server.websocket').broadcast(
                                 'issue.move',
                                 {
                                     namespace: req.params.ns,
@@ -188,7 +188,7 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
-                            container.get('socket').sockets.emit(
+                            container.get('server.websocket').broadcast(
                                 'issue.theme',
                                 {
                                     namespace: req.params.ns,
@@ -222,7 +222,7 @@ module.exports = function(router, container) {
                     function(body) {
                         var issue = formatIssue(body);
 
-                        container.get('socket').sockets.emit(
+                        container.get('server.websocket').broadcast(
                             'issue.close',
                             {
                                 namespace: req.params.ns,

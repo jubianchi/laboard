@@ -23,7 +23,8 @@
     "request": "^2.39.0",
     "lodash": "~2.4.1",
     "winston": "^0.7.3",
-    "socket.io": "^1.0.6"
+    "socket.io": "^1.0.6",
+    "cookie": "^0.1.2"
   },
   "devDependencies": {
     "atoum.js": "0.0.11"

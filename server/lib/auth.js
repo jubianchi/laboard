@@ -1,4 +1,4 @@
-var auth = module.exports = function auth(url, http) {
+var auth = module.exports = function auth(url, gitlab) {
     var passport = require('passport'),
         Bearer = require('passport-http-bearer').Strategy;
 
@@ -10,27 +10,7 @@ var auth = module.exports = function auth(url, http) {
                     passReqToCallback: true
                 },
                 function(req, token, done) {
-                    http.get(
-                        url + '/api/v3/user?private_token=' + token.private_token,
-                        function (err, resp, body) {
-                            if (err) {
-                                done(err);
-
-                                return;
-                            }
-
-                            if (resp.statusCode !== 200) {
-                                req.res.status(resp.statusCode);
-                                done(err);
-
-                                return;
-                            }
-
-                            done(null, JSON.parse(body));
-                        }
-                    );
-
-
+                    gitlab.auth(token.private_token, req, done);
                 }
             )
         );
@@ -42,9 +22,10 @@ auth.prototype = {
     setup: function (application) {
         application
             .use(this.passport.initialize())
-            .use(this.passport.session())
+            //.use(this.passport.session())
             .use(function(req, res, next) {
                 if (req.cookies.access_token) {
+                    req.cookies.access_token = JSON.parse(req.cookies.access_token);
                     req.body.access_token = req.cookies.access_token;
                 }
 

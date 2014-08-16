@@ -41,6 +41,7 @@ angular.module('laboard-frontend')
                     if (Auth.isLoggedIn()) {
                         $rootScope.project = null;
                         $rootScope.user = null;
+
                         $state.transitionTo('unauthorized');
                     } else {
                         $rootScope.project = null;
@@ -125,6 +126,6 @@ angular.module('laboard-frontend')
             };
 
             $rootScope.LABOARD_CONFIG = LABOARD_CONFIG;
-            $rootScope.socket = io(location.protocol + '//' + location.hostname + ':' + (LABOARD_CONFIG.socketIoPort || location.port));
+            $rootScope.socket = io.connect(location.protocol + '//' + location.hostname + ':' + (LABOARD_CONFIG.socketIoPort || location.port));
         }
     ]);

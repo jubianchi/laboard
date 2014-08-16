@@ -37,7 +37,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('socket').sockets.emit(
+                container.get('server.websocket').broadcast(
                     'column.new',
                     {
                         namespace: req.params.ns,
@@ -72,7 +72,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('socket').sockets.emit(
+                container.get('server.websocket').broadcast(
                     'column.edit',
                     {
                         namespace: req.params.ns,
@@ -107,7 +107,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('socket').sockets.emit(
+                container.get('server.websocket').broadcast(
                     'column.move',
                     {
                         namespace: req.params.ns,
@@ -140,7 +140,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('socket').sockets.emit(
+                container.get('server.websocket').broadcast(
                     'column.remove',
                     {
                         namespace: req.params.ns,

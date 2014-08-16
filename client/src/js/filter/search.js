@@ -17,7 +17,6 @@ angular.module('laboard-frontend')
                             } catch(e) {}
                         }
 
-                        console.log(regex, issue.milestone.title, regex.test(issue.milestone.title));
                         return regex.test(issue.milestone.title);
                     };
                 },

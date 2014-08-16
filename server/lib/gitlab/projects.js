@@ -49,6 +49,8 @@ projects.prototype = {
     all: function(token, callback, params) {
         var url = this.url();
 
+        if (!params) params = {};
+
         if (!params.per_page) {
             params.per_page = 100;
         }

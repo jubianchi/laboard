@@ -6,12 +6,16 @@ angular.module('laboard-frontend')
                 $rootScope.loggedin = true;
                 $rootScope.user = user;
                 $rootScope.projects = ProjectsRepository;
+
+                $rootScope.socket.io.connect();
             });
 
             $rootScope.$on('AuthenticateJS.logout', function(event) {
                 $rootScope.loggedin = false;
                 $rootScope.user = null;
                 $rootScope.project = null;
+
+                $rootScope.socket.io.disconnect();
 
                 $state.go('login');
             });

@@ -4,6 +4,32 @@ var gitlab = module.exports = function gitlab(url, http) {
 };
 
 gitlab.prototype = {
+    auth: function(token, req, done) {
+        if (typeof req === 'function') {
+            done = req;
+            req = null;
+        }
+
+        this.http.get(
+            this.base + '/user?private_token=' + token,
+            function (err, resp, body) {
+                if (err) {
+                    done(err);
+
+                    return;
+                }
+
+                if (resp.statusCode !== 200) {
+                    if (req) req.res.status(resp.statusCode);
+                    done(err);
+
+                    return;
+                }
+
+                done(null, JSON.parse(body));
+            }
+        );
+    },
     url: function(token, url, params) {
         var query = '',
             sep = '?';

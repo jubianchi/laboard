@@ -8,14 +8,12 @@ server.prototype = {
     start: function (application) {
         if (this.server === null) {
             var logger = this.logger,
-                server;
-
-            server = application.listen(
-                this.port,
-                function() {
-                    if(logger) logger.info('Listening on port %d', server.address().port);
-                }
-            );
+                server = application.listen(
+                    this.port,
+                    function() {
+                        if(logger) logger.info('Listening on port %d', server.address().port);
+                    }
+                );
 
             this.server = server;
         }
