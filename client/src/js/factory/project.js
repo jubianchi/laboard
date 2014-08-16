@@ -11,7 +11,10 @@ angular.module('laboard-frontend')
                         );
                 },
                 repository = {
-                    all: null
+                    all: null,
+                    one: function(id) {
+                        return Restangular.one('projects/' + id).get();
+                    }
                 };
 
             $rootScope.$watch('user', function() {

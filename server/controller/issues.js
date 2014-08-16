@@ -1,19 +1,10 @@
-var _ = require('lodash'),
-    q = require('q');
+var q = require('q');
 
-module.exports = function(router, authenticated, application) {
+module.exports = function(router, container) {
     var callback = function(req, res, callback) {
             return function (err, resp, body) {
                 if (err) {
                     res.error(err);
-
-                    return;
-                }
-
-                try {
-                    body = JSON.parse(body);
-                } catch (e) {
-                    res.error(body, resp.statusCode);
 
                     return;
                 }
@@ -26,52 +17,17 @@ module.exports = function(router, authenticated, application) {
 
                 return callback(body);
             };
-        },
-        formatIssue = function(issue) {
-            issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone']);
-            issue.column = null;
-            issue.theme = null;
-
-            (issue.labels || []).forEach(function(label, key) {
-                if (/^column:/.test(label)) {
-                    issue.column = label.replace(/^column:/, '');
-                    delete issue.labels[key];
-                }
-
-                if (/^theme:/.test(label)) {
-                    issue.theme = label.replace(/^theme:/, '');
-                    delete issue.labels[key];
-                }
-            });
-
-            issue.labels = issue.labels.filter(function(v) { return v && v.length > 0; });
-
-            return issue;
-        },
-        formatTags = function(issue) {
-            if (issue.column) {
-                issue.labels.push('column:' + issue.column)
-            }
-
-            if (issue.theme) {
-                issue.labels.push('theme:' + issue.theme)
-            }
-
-            if (issue.labels.length === 0) {
-                issue.labels = [''];
-            }
-
-            return issue;
         };
 
-    router.get('/projects',
-        authenticated,
+    router.authenticated.get('/projects/:ns/:name/issues',
         function(req, res) {
-            var projects = [],
+            var issues = [],
                 page = 0,
                 fetch = function(deferred) {
-                    application.gitlab.project.all(
+                    container.get('gitlab.issues').all(
                         req.user.private_token,
+                        req.params.ns,
+                        req.params.name,
                         function (err, resp, body) {
                             if (err) {
                                 deferred.reject();
@@ -80,26 +36,19 @@ module.exports = function(router, authenticated, application) {
                                     req,
                                     res,
                                     function(body) {
-                                        if(body.length > 0) {
-                                            projects = projects.concat(
-                                                body.filter(
-                                                    function(project) {
-                                                        return !!project.issues_enabled;
-                                                    }
-                                                ).map(function(project) {
-                                                    return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id'])
-                                                })
-                                            );
+                                        issues = issues.concat(body);
 
+                                        if (resp.links.next) {
                                             fetch(deferred);
                                         } else {
-                                            deferred.resolve(projects);
+                                            deferred.resolve(issues);
                                         }
                                     }
                                 )(err, resp, body);
                             }
                         },
                         {
+                            per_page: 100,
                             page: (++page)
                         }
                     );
@@ -109,76 +58,44 @@ module.exports = function(router, authenticated, application) {
 
             fetch(q.defer())
                 .then(
-                    function(projects) {
-                        res.response.ok(projects);
-                    }
-                );
-        }
-    );
-
-    router.get('/projects/:ns/:name/issues',
-        authenticated,
-        function(req, res) {
-            application.gitlab.issue.all(
-                req.user.private_token,
-                req.params.ns,
-                req.params.name,
-                function (err, resp, body) {
-                    var response = callback(
-                        req,
-                        res,
-                        function(body) {
-                            var issues = body.filter(
-                                function(issue) {
-                                    return issue.state !== 'closed';
-                                }
-                            );
-
-                            res.response.ok(issues.map(formatIssue));
-                        }
-                    );
-
-                    response(err, resp, body);
+                function(issues) {
+                    res.response.ok(issues);
                 }
             );
         }
     );
 
-    router.put('/projects/:ns/:name/issues/:id',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/issues/:id',
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
 
-            application.gitlab.issue.persist(
+            container.get('gitlab.issues').persist(
                 req.user.private_token,
                 req.params.ns,
                 req.params.name,
-                formatTags(issue),
+                issue,
                 callback(
                     req,
                     res,
                     function(body) {
-                        var issue = formatIssue(body);
-
-                        application.io.sockets.emit(
+                        container.get('socket').sockets.emit(
                             'issue.move',
                             {
                                 namespace: req.params.ns,
                                 project: req.params.name,
-                                issue: issue
+                                issue: body
                             }
                         );
 
-                        res.response.ok(issue);
+                        res.response.ok(body);
                     }
                 )
             );
         }
     );
 
-    router.put('/projects/:ns/:name/issues/:id/move',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/issues/:id/move',
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
@@ -206,29 +123,27 @@ module.exports = function(router, authenticated, application) {
                     issue.column = null;
                 }
 
-                application.gitlab.issue.persist(
+                container.get('gitlab.issues').persist(
                     req.user.private_token,
                     req.params.ns,
                     req.params.name,
-                    formatTags(issue),
+                    issue,
                     callback(
                         req,
                         res,
                         function(body) {
-                            var issue = formatIssue(body);
-
-                            application.io.sockets.emit(
+                            container.get('socket').sockets.emit(
                                 'issue.move',
                                 {
                                     namespace: req.params.ns,
                                     project: req.params.name,
                                     from: from,
                                     to: to,
-                                    issue: issue
+                                    issue: body
                                 }
                             );
 
-                            res.response.ok(issue);
+                            res.response.ok(body);
                         }
                     )
                 );
@@ -236,8 +151,7 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.put('/projects/:ns/:name/issues/:id/theme',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/issues/:id/theme',
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
@@ -265,29 +179,27 @@ module.exports = function(router, authenticated, application) {
                     issue.theme = null;
                 }
 
-                application.gitlab.issue.persist(
+                container.get('gitlab.issues').persist(
                     req.user.private_token,
                     req.params.ns,
                     req.params.name,
-                    formatTags(issue),
+                    issue,
                     callback(
                         req,
                         res,
                         function(body) {
-                            var issue = formatIssue(body);
-
-                            application.io.sockets.emit(
+                            container.get('socket').sockets.emit(
                                 'issue.theme',
                                 {
                                     namespace: req.params.ns,
                                     project: req.params.name,
-                                    issue: issue,
+                                    issue: body,
                                     before: before,
                                     after: after
                                 }
                             );
 
-                            res.response.ok(issue);
+                            res.response.ok(body);
                         }
                     )
                 );
@@ -295,23 +207,22 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.put('/projects/:ns/:name/issues/:id/close',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/issues/:id/close',
         function(req, res) {
             var issue = req.body;
 
-            application.gitlab.issue.close(
+            container.get('gitlab.issues').close(
                 req.user.private_token,
                 req.params.ns,
                 req.params.name,
-                formatTags(issue),
+                issue,
                 callback(
                     req,
                     res,
                     function(body) {
                         var issue = formatIssue(body);
 
-                        application.io.sockets.emit(
+                        container.get('socket').sockets.emit(
                             'issue.close',
                             {
                                 namespace: req.params.ns,

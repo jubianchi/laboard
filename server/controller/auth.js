@@ -1,10 +1,8 @@
-var request = require('request');
-
-module.exports = function(router, authenticated, application) {
+module.exports = function(router, container) {
     router.post('/login',
         function(req, res) {
-            request.get(
-                application.config.gitlab_url + '/api/v3/user?private_token=' + req.body.password,
+            container.get('http.client').get(
+                container.get('config').gitlab_url + '/api/v3/user?private_token=' + req.body.password,
                 function (err, resp, body) {
                     if (err) {
                         error(err);
@@ -30,20 +28,18 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.get('/logout',
-        authenticated,
+    router.authenticated.get('/logout',
         function(req, res) {
             res.clearCookie('access_token');
             res.end();
         }
     );
 
-    router.get('/login/check',
-        authenticated,
+    router.authenticated.get('/login/check',
         function(req, res) {
             if (req.cookies.access_token) {
-                request.get(
-                    application.config.gitlab_url + '/api/v3/user?private_token=' + req.cookies.access_token.private_token,
+                container.get('http.client').get(
+                    container.get('config').gitlab_url + '/api/v3/user?private_token=' + req.cookies.access_token.private_token,
                     function (err, resp, body) {
                         if (err) {
                             res.error(err);

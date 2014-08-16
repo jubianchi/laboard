@@ -1,10 +1,13 @@
 {
   "name": "laboard",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "author": "",
-  "license": "ISC",
+  "main": "index.js",
+  "author": "Julien Bianchi <julien.bianchi@pmsipilot.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "node_modules/atoum.js/bin/atoum -d tests"
+  },
   "dependencies": {
     "body-parser": "^1.0.2",
     "colors": "^0.6.2",
@@ -21,5 +24,8 @@
     "lodash": "~2.4.1",
     "winston": "^0.7.3",
     "socket.io": "^1.0.6"
+  },
+  "devDependencies": {
+    "atoum.js": "0.0.11"
   }
 }

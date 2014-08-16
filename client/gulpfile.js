@@ -120,14 +120,13 @@ gulp.task('server', connect.server({
     port: 4242,
     livereload: true,
     middleware: function(connect, opt) {
-        var app = require('../server/app.js'),
-            srv = http.Server(connect);
+        var container = require('../server/container');
 
-        app.socket(srv.listen(4343));
+        require('../server');
 
         return [
             function(req, res, next) {
-                app.handle(req, res, next);
+                container.get('app').handle(req, res, next);
             }
         ]
     }

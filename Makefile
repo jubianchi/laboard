@@ -17,7 +17,10 @@ config:
 	@echo "\033[34m=> Configuring Laboard frontend\033[0m"
 	@make config/client.js
 
-.PHONY: server install config
+test:
+	@cd server && npm test
+
+.PHONY: server install config test
 
 config/server.json:
 	@cp config/server.json-dist config/server.json

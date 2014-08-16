@@ -1,11 +1,12 @@
 var _ = require('lodash'),
     fs = require('fs');
 
-module.exports = function(router, authenticated, application) {
-    router.get('/projects/:ns/:name/columns',
-        authenticated,
+module.exports = function(router, container) {
+    var config = container.get('config');
+
+    router.authenticated.get('/projects/:ns/:name/columns',
         function(req, res) {
-            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+            var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 columns = [];
 
             if (fs.existsSync(file)) {
@@ -16,10 +17,9 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.post('/projects/:ns/:name/columns',
-        authenticated,
+    router.authenticated.post('/projects/:ns/:name/columns',
         function(req, res) {
-            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+            var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
                 columns = {};
 
@@ -37,7 +37,7 @@ module.exports = function(router, authenticated, application) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                application.io.sockets.emit(
+                container.get('socket').sockets.emit(
                     'column.new',
                     {
                         namespace: req.params.ns,
@@ -55,10 +55,9 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.put('/projects/:ns/:name/columns',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/columns',
         function(req, res) {
-            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+            var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
                 columns = {};
 
@@ -73,7 +72,7 @@ module.exports = function(router, authenticated, application) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                application.io.sockets.emit(
+                container.get('socket').sockets.emit(
                     'column.edit',
                     {
                         namespace: req.params.ns,
@@ -91,10 +90,9 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.put('/projects/:ns/:name/columns/:id/move',
-        authenticated,
+    router.authenticated.put('/projects/:ns/:name/columns/:id/move',
         function(req, res) {
-            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+            var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 columns = JSON.parse(fs.readFileSync(file)),
                 from = columns[req.params.id].position,
                 to =  req.body.position;
@@ -109,7 +107,7 @@ module.exports = function(router, authenticated, application) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                application.io.sockets.emit(
+                container.get('socket').sockets.emit(
                     'column.move',
                     {
                         namespace: req.params.ns,
@@ -125,10 +123,9 @@ module.exports = function(router, authenticated, application) {
         }
     );
 
-    router.delete('/projects/:ns/:name/columns',
-        authenticated,
+    router.authenticated.delete('/projects/:ns/:name/columns',
         function(req, res) {
-            var file = application.config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
+            var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
                 columns = {};
 
@@ -143,7 +140,7 @@ module.exports = function(router, authenticated, application) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                application.io.sockets.emit(
+                container.get('socket').sockets.emit(
                     'column.remove',
                     {
                         namespace: req.params.ns,
