@@ -39,8 +39,14 @@ angular.module('laboard-frontend')
 
                     return function(issue) {
                         return (
-                            (issue.assignee && (regex.test(issue.assignee.username) || regex.test(issue.assignee.name))) ||
-                            (issue.author && (regex.test(issue.author.username) || regex.test(issue.author.name)))
+                            (
+                                issue.assignee &&
+                                (regex.test(issue.assignee.username) || regex.test(issue.assignee.name))
+                            ) ||
+                            (
+                                issue.author &&
+                                (regex.test(issue.author.username) || regex.test(issue.author.name))
+                            )
                         );
                     };
                 },
@@ -58,18 +64,18 @@ angular.module('laboard-frontend')
                         var search;
 
                         if (/^@/.test(query)) {
-                            if (/^@from /.test(query)) {
+                            search = searchPeople;
+                            query = query.replace(/^@/, '');
+
+                            if (/^from /.test(query)) {
                                 search = searchAuthor;
-                                query = query.replace(/^@from /, '');
-                            } else if (/^@to /.test(query)) {
+                                query = query.replace(/^from /, '');
+                            } else if (/^to /.test(query)) {
                                 search = searchAssignee;
-                                query = query.replace(/^@to /, '');
-                            } else if (/^@me$/.test(query)) {
+                                query = query.replace(/^to /, '');
+                            } else if (/^me$/.test(query)) {
                                 search = searchPeople;
                                 query = $rootScope.user.username;
-                            } else {
-                                search = searchPeople;
-                                query = query.replace(/^@/, '');
                             }
                         } else if (/^#/.test(query)) {
                             search = searchNumber;
