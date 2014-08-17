@@ -30,6 +30,10 @@ var cookie = require('cookie'),
                 gitlab.auth(token.private_token, function(err, body) {
                     socket.token = body;
 
+                    if (!socket.token || !socket.token.private_token) {
+                        return next(new Error('Unauthorized'));
+                    }
+
                     projects.all(
                         socket.token.private_token,
                         function(err, resp, projects) {

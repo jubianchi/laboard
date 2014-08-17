@@ -16,6 +16,14 @@ angular.module('laboard-frontend')
                 },
                 repository = {
                     all: null,
+                    one: function(id) {
+                        var self = this;
+
+                        return Restangular.one('projects/' + $rootScope.project.path_with_namespace + '/issues/' + id).get()
+                            .then(function(issue) {
+                                return self.add(issue);
+                            });
+                    },
                     add: function(issue) {
                         var self = this,
                             added = false;
@@ -34,6 +42,8 @@ angular.module('laboard-frontend')
                         if(added === false && issue.id) {
                             self.all.push(issue);
                         }
+
+                        return issue;
                     },
                     edit: function(issue) {
                         var self = this,
@@ -63,7 +73,9 @@ angular.module('laboard-frontend')
                         var self = this,
                             deferred = $q.defer();
 
-                        issue.customPUT(issue, 'move')
+                        Restangular
+                            .one('projects/' + $rootScope.project.path_with_namespace)
+                            .one('issues', issue.id).customPUT(issue, 'move')
                             .then(
                                 function(issue) {
                                     self.add(issue);
@@ -81,7 +93,9 @@ angular.module('laboard-frontend')
                         var self = this,
                             deferred = $q.defer();
 
-                        issue.customPUT(issue, 'theme')
+                        Restangular
+                            .one('projects/' + $rootScope.project.path_with_namespace)
+                            .one('issues', issue.id).customPUT(issue, 'theme')
                             .then(
                                 function(issue) {
                                     self.add(issue);
@@ -99,7 +113,9 @@ angular.module('laboard-frontend')
                         var self = this,
                             deferred = $q.defer();
 
-                        issue.customPUT(issue, 'close')
+                        Restangular
+                            .one('projects/' + $rootScope.project.path_with_namespace)
+                            .one('issues', issue.id).customPUT(issue, 'close')
                             .then(
                                 function(issue) {
                                     self.add(issue);

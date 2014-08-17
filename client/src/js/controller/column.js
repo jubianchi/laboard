@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('ColumnController', [
-        '$scope', '$rootScope', 'ColumnsRepository', '$modal', 'IssuesRepository',
-        function($scope, $rootScope, ColumnsRepository, $modal, IssuesRepository) {
+        '$scope', '$rootScope', 'ColumnsRepository', '$modal', 'IssuesRepository', 'SocketFactory',
+        function($scope, $rootScope, ColumnsRepository, $modal, IssuesRepository, SocketFactory) {
             $scope.drop = function(issue) {
                 var from = issue.from;
                 issue.from = from.title;
@@ -260,6 +260,27 @@ angular.module('laboard-frontend')
                             $scope.column.theme = data.column.theme || 'default';
                         }
                     );
+                }
+            );
+
+            $scope.$on(
+                'issue.update',
+                function(event, issue) {
+                    var exists = false;
+
+                    $scope.column.issues.forEach(function(i, key) {
+                        if (i.id === issue.id) {
+                            exists = true;
+
+                            if (issue.column !== $scope.column.title.toLowerCase()) {
+                                $scope.column.issues.splice(key, 1);
+                            }
+                        }
+                    });
+
+                    if (false === exists && issue.column === $scope.column.title.toLowerCase()) {
+                        $scope.column.issues.push(issue);
+                    }
                 }
             );
         }

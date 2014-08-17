@@ -4,20 +4,31 @@ module.exports = function(router, container) {
     var callback = function(req, res, callback) {
             return function (err, resp, body) {
                 if (err) {
-                    res.error(err);
-
-                    return;
+                    return res.error(err);
                 }
 
                 if (resp.statusCode !== 200) {
-                    res.error(body, resp.statusCode);
-
-                    return;
+                    return res.error(body, resp.statusCode);
                 }
 
                 return callback(body);
             };
         };
+
+    router.post('/projects/:ns/:name/issues/hook',
+        function(req, res) {
+            container.get('server.websocket').broadcast(
+                'issue.update',
+                {
+                    namespace: req.params.ns,
+                    project: req.params.name,
+                    issue: req.body.object_attributes
+                }
+            );
+
+            res.response.ok(req.body);
+        }
+    );
 
     router.authenticated.get('/projects/:ns/:name/issues',
         function(req, res) {
@@ -60,6 +71,24 @@ module.exports = function(router, container) {
                 .then(
                 function(issues) {
                     res.response.ok(issues);
+                }
+            );
+        }
+    );
+
+    router.authenticated.get('/projects/:ns/:name/issues/:id',
+        function(req, res) {
+            container.get('gitlab.issues').one(
+                req.user.private_token,
+                req.params.ns,
+                req.params.name,
+                req.params.id,
+                function (err, resp, body) {
+                    callback(
+                        req,
+                        res,
+                        res.response.ok
+                    )(err, resp, body);
                 }
             );
         }
@@ -220,18 +249,16 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
-                        var issue = formatIssue(body);
-
                         container.get('server.websocket').broadcast(
                             'issue.close',
                             {
                                 namespace: req.params.ns,
                                 project: req.params.name,
-                                issue: issue
+                                issue: body
                             }
                         );
 
-                        res.response.ok(issue);
+                        res.response.ok(body);
                     }
                 )
             );

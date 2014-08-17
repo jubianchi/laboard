@@ -1,5 +1,5 @@
 var  _ = require('lodash'),
-    gitlab = module.exports = function gitlab(client, projects) {
+    issues = module.exports = function issues(client, projects) {
         this.client = client;
         this.projects = projects;
     },
@@ -20,11 +20,15 @@ var  _ = require('lodash'),
             }
         });
 
-        issue.labels = issue.labels.filter(function(v) { return v && v.length > 0; });
+        issue.labels = (issue.labels || []).filter(function(v) { return v && v.length > 0; });
 
         return issue;
     },
     formatOut = function(issue) {
+        if (issue.labels.split) {
+            issue.labels = issue.labels.split(',');
+        }
+
         if (issue.column) {
             issue.labels.push('column:' + issue.column)
         }
@@ -37,10 +41,14 @@ var  _ = require('lodash'),
             issue.labels = [''];
         }
 
+        if (issue.labels.join) {
+            issue.labels = issue.labels.join(',');
+        }
+
         return issue;
     };
 
-gitlab.prototype = {
+issues.prototype = {
     url: function(namespace, project, id) {
         if (typeof project === "number") {
             id = project;
