@@ -29,12 +29,34 @@ angular.module('laboard-frontend')
             };
 
             $scope.bootstrap = function() {
-                ['Sandbox', 'Backlog', 'Accepted', 'Review', 'Done'].forEach(function(column, index) {
-                    column = {
-                        title: column,
-                        position: index,
-                        issues: []
-                    };
+                var defaults = [
+                    {
+                        title: 'Sandbox',
+                        position: 0
+                    },
+                    {
+                        title: 'Backlog',
+                        position: 1
+                    },
+                    {
+                        title: 'Accepted',
+                        position: 2
+                    },
+                    {
+                        title: 'review',
+                        position: 3,
+                        theme: 'info'
+                    },
+                    {
+                        title: 'Done',
+                        position: 4,
+                        theme: 'success',
+                        closable: true
+                    }
+                ];
+
+                defaults.forEach(function(column) {
+                    column.issues = [];
 
                     ColumnsRepository.add(column);
                 });

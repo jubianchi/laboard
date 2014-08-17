@@ -73,13 +73,13 @@ angular.module('laboard-frontend')
                         templateUrl: 'partials/column/modal.html',
                         controller: function($scope, $modalInstance) {
                             $scope.edit = true;
-                            $scope.closable = parseInt(column.closable, 10) || false;
+                            $scope.closable = column.closable ? 1 : 0;
                             $scope.theme = column.theme || 'default';
                             $scope.title = column.title;
 
                             $scope.save = function () {
                                 column.theme = $scope.theme;
-                                column.closable = $scope.closable;
+                                column.closable = $scope.closable === 1 ? true : false;
 
                                 ColumnsRepository.edit(column)
                                     .then(
