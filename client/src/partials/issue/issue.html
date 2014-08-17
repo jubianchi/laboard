@@ -25,8 +25,13 @@
         <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
         <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
 
-        <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
-        <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email" data-tooltip="{{issue.assignee.name}}" data-tooltip-placement="bottom"/>
+        <div data-ng-click="assign()" class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
+            <div class="overlay">
+                <span>+</span>
+            </div>
+            <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
+            <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
+        </div>
         <p>{{ issue.title }}</p>
     </div>
     <div class="panel-footer">

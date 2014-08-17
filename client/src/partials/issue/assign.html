@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Assign #{{issue.iid}} - {{issue.title}}
+    </h3>
+</div>
+
+<div class="modal-body clearfix">
+    <form>
+        <div class="form-group has-feedback">
+            <input type="text" class="form-control" placeholder="Member search" data-ng-model="memberSearch">
+            <span class="text-muted form-control-feedback" data-ng-click="memberSearch = ''" data-ng-show="memberSearch">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+    </form>
+
+    <div class="col-md-3 user-card" data-ng-click="assignTo(member)" data-ng-repeat="member in $root.project.members|filter:memberSearch" data-ng-class="{in: member.id == issue.assignee.id}">
+        <img class="avatar" data-ng-src="{{member.avatar_url}}" data-ng-if="member.avatar_url"/>
+
+        <p>
+            <strong>{{member.username}}</strong><br/>
+            <small>{{member.name}}</small>
+        </p>
+    </div>
+
+</div>

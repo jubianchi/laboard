@@ -55,7 +55,11 @@ angular.module('laboard-frontend')
                             }
                         });
 
-                        issue.put()
+                        issue.assignee_id = issue.assignee.id;
+
+                        Restangular
+                            .one('projects/' + $rootScope.project.path_with_namespace)
+                            .one('issues', issue.id).customPUT(issue)
                             .then(
                                 function(issue) {
                                     self.add(issue);

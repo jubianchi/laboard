@@ -13,7 +13,15 @@ angular.module('laboard-frontend')
                 repository = {
                     all: null,
                     one: function(id) {
-                        return Restangular.one('projects/' + id).get();
+                        return Restangular.one('projects/' + id).get()
+                            .then(function(project) {
+                                return Restangular.all('projects/' + id + '/members').getList()
+                                    .then(function(members) {
+                                        project.members = members;
+
+                                        return project;
+                                    });
+                            });
                     }
                 };
 

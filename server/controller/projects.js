@@ -79,4 +79,21 @@ module.exports = function(router, container) {
             );
         }
     );
+
+    router.authenticated.get('/projects/:ns/:name/members',
+        function(req, res) {
+            container.get('gitlab.projects').members(
+                req.user.private_token,
+                req.params.ns,
+                req.params.name,
+                function (err, resp, body) {
+                    callback(
+                        req,
+                        res,
+                        res.response.ok
+                    )(err, resp, body);
+                }
+            );
+        }
+    );
 };

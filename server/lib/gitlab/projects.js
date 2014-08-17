@@ -46,6 +46,18 @@ projects.prototype = {
         );
     },
 
+    members: function(token, namespace, project, callback) {
+        var url = this.url(namespace, project);
+
+        return this.client.get(
+            token,
+            url + '/members',
+            function(err, resp, body) {
+                callback(err, resp, body);
+            }
+        );
+    },
+
     all: function(token, callback, params) {
         var url = this.url();
 

@@ -29,6 +29,29 @@ angular.module('laboard-frontend')
                     );
             };
 
+            var modal;
+            $scope.assign = function() {
+                var issue = $scope.issue;
+
+                modal = $modal
+                    .open({
+                        templateUrl: 'partials/issue/assign.html',
+                        controller: function($scope, $modalInstance) {
+                            $scope.issue = issue;
+                            $scope.assignTo = function(member) {
+                                modal.close(member);
+                            };
+                        }
+                    });
+
+                modal.result
+                    .then(function(member) {
+                        $scope.issue.assignee = member;
+
+                        IssuesRepository.edit($scope.issue);
+                    });
+            };
+
             $rootScope.socket.on(
                 'issue.theme',
                 function(data) {
