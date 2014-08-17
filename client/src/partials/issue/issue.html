@@ -14,8 +14,8 @@
                 <li><a data-ng-click="theme('warning')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada text-warning"></i> Pause</a></li>
                 <li><a data-ng-click="theme('success')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-success"></i> Check</a></li>
                 <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-danger"></i> Reject</a></li>
-                <li><a data-ng-click="unpin(issue)" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada animated-hover text-warning"></i> Unpin</a></li>
                 <li class="divider"></li>
+                <li><a data-ng-click="unpin(issue)" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin</a></li>
                 <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
                 <li><a data-ng-click="close(issue)" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover text-danger"></i> Close</a></li>
             </ul>

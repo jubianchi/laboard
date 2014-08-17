@@ -29,11 +29,11 @@ var  _ = require('lodash'),
             issue.labels = issue.labels.split(',');
         }
 
-        if (issue.column) {
+        if (issue.column && issue.labels.indexOf('column:' + issue.column) === -1) {
             issue.labels.push('column:' + issue.column)
         }
 
-        if (issue.theme) {
+        if (issue.theme && issue.labels.indexOf('theme:' + issue.theme) === -1) {
             issue.labels.push('theme:' + issue.theme)
         }
 
