@@ -14,12 +14,12 @@
         </div>
     </form>
 
-    <div class="col-md-3 user-card" data-ng-click="assignTo(member)" data-ng-repeat="member in $root.project.members|filter:memberSearch" data-ng-class="{in: member.id == issue.assignee.id}">
+    <div class="col-md-5 user-card" data-ng-click="assignTo(member)" data-ng-repeat="member in $root.project.members|filter:memberSearch" data-ng-class="{in: member.id == issue.assignee.id}">
         <img class="avatar" data-ng-src="{{member.avatar_url}}" data-ng-if="member.avatar_url"/>
 
         <p>
             <strong>{{member.username}}</strong><br/>
-            <small>{{member.name}}</small>
+            <small class="text-muted">{{member.name}}</small>
         </p>
     </div>
 

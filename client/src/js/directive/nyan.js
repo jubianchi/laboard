@@ -7,8 +7,7 @@ angular.module('laboard-frontend')
                         konami_index = 0,
                         body = $('body'),
                         doc = $(document),
-                        img = $('<img src="assets/nyancat.gif" width="100" style="border: none; position: absolute; z-index: 9999;"/>'),
-                        sound = $('<audio preload="auto"><source src="assets/nyancat.ogg" type="audio/ogg"/><source src="assets/nyancat.mp3" type="audio/mp3" /></audio>'),
+                        img, sound,
                         reset = function() {
                             sound.get(0).pause();
                             sound.get(0).currentTime = 0;
@@ -19,8 +18,6 @@ angular.module('laboard-frontend')
                             });
                         },
                         start = function() {
-                            reset();
-
                             sound.get(0).volume = 0.5;
                             sound.get(0).play();
                             img.animate(
@@ -32,9 +29,6 @@ angular.module('laboard-frontend')
                                     queue: false,
                                     duration: 9000,
                                     complete: function() {
-                                        img.remove();
-                                        sound.remove();
-
                                         konami_index = 0;
                                         doc.on('keydown', handler);
                                     }
@@ -46,14 +40,29 @@ angular.module('laboard-frontend')
                                 if (konami_index === konami_keys.length) {
                                     doc.off('keydown', handler);
 
-                                    body.append(img);
-                                    body.append(sound);
-
-                                    start();
+                                    bootstrap(function () {
+                                        reset();
+                                        start();
+                                    });
                                 }
                             } else {
                                 konami_index = 0;
                             }
+                        },
+                        bootstrap = function(cb) {
+                            img = $('<img src="assets/nyancat.gif" width="100" style="border: none; position: absolute; z-index: 9999;"/>');
+                            sound = $('<audio preload="auto"><source src="assets/nyancat.ogg" type="audio/ogg"/><source src="assets/nyancat.mp3" type="audio/mp3" /></audio>');
+
+                            body.append(img);
+                            body.append(sound);
+
+                            sound.get(0).addEventListener('loadedmetadata', function() {
+                                cb()
+                            });
+
+                            bootstrap = function(cb) {
+                                cb();
+                            };
                         };
 
                     doc.on('keydown', handler);

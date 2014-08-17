@@ -13,8 +13,19 @@ angular.module('laboard-frontend')
 
                         if (/^[\w\s]+$/.test(query) === false) {
                             try {
-                                return semver.satisfies(issue.milestone.title, query)
-                            } catch(e) {}
+                                var milestone = issue.milestone.title.replace(/^v/, '');
+                                milestone = milestone.split('.');
+
+                                if (milestone.length < 3) {
+                                    milestone.push('0');
+                                }
+
+                                milestone = milestone.join('.');
+
+                                return semver.satisfies(milestone, query)
+                            } catch(e) {
+                                console.log(e);
+                            }
                         }
 
                         return regex.test(issue.milestone.title);
