@@ -27,7 +27,7 @@ angular.module('laboard-frontend')
                         function() {
                             from.issues.push(issue);
 
-                            var key = $scope.column.issues.indexOf($scope.issue);
+                            var key = $scope.column.issues.indexOf(issue);
                             if (key > -1) {
                                 $scope.column.issues.splice(key, 1);
                             }

@@ -59,7 +59,7 @@ angular.module('laboard-frontend')
 
                         Restangular
                             .one('projects/' + $rootScope.project.path_with_namespace)
-                            .one('issues', issue.id).customPUT(issue)
+                            .one('issues', issue.iid).customPUT(issue)
                             .then(
                                 function(issue) {
                                     self.add(issue);
@@ -79,7 +79,7 @@ angular.module('laboard-frontend')
 
                         Restangular
                             .one('projects/' + $rootScope.project.path_with_namespace)
-                            .one('issues', issue.id).customPUT(issue, 'move')
+                            .one('issues', issue.iid).customPUT(issue, 'move')
                             .then(
                                 function(issue) {
                                     self.add(issue);
@@ -99,7 +99,7 @@ angular.module('laboard-frontend')
 
                         Restangular
                             .one('projects/' + $rootScope.project.path_with_namespace)
-                            .one('issues', issue.id).customPUT(issue, 'theme')
+                            .one('issues', issue.iid).customPUT(issue, 'theme')
                             .then(
                                 function(issue) {
                                     self.add(issue);
@@ -119,7 +119,7 @@ angular.module('laboard-frontend')
 
                         Restangular
                             .one('projects/' + $rootScope.project.path_with_namespace)
-                            .one('issues', issue.id).customPUT(issue, 'close')
+                            .one('issues', issue.iid).customPUT(issue, 'close')
                             .then(
                                 function(issue) {
                                     self.add(issue);
