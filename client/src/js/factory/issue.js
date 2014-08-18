@@ -55,7 +55,9 @@ angular.module('laboard-frontend')
                             }
                         });
 
-                        issue.assignee_id = issue.assignee.id;
+                        if (issue.assignee) {
+                            issue.assignee_id = issue.assignee.id;
+                        }
 
                         Restangular
                             .one('projects/' + $rootScope.project.path_with_namespace)
