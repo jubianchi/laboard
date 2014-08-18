@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('IssueController', [
-        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', '$compile', '$http', 'IssuesRepository',
-        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $compile, $http, IssuesRepository) {
+        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', '$compile', '$http', 'IssuesRepository', 'SocketFactory',
+        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $compile, $http, IssuesRepository, SocketFactory) {
             $scope.drag = function(column) {
                 $scope.issue.from = column;
 
@@ -52,14 +52,22 @@ angular.module('laboard-frontend')
                     });
             };
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'issue.theme',
-                function(data) {
+                function (data) {
+                    console.log(data.namespace + '/' + data.project, $rootScope.project.path_with_namespace);
+
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
+
+                    console.log(data.issue.id, $scope.issue.id);
+
                     if (data.issue.id !== $scope.issue.id) return;
 
+
+                    console.log('handling');
+
                     $rootScope.$apply(
-                        function() {
+                        function () {
                             IssuesRepository.add(data.issue);
                         }
                     );

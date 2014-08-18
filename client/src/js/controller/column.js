@@ -215,7 +215,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'issue.move',
                 function(data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
@@ -234,7 +234,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'column.move',
                 function(data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
@@ -248,7 +248,7 @@ angular.module('laboard-frontend')
                 }
             );
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'column.edit',
                 function(data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;

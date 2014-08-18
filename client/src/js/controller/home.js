@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('HomeController', [
-        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal',
-        function($scope, $rootScope, Restangular, ColumnsRepository, $modal) {
+        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', 'SocketFactory',
+        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, SocketFactory) {
             $scope.create = function() {
                 $modal
                     .open({
@@ -64,28 +64,28 @@ angular.module('laboard-frontend')
 
             $scope.columns = ColumnsRepository;
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'column.new',
-                function(data) {
+                function (data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
 
                     $rootScope.$apply(
-                        function() {
+                        function () {
                             ColumnsRepository.all.push(data.column);
                         }
                     );
                 }
             );
 
-            $rootScope.socket.on(
+            SocketFactory.on(
                 'column.remove',
-                function(data) {
+                function (data) {
                     if (data.namespace + '/' + data.project !== $rootScope.project.path_with_namespace) return;
 
                     $rootScope.$apply(
-                        function() {
-                            ColumnsRepository.all.forEach(function(value, key) {
-                                if(value.title === data.column.title) {
+                        function () {
+                            ColumnsRepository.all.forEach(function (value, key) {
+                                if (value.title === data.column.title) {
                                     ColumnsRepository.all.splice(key, 1);
                                 }
                             });
