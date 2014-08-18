@@ -79,7 +79,7 @@ angular.module('laboard-frontend')
 
                             $scope.save = function () {
                                 column.theme = $scope.theme;
-                                column.closable = $scope.closable === 1 ? true : false;
+                                column.closable = $scope.closable == 1;
 
                                 ColumnsRepository.edit(column)
                                     .then(

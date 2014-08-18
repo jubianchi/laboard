@@ -122,7 +122,11 @@ angular.module('laboard-frontend')
                             .one('issues', issue.iid).customPUT(issue, 'close')
                             .then(
                                 function(issue) {
-                                    self.add(issue);
+                                    self.all.forEach(function(value, key) {
+                                        if(value.id === issue.id) {
+                                            delete self.all[key];
+                                        }
+                                    });
 
                                     deferred.resolve(issue);
                                 },
