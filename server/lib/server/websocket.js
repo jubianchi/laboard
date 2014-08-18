@@ -21,9 +21,11 @@ var cookie = require('cookie'),
                     return next(new Error('Unauthorized'));
                 }
 
-                var token = JSON.parse(cookies.access_token);
+                try {
+                    var token = JSON.parse(cookies.access_token);
+                } catch(e) {}
 
-                if (!token.private_token) {
+                if (!token || !token.private_token) {
                     return next(new Error('Unauthorized'));
                 }
 

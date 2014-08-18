@@ -25,8 +25,10 @@ auth.prototype = {
             //.use(this.passport.session())
             .use(function(req, res, next) {
                 if (req.cookies.access_token) {
-                    req.cookies.access_token = JSON.parse(req.cookies.access_token);
-                    req.body.access_token = req.cookies.access_token;
+                    try {
+                        req.cookies.access_token = JSON.parse(req.cookies.access_token);
+                        req.body.access_token = req.cookies.access_token;
+                    } catch(e) {}
                 }
 
                 next();
