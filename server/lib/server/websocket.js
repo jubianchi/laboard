@@ -1,5 +1,6 @@
 var cookie = require('cookie'),
     _ = require('lodash'),
+    q = require('q'),
     websocket = module.exports = function server(gitlab, projects, logger) {
         this.logger = logger;
         this.gitlab = gitlab;
@@ -36,26 +37,48 @@ var cookie = require('cookie'),
                         return next(new Error('Unauthorized'));
                     }
 
-                    projects.all(
-                        socket.token.private_token,
-                        function(err, resp, projects) {
-                            if (err) {
-                                return next(err);
-                            }
+                    var page = 0,
+                        all = [],
+                        fetch = function(deferred) {
+                            projects.all(
+                                socket.token.private_token,
+                                function (err, resp, body) {
+                                    if (err) {
+                                        deferred.reject();
+                                    } else {
+                                        all = all.concat(body);
 
-                            socket.token.projects = _.pluck(projects, 'path_with_namespace');
-
-                            var emit = socket.emit;
-
-                            socket.emit = function(event, data) {
-                                if (socket.token.projects.indexOf(data.namespace + '/' + data.project) > -1) {
-                                    emit.apply(socket, Array.prototype.slice.call(arguments));
+                                        if (resp.links.next) {
+                                            fetch(deferred);
+                                        } else {
+                                            deferred.resolve(all);
+                                        }
+                                    }
+                                },
+                                {
+                                    page: (++page)
                                 }
-                            };
+                            );
 
-                            next();
-                        }
-                    );
+                            return deferred.promise;
+                        };
+
+                    fetch(q.defer())
+                        .then(
+                            function(projects) {
+                                socket.token.projects = _.pluck(projects, 'path_with_namespace');
+
+                                var emit = socket.emit;
+
+                                socket.emit = function(event, data) {
+                                    if (socket.token.projects.indexOf(data.namespace + '/' + data.project) > -1) {
+                                        emit.apply(socket, Array.prototype.slice.call(arguments));
+                                    }
+                                };
+
+                                next();
+                            }
+                        );
                 });
             }
         );
