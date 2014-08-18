@@ -14,8 +14,7 @@ angular.module('laboard-frontend')
                     all: null,
                     add: function(column) {
                         var self = this,
-                            added = false,
-                            deferred = $q.defer();
+                            added = false;
 
                         if(!self.all) {
                             self.all = [];
@@ -24,19 +23,27 @@ angular.module('laboard-frontend')
                         column.position = column.position || this.all.length;
                         column.theme = column.theme || 'default';
 
+                        self.all.forEach(function(value, key) {
+                            if(value.title === column.title) {
+                                self.all[key] = column;
+                                added = true;
+                            }
+                        });
+
+                        if(added === false && column.title) {
+                            self.all.push(column);
+                        }
+
+                        return column;
+                    },
+                    persist: function(column) {
+                        var self = this,
+                            deferred = $q.defer();
+
                         Restangular.all('projects/' + $rootScope.project.path_with_namespace + '/columns').post(column)
                             .then(
                                 function(column) {
-                                    self.all.forEach(function(value, key) {
-                                        if(value.title === column.title) {
-                                            self.all[key] = column;
-                                            added = true;
-                                        }
-                                    });
-
-                                    if(added === false && column.title) {
-                                        self.all.push(column);
-                                    }
+                                    self.add(column);
 
                                     deferred.resolve(column);
                                 },
@@ -44,8 +51,6 @@ angular.module('laboard-frontend')
                                     deferred.reject(err);
                                 }
                             );
-
-                        return deferred.promise;
                     },
                     edit: function(column) {
                         var deferred = $q.defer();

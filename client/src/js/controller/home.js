@@ -58,7 +58,7 @@ angular.module('laboard-frontend')
                 defaults.forEach(function(column) {
                     column.issues = [];
 
-                    ColumnsRepository.add(column);
+                    ColumnsRepository.persist(column);
                 });
             };
 
@@ -71,7 +71,7 @@ angular.module('laboard-frontend')
 
                     $rootScope.$apply(
                         function () {
-                            ColumnsRepository.all.push(data.column);
+                            ColumnsRepository.add(data.column);
                         }
                     );
                 }
