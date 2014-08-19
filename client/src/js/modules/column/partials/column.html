@@ -13,11 +13,11 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 <li><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                <li><a data-ng-click="delete()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
+                <li><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
                 <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
                 <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                 <li class="divider"></li>
-                <li><a data-ng-click="import()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
+                <li><a data-ng-click="pin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
                 <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
                 <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
             </ul>
@@ -25,6 +25,6 @@
     </div>
 
     <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="column.issues">
-        <div data-ng-repeat="issue in column.issues | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'partials/issue/issue.html'"></div>
+        <div data-ng-repeat="issue in column.issues | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
     </div>
 </div>

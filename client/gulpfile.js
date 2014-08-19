@@ -85,7 +85,11 @@ gulp.task('js', function() {
 });
 
 gulp.task('html', function() {
-    gulp.src('src/**/*.html')
+    gulp.src(['src/*.html'])
+        .pipe(gulp.dest('public'))
+        .pipe(connect.reload());
+
+    gulp.src(['src/js/modules/**/partials/**/*.html'])
         .pipe(gulp.dest('public'))
         .pipe(connect.reload());
 });

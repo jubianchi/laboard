@@ -41,9 +41,11 @@ var  _ = require('lodash'),
             issue.labels = [''];
         }
 
-        if (issue.labels.join) {
-            issue.labels = issue.labels.join(',');
-        }
+        // Gitlab >= 7.2
+        //
+        //if (issue.labels.join) {
+        //    issue.labels = issue.labels.join(',');
+        //}
 
         return issue;
     };

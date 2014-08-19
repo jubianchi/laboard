@@ -1,4 +1,16 @@
 angular.module('laboard-frontend')
+    .filter('column', [
+        '$filter', '$rootScope',
+        function ($filter, $rootScope) {
+            return function(issues, column) {
+                if (!issues) return [];
+
+                return _.filter(issues, function(issue) {
+                    return issue.column === column.title.toLowerCase();
+                });
+            };
+        }
+    ])
     .filter('search', [
         '$filter', '$rootScope',
         function($filter, $rootScope) {

@@ -57,65 +57,6 @@ angular.module('laboard-frontend')
                 }
             });
 
-            var modal;
-            $rootScope.switchProject = function() {
-                var open = function() {
-                    modal = $modal
-                        .open({
-                            templateUrl: 'partials/project/modal.html',
-                            backdrop: !!$rootScope.project || 'static',
-                            keyboard: !!$rootScope.project
-                        });
-
-                    modal.result
-                        .then(function(project) {
-                            if(!project) {
-                                open();
-                            } else {
-                                ColumnsRepository.all = null;
-                                IssuesRepository.all = null;
-                            }
-                        });
-                };
-
-                open();
-            };
-
-            $rootScope.selectProject = function(project) {
-                ProjectsRepository.one(project.path_with_namespace)
-                    .then(
-                        function(project) {
-                            $rootScope.project = project;
-
-                            if (modal) modal.close($rootScope.project);
-                        }
-                    );
-            };
-
-            $rootScope.create = function() {
-                $modal
-                    .open({
-                        templateUrl: 'partials/column/modal.html',
-                        controller: function($scope, $modalInstance) {
-                            $scope.theme = 'default';
-                            $scope.error = false;
-                            $scope.closable = false;
-
-                            $scope.save = function () {
-                                var column = {
-                                    title: $scope.title,
-                                    theme: $scope.theme,
-                                    closable: parseInt($scope.closable, 10) || false,
-                                    issues: []
-                                };
-
-                                ColumnsRepository.persist(column);
-                                $modalInstance.close();
-                            };
-                        }
-                    });
-            };
-
             $rootScope.focusSearch = function() {
                 $('[data-ng-model=globalSearch]').focus();
             };

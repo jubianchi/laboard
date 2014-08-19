@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">
         Projects
-        <small data-ng-if="projects.all.length">({{ (projects.all | search:projectSearch).length }} <span data-ng-if="(projects.all | search:projectSearch).length <= 1">project</span><span data-ng-if="(projects.all | search:projectSearch).length > 1">projects</span>)</small>
+        <small data-ng-if="projects.length">({{ (projects | search:projectSearch).length }} <span data-ng-if="(projects | search:projectSearch).length <= 1">project</span><span data-ng-if="(projects | search:projectSearch).length > 1">projects</span>)</small>
     </h3>
 </div>
 
@@ -15,9 +15,9 @@
         </div>
     </form>
 
-    <table class="table table-striped table-hover" data-loading="projects.all">
+    <table class="table table-striped table-hover" data-loading="projects">
         <tbody>
-            <tr data-ng-repeat="p in projects.all | filter:projectSearch | orderBy:'-last_activity_at' track by $id(p)">
+            <tr data-ng-repeat="p in projects | filter:projectSearch | orderBy:'-last_activity_at' track by $id(p)">
                 <td data-ng-click="selectProject(p)">
                     <strong>{{ p.path_with_namespace }}</strong>
                     <br data-ng-if="p.description"/>

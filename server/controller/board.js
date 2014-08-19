@@ -55,7 +55,7 @@ module.exports = function(router, container) {
         }
     );
 
-    router.authenticated.put('/projects/:ns/:name/columns',
+    router.authenticated.put('/projects/:ns/:name/columns/:column',
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
@@ -65,10 +65,10 @@ module.exports = function(router, container) {
                 columns = JSON.parse(fs.readFileSync(file));
             }
 
-            if (columns[column.title]) {
-                if (typeof column.theme !== "undefined") columns[column.title].theme = column.theme;
-                if (typeof column.position !== "undefined") columns[column.title].position = column.position;
-                if (typeof column.closable !== "undefined") columns[column.title].closable = column.closable;
+            if (columns[req.params.column]) {
+                if (typeof column.theme !== "undefined") columns[req.params.column].theme = column.theme;
+                if (typeof column.position !== "undefined") columns[req.params.column].position = column.position;
+                if (typeof column.closable !== "undefined") columns[req.params.column].closable = column.closable;
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
@@ -77,11 +77,11 @@ module.exports = function(router, container) {
                     {
                         namespace: req.params.ns,
                         project: req.params.name,
-                        column: columns[column.title]
+                        column: columns[req.params.column]
                     }
                 );
 
-                res.response.ok(column);
+                res.response.ok(columns[req.params.column]);
             } else {
                 res.error.notFound({
                     message: 'Not found'
@@ -90,11 +90,11 @@ module.exports = function(router, container) {
         }
     );
 
-    router.authenticated.put('/projects/:ns/:name/columns/:id/move',
+    router.authenticated.put('/projects/:ns/:name/columns/:column/move',
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 columns = JSON.parse(fs.readFileSync(file)),
-                from = columns[req.params.id].position,
+                from = columns[req.params.column].position,
                 to =  req.body.position;
 
 
@@ -103,7 +103,7 @@ module.exports = function(router, container) {
                     message: 'Not acceptable'
                 });
             } else {
-                columns[req.params.id].position = to;
+                columns[req.params.column].position = to;
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
@@ -114,16 +114,16 @@ module.exports = function(router, container) {
                         project: req.params.name,
                         from: from,
                         to: to,
-                        column: columns[req.params.id]
+                        column: columns[req.params.column]
                     }
                 );
 
-                res.response.ok(columns[req.params.id]);
+                res.response.ok(columns[req.params.column]);
             }
         }
     );
 
-    router.authenticated.delete('/projects/:ns/:name/columns',
+    router.authenticated.delete('/projects/:ns/:name/columns/:column',
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
@@ -133,10 +133,10 @@ module.exports = function(router, container) {
                 columns = JSON.parse(fs.readFileSync(file));
             }
 
-            if (columns[column.title]) {
-                var col = columns[column.title];
+            if (columns[req.params.column]) {
+                var col = columns[req.params.column];
 
-                delete columns[column.title];
+                delete columns[req.params.column];
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 

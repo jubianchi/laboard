@@ -1,12 +1,12 @@
-<div data-ng-init="switchProject()" data-loading="columns.all">
+<div data-loading="columns">
     <div data-ng-if="project">
-        <div class="alert alert-warning" data-ng-if="columns.all && !columns.all.length">
+        <div class="alert alert-warning" data-ng-if="columns.length === 0">
             <i class="fa fa-columns fa-4x"></i>
             <h3>No columns</h3>
 
             <p>To get started, <a data-ng-click="create()" class="alert-link">create some columns</a> for your project or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
         </div>
 
-        <div class="column-container" data-ng-include="'partials/column/column.html'" data-ng-repeat="column in columns.all | orderBy:'position' track by $id(column)"></div>
+        <div class="column-container" data-ng-include="'column/partials/column.html'" data-ng-repeat="column in columns | orderBy:'position' track by $id(column)"></div>
     </div>
 </div>
