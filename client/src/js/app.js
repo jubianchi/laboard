@@ -109,13 +109,8 @@ angular.module('laboard-frontend')
                                     issues: []
                                 };
 
-                                ColumnsRepository.add(column)
-                                    .then(
-                                        $modalInstance.close,
-                                        function() {
-                                            $scope.error = true;
-                                        }
-                                    );
+                                ColumnsRepository.persist(column);
+                                $modalInstance.close();
                             };
                         }
                     });
