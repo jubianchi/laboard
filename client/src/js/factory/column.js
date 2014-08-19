@@ -40,6 +40,8 @@ angular.module('laboard-frontend')
                         var self = this,
                             deferred = $q.defer();
 
+                        column.position = column.position || this.all.length;
+
                         Restangular.all('projects/' + $rootScope.project.path_with_namespace + '/columns').post(column)
                             .then(
                                 function(column) {
