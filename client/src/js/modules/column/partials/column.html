@@ -2,8 +2,8 @@
     <div class="panel-heading">
         <strong>{{column.title}}</strong>
 
-        <small data-ng-if="column.issues" class="text-muted">
-            ({{ (column.issues | search:globalSearch).length }} <span data-ng-if="(column.issues | search:globalSearch).length <= 1">issue</span><span data-ng-if="(column.issues | search:globalSearch).length > 1">issues</span>)
+        <small class="text-muted">
+            ({{ (project.issues.$objects | column:column | search:globalSearch).length }} <span data-ng-if="(project.issues.$objects | column:column | search:globalSearch).length <= 1">issue</span><span data-ng-if="(project.issues.$objects | column:column | search:globalSearch).length > 1">issues</span>)
         </small>
 
         <div class="btn-group" data-ng-prevent-drag="true">
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="column.issues">
-        <div data-ng-repeat="issue in column.issues | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
+    <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
+        <div data-ng-repeat="issue in project.issues.$objects | column:column | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
     </div>
 </div>

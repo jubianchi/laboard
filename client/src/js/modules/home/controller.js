@@ -12,13 +12,6 @@ angular.module('laboard-frontend')
                             backdrop: !!$root.project || 'static',
                             keyboard: !!$root.project,
                             controller: function ($scope) {
-                                $projects.all()
-                                    .then(
-                                        function(projects) {
-                                            $scope.projects = projects;
-                                        }
-                                    );
-
                                 $scope.selectProject = function (project) {
                                     $projects.one(project.path_with_namespace)
                                         .then(
@@ -59,5 +52,8 @@ angular.module('laboard-frontend')
 
                 open();
             };
+
+            $scope.projects = $projects;
+            $projects.all();
         }
     ]);

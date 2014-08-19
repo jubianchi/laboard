@@ -1,25 +1,18 @@
 angular.module('laboard-frontend')
     .controller('ColumnController', [
-        '$rootScope', '$scope', '$modal', '$filter', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository', 'IssuesSocket',
-        function($root, $scope, $modal, $filter, $columns, $socket, $issues, $issuesSocket) {
-            var fill = function() {
-                    $scope.column.issues = $filter('column')($issues.$objects, $scope.column);
-                };
-
-            $scope.column.issues = $scope.column.issues || [];
-
+        '$rootScope', '$scope', '$modal', '$filter', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository',
+        function($root, $scope, $modal, $filter, $columns, $socket, $issues) {
             $scope.drop = function(issue) {
                 var from = issue.from;
                 issue.from = from.title;
                 issue.to = $scope.column.title;
+                issue.column = $scope.column.title.toLowerCase();
 
                 if (issue.from === issue.to) {
                     $scope.column.issues.push(issue);
                 }
 
                 if (issue.from === issue.to || !issue.to || !issue.from) return;
-
-                $scope.column.issues.push(issue);
 
                 $issues.move(issue)
                     .then(
@@ -29,10 +22,6 @@ angular.module('laboard-frontend')
                                 issue.after = null;
                                 $issues.theme(issue);
                             }
-                        },
-                        function() {
-                            from.issues.push(issue);
-                            $scope.unpin(issue);
                         }
                     );
             };
@@ -102,18 +91,15 @@ angular.module('laboard-frontend')
             $scope.remove = function () {
                 $columns.remove($scope.column)
                     .then(function () {
-                        if ($scope.column.issues) {
-                            $scope.column.issues.forEach($scope.unpin);
-                        }
-                    });
-            };
+                        $issues.$objects.forEach(function(issue) {
+                            if (issue.column === $scope.column.title.toLowerCase()) {
+                                issue.from = $scope.column.title;
+                                issue.to = null;
 
-            $scope.unpin = function (issue) {
-                $scope.column.issues.forEach(function(value, key) {
-                    if (value.id === issue.id)  {
-                        $scope.column.issues.splice(key, 1);
-                    }
-                });
+                                $issues.move(issue);
+                            }
+                        });
+                    });
             };
 
             $scope.pin = function() {
@@ -143,8 +129,6 @@ angular.module('laboard-frontend')
                                                     $scope.issues.splice(index, 1);
                                                 }
 
-                                                fill();
-
                                                 if ($scope.issues.length === 0) {
                                                     $modalInstance.close();
                                                 }
@@ -155,16 +139,5 @@ angular.module('laboard-frontend')
                         });
                 }
             };
-
-            $issuesSocket.on('move', fill);
-            $issuesSocket.on('update', fill);
-            $issuesSocket.on('close', fill);
-
-            $scope.$watch(
-                function () {
-                    return $issues.$objects;
-                },
-                fill
-            );
         }
     ]);

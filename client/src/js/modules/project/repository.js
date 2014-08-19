@@ -2,15 +2,14 @@ angular.module('laboard-frontend')
     .factory('ProjectsRepository', [
         '$rootScope', 'Restangular', '$q',
         function($root, $rest, $q) {
-            var storage = [],
-                fetch = function() {
+            var fetch = function (self) {
                     var deferred = $q.defer();
 
                     $rest.all('projects')
                         .getList()
                         .then(
                             function (projects) {
-                                storage = _.sortBy(projects, 'path_with_namespace');
+                                self.$objects = _.sortBy(projects, 'path_with_namespace');
 
                                 deferred.resolve(projects);
                             },
@@ -19,50 +18,74 @@ angular.module('laboard-frontend')
 
                     return deferred.promise;
                 },
-                fetchOne = function (id) {
-                    return $rest.all('projects').one(id);
+                fetchOne = function (id, self) {
+                    var deferred = $q.defer();
+
+                    $rest.all('projects')
+                        .one(id)
+                        .get()
+                        .then(
+                            function (column) {
+                                self.add(column);
+
+                                deferred.resolve(column);
+                            },
+                            deferred.reject
+                        );
+
+                    return deferred.promise;
+                },
+                all = function (self) {
+                    var deferred = $q.defer();
+
+                    fetch(self)
+                        .then(
+                            function(columns) {
+                                if (columns.length) {
+                                    self.all = function() {
+                                        return allCached(self);
+                                    };
+                                }
+
+                                deferred.resolve(columns);
+                            },
+                            deferred.reject
+                        );
+
+                    return deferred.promise;
+                },
+                allCached = function(self) {
+                    var deferred = $q.defer();
+
+                    deferred.resolve(self.$objects);
+
+                    return deferred.promise;
                 },
                 repository = {
-                    all: function () {
-                        var self = this,
-                            deferred = $q.defer();
+                    $objects: [],
 
-                        fetch()
-                            .then(
-                                function (projects) {
-                                    self.all = function () {
-                                        var deferred = $q.defer();
-
-                                        deferred.resolve(projects);
-
-                                        return deferred.promise;
-                                    };
-
-                                    deferred.resolve(projects);
-                                },
-                                deferred.reject
-                            );
-
-                        return deferred.promise;
+                    all: function() {
+                        return all(this);
                     },
-                    one: function (id) {
-                        return fetchOne(id).get();
+                    one: function(id) {
+                        return fetchOne(id, this);
                     },
 
                     add: function (project) {
-                        var added = false;
+                        var added = false,
+                            self = this;
 
-                        storage.forEach(function(value, key) {
+                        this.$objects.forEach(function(value, key) {
                             if (added) return;
 
                             if(value.path_with_namespace === project.path_with_namespace) {
-                                storage[key] = project;
+                                self.$objects[key] = project;
                                 added = true;
                             }
                         });
 
                         if(added === false && project.path_with_namespace) {
-                            storage.push(project);
+                            this.$objects.push(project);
                         }
 
                         return project;

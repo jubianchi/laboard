@@ -16,16 +16,38 @@ angular.module('laboard-frontend')
                                         }
                                     );
 
-                                $columns.all();
-                                $issues.all();
+                                $columns.all()
+                                    .then(
+                                        function() {
+                                            $root.project.columns = $columns;
+                                        }
+                                    );
+
+                                $issues.all()
+                                    .then(
+                                        function() {
+                                            $root.project.issues = $issues;
+                                        }
+                                    );
                             }
                         );
                 } else {
                     $state.transitionTo('home');
                 }
             } else {
-                $columns.all();
-                $issues.all();
+                $columns.all()
+                    .then(
+                        function() {
+                            $root.project.columns = $columns;
+                        }
+                    );
+
+                $issues.all()
+                    .then(
+                        function() {
+                            $root.project.issues = $issues;
+                        }
+                    );
             }
 
             $scope.bootstrap = function() {
@@ -58,16 +80,5 @@ angular.module('laboard-frontend')
                         }
                     });
             };
-
-            $scope.$watch(
-                function () {
-                    return $columns.$objects;
-                },
-                function (data) {
-                    if (typeof data.length !== 'undefined') $scope.columns = data;
-                }
-            );
-
-            $columnsSocket.on('move', function() {});
         }
     ]);

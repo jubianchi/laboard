@@ -203,6 +203,7 @@ angular.module('laboard-frontend')
                 .on('update', handler)
                 .on('move', handler)
                 .on('theme', handler)
+                .on('edit', handler)
                 .on('close',
                     function(data) {
                         repository.unadd(data.issue);

@@ -2,28 +2,9 @@ angular.module('laboard-frontend')
     .factory('SocketFactory', [
         '$rootScope',
         function($root) {
-            /*var handler = function(data) {
-                    if (data.namespace + '/' + data.project !== $root.project.path_with_namespace) return;
-
-                    $root.$apply(
-                        function() {
-                            IssuesRepository.one(data.issue.id)
-                                .then(
-                                function(issue) {
-                                    $root.$broadcast('issue.update', issue);
-                                }
-                            );
-                        }
-                    );
-                },*/
             var connected = false,
                 handlers = {},
                 socket;
-
-            /*$root.$on('socket.ready', function(e, socket) {
-                socket.on('issue.update', handler);
-                socket.on('issue.edit', handler);
-            });*/
 
             return {
                 connect: function() {

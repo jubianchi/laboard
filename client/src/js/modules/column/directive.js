@@ -13,8 +13,8 @@ angular.module('laboard-frontend')
                         resizeWidth = function() {
                             var width = 100;
 
-                            if ($scope.columns) {
-                                width = 100 / $scope.columns.length;
+                            if ($scope.project.columns.$objects) {
+                                width = 100 / $scope.project.columns.$objects.length;
                             }
 
 
@@ -31,8 +31,8 @@ angular.module('laboard-frontend')
 
                     $scope.$watch(
                         function() {
-                            if ($scope.columns) {
-                                return $scope.columns.length;
+                            if ($scope.project.columns.$objects) {
+                                return $scope.project.columns.$objects.length;
                             } else {
                                 return 1;
                             }

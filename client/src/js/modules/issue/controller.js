@@ -2,27 +2,20 @@ angular.module('laboard-frontend')
     .controller('IssueController', [
         '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', 'IssuesRepository', 'IssuesSocket',
         function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $issues, $socket) {
-            var refresh = function(issue) {
-                    $scope.issue = issue;
-                },
-                unpin = function (issue) {
-                    $scope.$parent.unpin(issue);
-                };
-
             $scope.close = function() {
-                $issues.close($scope.issue).then(unpin);
+                $issues.close($scope.issue)
             };
 
             $scope.unpin = function() {
                 $scope.issue.from = $scope.column.title;
                 $scope.issue.to = null;
 
-                $issues.move($scope.issue).then(unpin);
+                $issues.move($scope.issue)
             };
 
             $scope.drag = function() {
                 $scope.issue.from = $scope.column;
-                unpin($scope.issue);
+                $scope.issue.column = null;
             };
 
             $scope.theme = function(theme) {
@@ -34,13 +27,7 @@ angular.module('laboard-frontend')
 
                 $scope.issue.after = theme;
 
-                $issues.theme($scope.issue)
-                    .then(
-                        refresh,
-                        function() {
-                            $scope.issue.theme = $scope.issue.before;
-                        }
-                    );
+                $issues.theme($scope.issue);
             };
 
             var modal;
@@ -62,12 +49,8 @@ angular.module('laboard-frontend')
                     .then(function(member) {
                         $scope.issue.assignee = member;
 
-                        $issues.persist($scope.issue).then(refresh);
+                        $issues.persist($scope.issue);
                     });
             };
-
-            $socket
-                .on('update', function(data) { refresh(data.issue); })
-                .on('theme', function(data) { refresh(data.issue); });
         }
     ]);
