@@ -72,7 +72,7 @@ Starting the application is really easy:
 
 ```
 $ cd laboard
-$ node server/server.js
+$ node server
 ```
 
 ## Hacking
