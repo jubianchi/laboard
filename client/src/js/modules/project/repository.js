@@ -62,7 +62,7 @@ angular.module('laboard-frontend')
                     return deferred.promise;
                 },
                 repository = {
-                    $objects: [],
+                    $objects: null,
 
                     all: function() {
                         return all(this);
@@ -74,6 +74,8 @@ angular.module('laboard-frontend')
                     add: function (project) {
                         var added = false,
                             self = this;
+
+                        this.$objects = this.$objects || [];
 
                         this.$objects.forEach(function(value, key) {
                             if (added) return;
@@ -89,6 +91,13 @@ angular.module('laboard-frontend')
                         }
 
                         return project;
+                    },
+                    clear: function() {
+                        this.$objects = null;
+
+                        this.all = function() {
+                            return all(this);
+                        };
                     },
 
                     members: function (project) {

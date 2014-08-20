@@ -66,7 +66,7 @@ angular.module('laboard-frontend')
                     return deferred.promise;
                 },
                 repository = {
-                    $objects: [],
+                    $objects: null,
 
                     all: function() {
                         return all(this);
@@ -83,6 +83,8 @@ angular.module('laboard-frontend')
                         column.theme = column.theme || 'default';
                         column.closable = column.closable == true;
                         column.issues = column.issues || [];
+
+                        this.$objects = this.$objects || [];
 
                         this.$objects.forEach(function(value, key) {
                             if (added) return;
@@ -111,7 +113,7 @@ angular.module('laboard-frontend')
                         return column;
                     },
                     clear: function() {
-                        this.$objects = [];
+                        this.$objects = null;
 
                         this.all = function() {
                             return all(this);
