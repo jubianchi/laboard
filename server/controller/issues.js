@@ -138,7 +138,7 @@ module.exports = function(router, container) {
                     old = 'column:' + from,
                     nw = 'column:' + to;
 
-                issue.labels.forEach(function(label, key) {
+                (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {
                         issue.labels.splice(key, 1);
                     }
@@ -194,7 +194,7 @@ module.exports = function(router, container) {
                     old = 'theme:' + (before || 'default'),
                     nw = 'theme:' + (after || 'default');
 
-                issue.labels.forEach(function(label, key) {
+                (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {
                         issue.labels.splice(key, 1);
                     }
