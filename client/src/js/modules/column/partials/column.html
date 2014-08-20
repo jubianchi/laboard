@@ -1,10 +1,8 @@
-<div data-column class="column pull-left" data-ng-class="'panel-' + (column.theme || 'default')" data-ng-controller="ColumnController">
+<div data-column class="column pull-left panel-{{(column.theme || 'default')}}" data-ng-controller="ColumnController">
     <div class="panel-heading">
         <strong>{{column.title}}</strong>
 
-        <small class="text-muted">
-            ({{ (project.issues.$objects | column:column | search:globalSearch).length }} <span data-ng-if="(project.issues.$objects | column:column | search:globalSearch).length <= 1">issue</span><span data-ng-if="(project.issues.$objects | column:column | search:globalSearch).length > 1">issues</span>)
-        </small>
+        <counter singular="'issue'" plural="'issues'" max="column.limit" value="(project.issues.$objects | column:column | search:globalSearch).length"></counter>
 
         <div class="btn-group" data-ng-prevent-drag="true">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
@@ -18,13 +16,13 @@
                 <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                 <li class="divider"></li>
                 <li><a data-ng-click="pin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
-                <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
-                <li><a target="_blank" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
+                <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
+                <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
             </ul>
         </div>
     </div>
 
-    <div class="panel-body" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
+    <div class="panel-body" data-ng-class="{full: column.limit > 0 && column.limit <= (project.issues.$objects|column:column).length}" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
         <div data-ng-repeat="issue in project.issues.$objects | column:column | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .filter('column', [
         '$filter', '$rootScope',
-        function ($filter, $rootScope) {
+        function () {
             return function(issues, column) {
                 if (!issues) return [];
 

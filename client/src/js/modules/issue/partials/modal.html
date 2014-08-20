@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">
         Issues
-        <small data-ng-if="projects.all.length">({{issues.length}} <span data-ng-if="issues.length == 0">issue</span><span data-ng-if="issues.length > 0">issues</span>)</small>
+        <counter singular="'issue'" plural="'issues'" value="(issues|filter:issueSearch).length"></counter>
     </h3>
 </div>
 

@@ -6,24 +6,25 @@ angular.module('laboard-frontend')
                 var from = issue.from;
                 issue.from = from.title;
                 issue.to = $scope.column.title;
-                issue.column = $scope.column.title.toLowerCase();
 
-                if (issue.from === issue.to) {
-                    $scope.column.issues.push(issue);
-                }
+                if (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length) {
+                    if (issue.from === issue.to || !issue.to || !issue.from) return;
 
-                if (issue.from === issue.to || !issue.to || !issue.from) return;
+                    issue.column = $scope.column.title.toLowerCase();
 
-                $issues.move(issue)
-                    .then(
-                        function(issue) {
-                            if (issue.theme) {
-                                issue.before = issue.theme;
-                                issue.after = null;
-                                $issues.theme(issue);
+                    $issues.move(issue)
+                        .then(
+                            function (issue) {
+                                if (issue.theme) {
+                                    issue.before = issue.theme;
+                                    issue.after = null;
+                                    $issues.theme(issue);
+                                }
                             }
-                        }
-                    );
+                        );
+                } else {
+                    issue.column = from.title.toLowerCase();
+                }
             };
 
             $scope.move = function(step) {
@@ -68,10 +69,12 @@ angular.module('laboard-frontend')
                             $scope.closable = column.closable ? 1 : 0;
                             $scope.theme = column.theme || 'default';
                             $scope.title = column.title;
+                            $scope.limit = column.limit ? (column.limit < 0 ? 0 : column.limit) : 0;
 
                             $scope.save = function () {
                                 column.theme = $scope.theme;
                                 column.closable = $scope.closable == 1;
+                                column.limit = $scope.limit;
 
                                 $columns.persist(column)
                                     .then(
@@ -110,7 +113,7 @@ angular.module('laboard-frontend')
                     if (!issue.column) issues.push(issue);
                 });
 
-                if (issues.length) {
+                if (issues.length && (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length)) {
                     $modal
                         .open({
                             templateUrl: 'issue/partials/modal.html',
