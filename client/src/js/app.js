@@ -72,7 +72,7 @@ angular.module('laboard-frontend')
                             keyboard: !!$rootScope.project,
                             controller: function ($scope) {
                                 $scope.selectProject = function (project) {
-                                    if (project.path_with_namespace === $rootScope.project.path_with_namespace) {
+                                    if (!$rootScope.project || project.path_with_namespace !== $rootScope.project.path_with_namespace) {
                                         $projects.one(project.path_with_namespace)
                                             .then(
                                             function (project) {
