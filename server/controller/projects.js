@@ -46,7 +46,6 @@ module.exports = function(router, container) {
                             }
                         },
                         {
-                            per_page: 100,
                             page: (++page)
                         }
                     );
