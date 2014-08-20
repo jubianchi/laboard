@@ -97,7 +97,7 @@ angular.module('laboard-frontend')
                                 $issues.clear();
 
                                 $state.transitionTo(
-                                    'home.project',
+                                    'project',
                                     {
                                         namespace: project.path_with_namespace.split('/')[0],
                                         project: project.path_with_namespace.split('/')[1]
