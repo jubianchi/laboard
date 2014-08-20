@@ -11,57 +11,7 @@
 
 <body data-nyan>
 
-<div class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img src="/assets/images/logo.png"/>
-            <a target="_blank" class="navbar-brand" href="{{ LABOARD_CONFIG.gitlabUrl }}/{{ project.path_with_namespace }}">{{ project.path_with_namespace }}</a>
-        </div>
-
-        <form class="navbar-form navbar-left" data-ng-show="project">
-            <div class="form-group has-feedback">
-                <div class="dropdown" data-ng-init="globalSearch = ''">
-                    <input type="text" class="form-control dropdown-toggle" placeholder="Global search" data-ng-model="globalSearch" data-ng-disabled="issues.all.length == 0">
-                    <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times-circle"></i></span>
-                    <ul class="dropdown-menu" data-ng-show="globalSearch[0] != '@' || (project.members|filter:globalSearch.replace('@from ', '').replace('@to ', '').replace('@', '')).length > 0">
-                        <li data-ng-show="globalSearch[0] != '@'"><a data-ng-click="globalSearch = '@from '; focusSearch()"><i class="fa fa-user fa-fw"></i> Search authors</a></li>
-                        <li data-ng-show="globalSearch[0] != '@'"><a data-ng-click="globalSearch = '@to '; focusSearch()"><i class="fa fa-user fa-fw"></i> Search assignees</a></li>
-                        <li data-ng-show="globalSearch[0] != '@'" class="dropdown-toggle"><a data-ng-click="globalSearch = '@me'; focusSearch()"><i class="fa fa-user fa-fw"></i> Search my tickets (authored and assigned)</a></li>
-                        <li data-ng-show="globalSearch[0] != '@'"><a data-ng-click="globalSearch = '@'; focusSearch()"><i class="fa fa-user fa-fw"></i> Search assignees and authors</a></li>
-                        <li data-ng-show="globalSearch[0] != '@'" class="dropdown-toggle"><a data-ng-click="globalSearch = '#'; focusSearch()"><i class="fa fa-slack fa-fw"></i> Search issue numbers</a></li>
-                        <li data-ng-show="globalSearch[0] != '@'" class="dropdown-toggle"><a data-ng-click="globalSearch = ':'; focusSearch()"><i class="fa fa-crosshairs fa-fw"></i> Search milestones (semver)</a></li>
-
-                        <li data-ng-if="globalSearch[0] == '@'" data-ng-repeat="member in project.members|filter:globalSearch.replace('@from ', '').replace('@to ', '').replace('@', '')" class="dropdown-toggle">
-                            <a data-ng-click="$root.globalSearch = $root.globalSearch + member.username;"><i class="fa fa-user fa-fw"></i> {{member.username}} <small class="text-muted">{{member.name}}</small></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </form>
-
-        <div class="btn-group navbar-left" data-ng-if="project">
-            <button data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
-            <button data-tooltip="Create a new column" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="addColumn()"><i class="fa fa-plus"></i></button>
-        </div>
-
-        <ul class="nav navbar-nav navbar-right" data-ng-controller="LoginController" data-ng-show="loggedin">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                    <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
-                    {{ user.name }}
-                    <b class="fa fa-caret-down"></b>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="#" class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="main clearfix" data-ui-view></div>
+<div data-ui-view></div>
 
 <script src="assets/js/vendor.js"></script>
 <script src="assets/js/app.js"></script>

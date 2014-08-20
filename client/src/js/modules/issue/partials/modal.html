@@ -5,8 +5,8 @@
     </h3>
 </div>
 
-<div class="modal-body">
-    <form>
+<div class="modal-body" data-loading="issues">
+    <form data-ng-show="issues">
         <div class="form-group has-feedback">
             <input type="text" class="form-control" placeholder="Issue search" data-ng-model="issueSearch">
             <span class="text-muted form-control-feedback" data-ng-click="issueSearch = ''" data-ng-show="issueSearch">
@@ -15,9 +15,9 @@
         </div>
     </form>
 
-    <table class="table table-striped table-hover" data-loading="projects.all">
+    <table class="table table-striped table-hover">
         <tbody>
-            <tr data-ng-repeat="issue in issues | filter:issueSearch | orderBy:'-created_at' track by $id(issue)">
+            <tr data-ng-repeat="issue in issues|filter:issueSearch | orderBy:'-created_at' track by $id(issue)">
                 <td data-ng-click="import(issue)">
                     <strong>#{{ issue.iid }}</strong> - {{ issue.title }}
 

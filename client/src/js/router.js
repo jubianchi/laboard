@@ -28,13 +28,12 @@ angular.module('laboard-frontend')
                     controller: 'HomeController',
                     security: true
                 })
-
-                .state('project', {
-                    url: "/:namespace/:project",
-                    templateUrl: 'project/partials/project.html',
-                    controller: 'ProjectController',
-                    security: true
-                })
+                    .state('home.project', {
+                        url: ":namespace/:project",
+                        templateUrl: 'project/partials/project.html',
+                        controller: 'ProjectController',
+                        security: true
+                    })
             ;
         }
     ]);

@@ -2,44 +2,43 @@ angular.module('laboard-frontend')
     .controller('ProjectController', [
         '$rootScope', '$scope', '$stateParams', '$state', '$modal', 'ColumnsRepository', 'ProjectsRepository', 'IssuesRepository',
         function($root, $scope, $params, $state, $modal, $columns, $projects, $issues) {
-            var load = function() {
-                $projects.members($root.project)
-                    .then(
-                        function(members) {
-                            $root.project.members = members;
-                        }
-                    );
+            $root.$watch(
+                function() {
+                    return $root.project;
+                },
+                function() {
+                    if (!$root.project) return;
 
-                $columns.all()
-                    .then(
-                        function() {
-                            $root.project.columns = $columns;
-                        }
-                    );
-
-                $issues.all()
-                    .then(
-                        function() {
-                            $root.project.issues = $issues;
-                        }
-                    );
-            };
-
-            if (!$root.project) {
-                if ($params.namespace && $params.project) {
-                    $projects.one($params.namespace + '/' + $params.project)
+                    $projects.members($root.project)
                         .then(
-                            function (project) {
-                                $root.project = project;
-
-                                load();
+                            function(members) {
+                                $root.project.members = members;
                             }
                         );
-                } else {
-                    $state.transitionTo('home');
+
+                    $columns.all()
+                        .then(
+                            function() {
+                                $root.project.columns = $columns;
+                            }
+                        );
+
+                    $issues.all()
+                        .then(
+                            function() {
+                                $root.project.issues = $issues;
+                            }
+                        );
                 }
-            } else {
-                load();
+            );
+
+            if ($params.namespace && $params.project) {
+                $projects.one($params.namespace + '/' + $params.project)
+                    .then(
+                        function (project) {
+                            $scope.selectProject(project);
+                        }
+                    );
             }
 
             $scope.bootstrap = function() {
