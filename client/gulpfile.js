@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     path = require('path'),
     prefix = require('gulp-autoprefixer'),
+    templateCache = require('gulp-angular-templatecache'),
     exec = require('child_process').exec,
     http = require('http');
 
@@ -76,9 +77,18 @@ gulp.task('less', function() {
         .pipe(connect.reload());
 });
 
+gulp.task('cache', function() {
+    gulp.src('src/js/modules/**/partials/**/*.html')
+        .pipe(templateCache('templates.js', {
+            module: 'laboard-frontend'
+        }))
+        .pipe(gulp.dest('tmp'))
+        .pipe(connect.reload());
+});
+
 var js;
-gulp.task('js', function() {
-    gulp.src(js = ['src/js/**/*.js', '../config/client.js'])
+gulp.task('js', ['cache'], function() {
+    gulp.src(js = ['src/js/**/*.js', '../config/client.js', 'tmp/templates.js'])
         .pipe(concat('app.js'))
         .pipe(gulp.dest('public/assets/js'))
         .pipe(connect.reload());
@@ -86,10 +96,6 @@ gulp.task('js', function() {
 
 gulp.task('html', function() {
     gulp.src(['src/*.html'])
-        .pipe(gulp.dest('public'))
-        .pipe(connect.reload());
-
-    gulp.src(['src/js/modules/**/partials/**/*.html'])
         .pipe(gulp.dest('public'))
         .pipe(connect.reload());
 });
@@ -105,7 +111,7 @@ gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
 
 gulp.task('watch', ['server'], function() {
     var watched = {
-        js: js,
+        js: js.concat(['src/**/*.html']),
         libs: libs.concat(['bower_components/node-semver/semver.js']),
         less: ['src/less/**/*.less'],
         'font-awesome': ['bower_components/font-awesome/fonts/*'],

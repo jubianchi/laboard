@@ -3,6 +3,7 @@ config/server.json
 node_modules
 bower_components
 client/public
+client/tmp
 /data
 *.log
 .idea/
