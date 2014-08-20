@@ -68,8 +68,8 @@ angular.module('laboard-frontend')
                     modal = $modal
                         .open({
                             templateUrl: 'home/partials/projects.html',
-                            backdrop: !!$root.project || 'static',
-                            keyboard: !!$root.project,
+                            backdrop: !!$rootScope.project || 'static',
+                            keyboard: !!$rootScope.project,
                             controller: function ($scope) {
                                 $scope.selectProject = function (project) {
                                     if (project.path_with_namespace === $oot.project.path_with_namespace) {
