@@ -137,5 +137,8 @@ angular.module('laboard-frontend')
                         }
                     });
             };
+
+            $scope.projects = $projects;
+            $projects.all();
         }
     ]);
