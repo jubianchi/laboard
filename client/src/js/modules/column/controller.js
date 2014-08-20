@@ -7,24 +7,27 @@ angular.module('laboard-frontend')
                 issue.from = from.title;
                 issue.to = $scope.column.title;
 
-                if (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length) {
-                    if (issue.from === issue.to || !issue.to || !issue.from) return;
-
-                    issue.column = $scope.column.title.toLowerCase();
-
-                    $issues.move(issue)
-                        .then(
-                            function (issue) {
-                                if (issue.theme) {
-                                    issue.before = issue.theme;
-                                    issue.after = null;
-                                    $issues.theme(issue);
-                                }
-                            }
-                        );
-                } else {
+                if (
+                    (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length) ||
+                    (issue.from === issue.to || !issue.to || !issue.from)
+                ) {
                     issue.column = from.title.toLowerCase();
+
+                    return;
                 }
+
+                issue.column = $scope.column.title.toLowerCase();
+
+                $issues.move(issue)
+                    .then(
+                        function (issue) {
+                            if (issue.theme) {
+                                issue.before = issue.theme;
+                                issue.after = null;
+                                $issues.theme(issue);
+                            }
+                        }
+                    );
             };
 
             $scope.move = function(step) {
