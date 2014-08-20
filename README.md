@@ -11,7 +11,8 @@ A kanban board made for Gitlab
 
 ## Requirements
 
-* nodejs v0.10.*
+* nodejs `~ 0.10.26`
+* Gitlab `>= 7.1`
 
 ## How does it work
 

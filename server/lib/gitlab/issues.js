@@ -1,7 +1,8 @@
 var  _ = require('lodash'),
-    issues = module.exports = function issues(client, projects) {
+    issues = module.exports = function issues(client, projects, version) {
         this.client = client;
         this.projects = projects;
+        this.version = version;
     },
     format = function(issue) {
         issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone']);
@@ -41,11 +42,9 @@ var  _ = require('lodash'),
             issue.labels = [''];
         }
 
-        // Gitlab >= 7.2
-        //
-        //if (issue.labels.join) {
-        //    issue.labels = issue.labels.join(',');
-        //}
+        if (this.version !== '7.1' && issue.labels.join) {
+            issue.labels = issue.labels.join(',');
+        }
 
         return issue;
     };

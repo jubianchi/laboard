@@ -1,5 +1,6 @@
 {
     "gitlab_url": "http://gitlab.example.com",
+    "gitlab_version": "7.1",
     "data_dir": "../data",
     "port": 80
 }

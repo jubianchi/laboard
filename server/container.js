@@ -63,7 +63,7 @@ jimple
     .share('gitlab.issues', function(container) {
         var Issues = require('./lib/gitlab/issues');
 
-        return new Issues(container.get('gitlab'), container.get('gitlab.projects'));
+        return new Issues(container.get('gitlab'), container.get('gitlab.projects'), container.get('config').gitlab_version);
     })
     .share('app', function(container) {
         var application = express();
