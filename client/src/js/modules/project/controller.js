@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('ProjectController', [
-        '$rootScope', '$scope', '$stateParams', '$state', '$modal', 'ColumnsRepository', 'ProjectsRepository', 'IssuesRepository', 'ColumnsSocket',
-        function($root, $scope, $params, $state, $modal, $columns, $projects, $issues, $columnsSocket) {
+        '$rootScope', '$scope', '$stateParams', '$state', '$modal', 'ColumnsRepository', 'ProjectsRepository', 'IssuesRepository',
+        function($root, $scope, $params, $state, $modal, $columns, $projects, $issues) {
             var load = function() {
                 $projects.members($root.project)
                     .then(
