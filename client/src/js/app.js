@@ -6,7 +6,8 @@ angular.module('laboard-frontend',[
     'restangular',
     'authenticate.js',
     'chieffancypants.loadingBar',
-    'ngDraggable'
+    'ngDraggable',
+    'highcharts-ng'
 ]);
 
 angular.module('laboard-frontend')

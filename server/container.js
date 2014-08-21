@@ -73,6 +73,11 @@ jimple
             container.get('config').gitlab_version
         );
     })
+    .share('mysql', function(container) {
+        var mysql = require('mysql');
+
+        return mysql.createConnection(container.get('config').mysql);
+    })
     .share('app', function(container) {
         var application = express();
 

@@ -86,5 +86,6 @@ angular.module('laboard-frontend')
             $projects.all();
 
             $root.globalSearch = '';
+            $scope.$state = $state;
         }
     ]);

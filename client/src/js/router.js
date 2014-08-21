@@ -34,6 +34,12 @@ angular.module('laboard-frontend')
                         controller: 'ProjectController',
                         security: true
                     })
+                        .state('home.project.metrics', {
+                            url: "/metrics",
+                            templateUrl: 'metrics/partials/metrics.html',
+                            controller: 'MetricsController',
+                            security: true
+                        })
             ;
         }
     ]);

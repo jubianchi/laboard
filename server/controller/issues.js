@@ -30,6 +30,35 @@ module.exports = function(router, container) {
         }
     );
 
+    router.authenticated.get('/projects/:ns/:name/issues/metrics',
+        function(req, res) {
+            container.get('mysql').query(
+                'SELECT ' +
+                    'destination.from AS \'from\', ' +
+                    'YEAR(destination.date) AS year, ' +
+                    'WEEK(destination.date) AS week, ' +
+                    'AVG(TIME_TO_SEC(TIMEDIFF(source.date, destination.date))) AS days ' +
+                'FROM ' +
+                    'moves AS source ' +
+                'LEFT JOIN ' +
+                    'moves AS destination ON ( ' +
+                        'source.from=destination.to AND ' +
+                        'source.issue=destination.issue ' +
+                    ')' +
+                'WHERE ' +
+                    'destination.from IS NOT NULL ' +
+                'GROUP BY ' +
+                    'YEAR(destination.date), ' +
+                    'WEEK(destination.date), ' +
+                    'destination.from',
+                function(err, result) {
+                    console.log(result);
+                    res.response.ok(result);
+                }
+            );
+        }
+    );
+
     router.authenticated.get('/projects/:ns/:name/issues',
         function(req, res) {
             var issues = [],
@@ -160,6 +189,18 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
+                            container.get('mysql').query(
+                                'INSERT INTO moves VALUES(?, ?, ?, ?, ?, ?)',
+                                [
+                                    req.params.ns,
+                                    req.params.name,
+                                    issue.id,
+                                    from,
+                                    to,
+                                    new Date()
+                                ]
+                            );
+
                             container.get('server.websocket').broadcast(
                                 'issue.move',
                                 {

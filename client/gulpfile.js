@@ -38,7 +38,9 @@ var libs = [
     'bower_components/angular-bootstrap/ui-bootstrap.js',
     'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
     'bower_components/socket.io-client/socket.io.js',
-    'bower_components/node-semver/semver.browser.js'
+    'bower_components/node-semver/semver.browser.js',
+    'bower_components/highcharts/highcharts-all.js',
+    'bower_components/highcharts-ng/dist/highcharts-ng.js'
 ];
 gulp.task('libs', function(cb) {
     exec(
