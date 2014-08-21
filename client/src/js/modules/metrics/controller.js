@@ -1,8 +1,10 @@
 angular.module('laboard-frontend')
     .controller('MetricsController', [
-        '$rootScope', '$scope', '$http', '$stateParams', 'FlowGraphDataFactory',
-        function ($root, $scope, $http, $params, $graph) {
+        '$rootScope', '$scope', '$http', '$stateParams', 'FlowGraphDataFactory', 'ProjectManager',
+        function ($root, $scope, $http, $params, $graph, $projectManager) {
             var render = function() {
+                $scope.error = false;
+
                 $graph.getData($params.namespace, $params.project)
                     .then(
                         function(data) {
@@ -32,7 +34,7 @@ angular.module('laboard-frontend')
                                 xAxis: {
                                     categories: data.dates,
                                     title: {
-                                        text: 'Year / Week'
+                                        text: 'Incoming date'
                                     }
                                 },
                                 yAxis: {
@@ -49,30 +51,40 @@ angular.module('laboard-frontend')
                                     }
                                 },
                                 title: {
-                                    text: 'Cumulative flow graph'
+                                    text: 'Cumulative flow graph (by ' + $graph.getInterval() + ')'
+                                },
+                                subtitle: {
+                                    text: 'Time spent in each column depending on issue\'s incoming date'
                                 }
                             };
+                        },
+                        function() {
+                            $scope.error = true;
                         }
                     );
             };
 
             $root.$on('graph.interval', function() {
-                console.log('graph.interval');
                 render();
             });
 
-            render();
+            if ($params.namespace && $params.project) {
+                $projectManager.select($params.namespace + '/' + $params.project).then(
+                    render,
+                    function() {
+                        $state.go('home');
+                    }
+                );
+            } else {
+                render();
+            }
         }
     ])
     .controller('MetricsMenuController', [
         '$rootScope', '$scope', 'FlowGraphDataFactory',
         function ($root, $scope, $graph) {
             $scope.interval = 'week';
-            console.log('MetricsMenuController');
-
             $scope.setInterval = function(interval) {
-                console.log('setInterval');
-
                 $graph.setInterval(interval);
                 $scope.interval = interval;
 

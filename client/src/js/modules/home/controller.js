@@ -1,36 +1,19 @@
 angular.module('laboard-frontend')
     .controller('HomeController', [
-        '$rootScope', '$scope', '$modal', '$state', '$stateParams', 'ProjectsRepository', 'ColumnsRepository', 'IssuesRepository',
-        function ($root, $scope, $modal, $state, $params, $projects, $columns, $issues) {
-            var modal;
-
-            var selectProject = $scope.selectProject = function (project) {
-                if (!$root.project || project.path_with_namespace !== $root.project.path_with_namespace) {
-                    $projects.one(project.path_with_namespace)
-                        .then(
-                            function (project) {
-                                $root.project = project;
-                                $columns.clear();
-                                $issues.clear();
-
-                                if (modal) modal.close(project);
-                            }
-                        );
-                } else {
-                    if (modal) modal.close($root.project);
-                }
-            };
-
+        '$rootScope', '$scope', '$modal', '$state', '$stateParams', 'ProjectsRepository', 'ColumnsRepository', 'IssuesRepository', 'ProjectManager',
+        function ($root, $scope, $modal, $state, $params, $projects, $columns, $issues, $projectManager) {
             $scope.switchProject = function () {
                 var open = function () {
-                    modal = $modal
+                    var modal = $modal
                         .open({
                             templateUrl: 'home/partials/projects.html',
                             backdrop: !!$root.project || 'static',
                             keyboard: !!$root.project,
                             controller: function($scope) {
                                 $scope.projects = $projects;
-                                $scope.selectProject = selectProject;
+                                $scope.selectProject = function (project) {
+                                    $projectManager.select(project.path_with_namespace).then(modal.close(project));
+                                };
                             }
                         });
 
@@ -53,34 +36,11 @@ angular.module('laboard-frontend')
                 open();
             };
 
-            $scope.addColumn = function() {
-                $modal
-                    .open({
-                        templateUrl: 'column/partials/modal.html',
-                        controller: function ($scope, $modalInstance) {
-                            $scope.theme = 'default';
-                            $scope.closable = false;
-                            $scope.error = false;
-
-                            $scope.save = function () {
-                                var column = {
-                                    title: $scope.title,
-                                    theme: $scope.theme,
-                                    position: $columns.$objects.length,
-                                    limit: $scope.limit ? ($scope.limit < 0 ? 0 : $scope.limit) : 0
-                                };
-
-                                $columns.persist(column)
-                                    .then(
-                                    $modalInstance.close,
-                                    function () {
-                                        $scope.error = true;
-                                    }
-                                );
-                            };
-                        }
-                    });
-            };
+            $root.$on('$stateChangeStart', function(e, state) {
+                if (state.name === 'home') {
+                    $scope.switchProject();
+                }
+            });
 
             $scope.projects = $projects;
             $projects.all();

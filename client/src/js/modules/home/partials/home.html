@@ -26,12 +26,8 @@
             </div>
         </form>
 
-        <div class="btn-group navbar-left">
+        <div class="navbar-left">
             <button data-ng-show="project" data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
-            <button data-ng-show="project" data-tooltip="Create a new column" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="addColumn()"><i class="fa fa-plus"></i></button>
-
-            <button data-ng-show="!$state.is('home.project') && project" data-tooltip="View project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ui-sref="home.project"><i class="fa fa-columns"></i></button>
-            <button data-ng-show="!$state.is('home.project.metrics') && project" data-tooltip="View flow graph" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ui-sref="home.project.metrics"><i class="fa fa-bar-chart-o"></i></button>
         </div>
 
         <div class="nav navbar-nav navbar-left" data-ui-view="menu"></div>
@@ -53,4 +49,4 @@
     </div>
 </div>
 
-<div class="main clearfix" data-ng-init="switchProject()" data-ui-view></div>
+<div class="main clearfix" data-ng-init="$state.includes('home.project') || switchProject()" data-ui-view></div>

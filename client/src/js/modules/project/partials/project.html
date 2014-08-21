@@ -1,12 +1,10 @@
-<div data-loading="project.columns.$objects" data-ui-view>
-    <div data-ng-if="project">
-        <div class="alert alert-warning" data-ng-if="project.columns.$objects.length === 0">
-            <i class="fa fa-columns fa-4x"></i>
-            <h3>No columns</h3>
+<div data-loading="project.columns.$objects">
+    <div class="alert alert-warning" data-ng-if="project.columns.$objects.length === 0">
+        <i class="fa fa-columns fa-4x"></i>
+        <h3>No columns</h3>
 
-            <p>To get started, <a data-ng-click="create()" class="alert-link">create some columns</a> for your project or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
-        </div>
-
-        <div class="column-container" data-ng-include="'column/partials/column.html'" data-ng-repeat="column in project.columns.$objects | orderBy:'position' track by $id(column)"></div>
+        <p>To get started, <a data-ng-click="create()" class="alert-link">create some columns</a> for your project or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
     </div>
+
+    <div class="column-container" data-ng-include="'column/partials/column.html'" data-ng-repeat="column in project.columns.$objects | orderBy:'position' track by $id(column)"></div>
 </div>

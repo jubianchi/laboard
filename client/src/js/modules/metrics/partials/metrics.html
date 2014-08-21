@@ -1,8 +1,10 @@
-<highchart config="chart" data-ng-show="chart && !error"></highchart>
+<div data-loading="chart || error">
+    <highchart config="chart" data-ng-show="chart && !error"></highchart>
 
-<div class="alert alert-warning" data-ng-if="error">
-    <i class="fa fa-bar-chart-o fa-4x"></i>
-    <h3>No data</h3>
+    <div class="alert alert-warning" data-ng-if="error">
+        <i class="fa fa-bar-chart-o fa-4x"></i>
+        <h3>No data</h3>
 
-    <p>There is not enough data to compute flow graph.</p>
+        <p>There is not enough data to compute flow graph.</p>
+    </div>
 </div>

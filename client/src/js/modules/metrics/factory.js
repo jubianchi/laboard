@@ -3,7 +3,6 @@ angular.module('laboard-frontend')
         '$rootScope', '$q', '$http', 'ColumnsRepository',
         function($root, $q, $http, $columns) {
             var weeks = [],
-                series = [],
                 data = [],
                 interval = 'week',
                 round = function (num, dec) {
@@ -57,6 +56,11 @@ angular.module('laboard-frontend')
 
                     return this;
                 },
+
+                getInterval: function() {
+                    return interval;
+                },
+
                 getData: function(namespace, project) {
                     var deferred = $q.defer(),
                         series = [];
