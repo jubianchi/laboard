@@ -24,20 +24,36 @@ angular.module('laboard-frontend')
 
                 .state('home', {
                     url: "/",
-                    templateUrl: 'home/partials/home.html',
-                    controller: 'HomeController',
+                    views: {
+                        '': {
+                            templateUrl: 'home/partials/home.html',
+                            controller: 'HomeController'
+                        }
+                    },
                     security: true
                 })
                     .state('home.project', {
                         url: ":namespace/:project",
-                        templateUrl: 'project/partials/project.html',
-                        controller: 'ProjectController',
+                        views: {
+                            '': {
+                                templateUrl: 'project/partials/project.html',
+                                controller: 'ProjectController'
+                            }
+                        },
                         security: true
                     })
                         .state('home.project.metrics', {
                             url: "/metrics",
-                            templateUrl: 'metrics/partials/metrics.html',
-                            controller: 'MetricsController',
+                            views: {
+                                '': {
+                                    templateUrl: 'metrics/partials/metrics.html',
+                                    controller: 'MetricsController'
+                                },
+                                'menu@home': {
+                                    templateUrl: 'metrics/partials/menu.html',
+                                    controller: 'MetricsMenuController'
+                                }
+                            },
                             security: true
                         })
             ;

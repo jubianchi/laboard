@@ -1,0 +1,14 @@
+<div class="btn-group" data-ng-show="$state.is('home.project.metrics') && project">
+    <button data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-cog"></i>
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li class="dropdown-header">Interval</li>
+        <li data-ng-class="{active: interval == 'year'}"><a data-ng-click="setInterval('year')">Year</a></li>
+        <li data-ng-class="{active: interval == 'month'}"><a data-ng-click="setInterval('month')">Month</a></li>
+        <li data-ng-class="{active: interval == 'week'}"><a data-ng-click="setInterval('week')">Week</a></li>
+        <li data-ng-class="{active: interval == 'day'}"><a data-ng-click="setInterval('day')">Day</a></li>
+    </ul>
+</div>
