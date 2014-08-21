@@ -1,52 +1,9 @@
 var  _ = require('lodash'),
-    issues = module.exports = function issues(client, projects, version) {
+    issues = module.exports = function issues(client, projects, formatter, version) {
         this.client = client;
         this.projects = projects;
+        this.formatter = formatter;
         this.version = version;
-    },
-    format = function(issue) {
-        issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone']);
-        issue.column = null;
-        issue.theme = null;
-
-        (issue.labels || []).forEach(function(label, key) {
-            if (/^column:/.test(label)) {
-                issue.column = label.replace(/^column:/, '');
-                delete issue.labels[key];
-            }
-
-            if (/^theme:/.test(label)) {
-                issue.theme = label.replace(/^theme:/, '');
-                delete issue.labels[key];
-            }
-        });
-
-        issue.labels = (issue.labels || []).filter(function(v) { return v && v.length > 0; });
-
-        return issue;
-    },
-    formatOut = function(issue) {
-        if (issue.labels.split) {
-            issue.labels = issue.labels.split(',');
-        }
-
-        if (issue.column && issue.labels.indexOf('column:' + issue.column) === -1) {
-            issue.labels.push('column:' + issue.column)
-        }
-
-        if (issue.theme && issue.labels.indexOf('theme:' + issue.theme) === -1) {
-            issue.labels.push('theme:' + issue.theme)
-        }
-
-        if (issue.labels.length === 0) {
-            issue.labels = [''];
-        }
-
-        if (this.version !== '7.1' && issue.labels.join) {
-            issue.labels = issue.labels.join(',');
-        }
-
-        return issue;
     };
 
 issues.prototype = {
@@ -66,7 +23,8 @@ issues.prototype = {
     },
 
     one: function(token, namespace, project, id, callback) {
-        var url = this.url(namespace, project, id);
+        var url = this.url(namespace, project, id),
+            format = this.formatter.formatIssueFromGitlab;
 
         return this.client.get(
             token,
@@ -78,7 +36,8 @@ issues.prototype = {
     },
 
     all: function(token, namespace, project, callback, params) {
-        var url = this.url(namespace, project);
+        var url = this.url(namespace, project),
+            format = this.formatter.formatIssueFromGitlab;
 
         return this.client.get(
             token,
@@ -99,7 +58,9 @@ issues.prototype = {
     },
 
     persist: function(token, namespace, project, issue, callback) {
-        var url = this.url(namespace, project, issue.id);
+        var url = this.url(namespace, project, issue.id),
+            format = this.formatter.formatIssueFromGitlab,
+            formatOut = this.formatter.formatIssueToGitlab;
 
         return this.client.put(
             token,
@@ -112,7 +73,9 @@ issues.prototype = {
     },
 
     close: function(token, namespace, project, issue, callback) {
-        var url = this.url(namespace, project, issue.id);
+        var url = this.url(namespace, project, issue.id),
+            format = this.formatter.formatIssueFromGitlab,
+            formatOut = this.formatter.formatIssueToGitlab;
 
         issue.state_event = 'close';
 

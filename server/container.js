@@ -55,15 +55,23 @@ jimple
 
         return new Gitlab(container.get('config').gitlab_url + '/api/v3', container.get('http.client'));
     })
+    .share('gitlab.formatter', function() {
+        return require('./lib/gitlab/formatter');
+    })
     .share('gitlab.projects', function(container) {
         var Projects = require('./lib/gitlab/projects');
 
-        return new Projects(container.get('gitlab'));
+        return new Projects(container.get('gitlab'), container.get('gitlab.formatter'));
     })
     .share('gitlab.issues', function(container) {
         var Issues = require('./lib/gitlab/issues');
 
-        return new Issues(container.get('gitlab'), container.get('gitlab.projects'), container.get('config').gitlab_version);
+        return new Issues(
+            container.get('gitlab'),
+            container.get('gitlab.projects'),
+            container.get('gitlab.formatter'),
+            container.get('config').gitlab_version
+        );
     })
     .share('app', function(container) {
         var application = express();
@@ -98,5 +106,5 @@ jimple
     .share('http.cookie', jimple.protect(require('cookie-parser')()), ['middleware'])
     .share('http.body', jimple.protect(require('body-parser')()), ['middleware'])
     .share('http.response', jimple.protect(require('./lib/middleware/response.js')), ['middleware'])
-    .share('static', jimple.protect(express.static(path.join(__dirname, '..', 'client', 'public'))), ['middleware']);
+    .share('static', jimple.protect(express.static(path.join(__dirname, '..', 'client', 'public'))), ['middleware'])
 ;

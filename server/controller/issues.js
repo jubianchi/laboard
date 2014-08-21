@@ -108,7 +108,7 @@ module.exports = function(router, container) {
                     res,
                     function(body) {
                         container.get('server.websocket').broadcast(
-                            'issue.update',
+                            'issue.edit',
                             {
                                 namespace: req.params.ns,
                                 project: req.params.name,

@@ -1,21 +1,7 @@
 var _ = require('lodash'),
-    projects = module.exports = function projects(client) {
+    projects = module.exports = function projects(client, formatter) {
         this.client = client;
-    },
-    format = function(project) {
-        project.access_level = 10;
-
-        if (project.permissions) {
-            if (project.permissions.project_access && project.permissions.project_access.access_level > project.access_level) {
-                project.access_level = project.permissions.project_access.access_level;
-            }
-
-            if (project.permissions.group_access && project.permissions.group_access.access_level > project.access_level) {
-                project.access_level = project.permissions.group_access.access_level;
-            }
-        }
-
-        return _.pick(project, ['path_with_namespace', 'description', 'last_activity_at', 'id', 'access_level']);
+        this.formatter = formatter;
     };
 
 projects.prototype = {
@@ -35,7 +21,8 @@ projects.prototype = {
     },
 
     one: function(token, namespace, project, callback) {
-        var url = this.url(namespace, project);
+        var url = this.url(namespace, project),
+            format = this.formatter.formatProjectFromGitlab;
 
         return this.client.get(
             token,
@@ -59,7 +46,8 @@ projects.prototype = {
     },
 
     all: function(token, callback, params) {
-        var url = this.url();
+        var url = this.url(),
+            format = this.formatter.formatProjectFromGitlab;
 
         if (!params) params = {};
 
