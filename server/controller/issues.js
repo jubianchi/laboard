@@ -34,25 +34,40 @@ module.exports = function(router, container) {
         function(req, res) {
             container.get('mysql').query(
                 'SELECT ' +
-                    'destination.from AS \'from\', ' +
-                    'YEAR(destination.date) AS year, ' +
-                    'WEEK(destination.date) AS week, ' +
-                    'AVG(TIME_TO_SEC(TIMEDIFF(source.date, destination.date))) AS days ' +
+                '    source.to AS \'column\', ' +
+                '    DAY(entry.date) as \'day\', ' +
+                '    WEEK(entry.date) as \'week\', ' +
+                '    MONTH(entry.date) as \'month\', ' +
+                '    YEAR(entry.date) as \'year\', ' +
+                '    AVG(TIME_TO_SEC(TIMEDIFF(destination.date, source.date))) AS \'time\' ' +
                 'FROM ' +
-                    'moves AS source ' +
+                '    ( ' +
+                '        SELECT date, issue ' +
+                '        FROM moves AS entry ' +
+                '    ) AS entry, ' +
+                '    moves AS source ' +
                 'LEFT JOIN ' +
-                    'moves AS destination ON ( ' +
-                        'source.from=destination.to AND ' +
-                        'source.issue=destination.issue ' +
-                    ')' +
+                '    moves AS destination ON ( ' +
+                '        source.to=destination.from AND ' +
+                '        source.issue=destination.issue AND ' +
+                '        destination.date > source.date ' +
+                '    ) ' +
                 'WHERE ' +
-                    'destination.from IS NOT NULL ' +
+                '    entry.issue = source.issue AND ' +
+                '    destination.from IS NOT NULL AND ' +
+                '    destination.namespace = \'' + req.params.ns + '\' AND ' +
+                '    destination.project = \'' + req.params.name + '\' ' +
                 'GROUP BY ' +
-                    'YEAR(destination.date), ' +
-                    'WEEK(destination.date), ' +
-                    'destination.from',
+                '    WEEK(entry.date), ' +
+                '    YEAR(entry.date), ' +
+                '    destination.from',
                 function(err, result) {
-                    console.log(result);
+                    if (err) {
+                        res.error(err);
+
+                        return;
+                    }
+
                     res.response.ok(result);
                 }
             );

@@ -1,27 +1,66 @@
 angular.module('laboard-frontend')
     .controller('MetricsController', [
-        '$rootScope', '$scope', '$http', '$stateParams', 'ColumnsRepository',
-        function ($root, $scope, $http, $params, $columns) {
-            $http.get('/projects/' + $params.namespace + '/' + $params.project + '/issues/metrics')
-                .success(function(data) {
-                    var weeks = [],
-                        series = [],
-                        round = function(num, dec) {
-                            return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
-                        },
-                        label = function(line) {
-                            return line.week + ' / ' + line.year;
-                        };
+        '$rootScope', '$scope', '$http', '$stateParams', 'ColumnsRepository', '$q',
+        function ($root, $scope, $http, $params, $columns, $q) {
+            var weeks = [],
+                series = [],
+                data = [],
+                round = function (num, dec) {
+                    return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
+                },
+                label = function (line) {
+                    switch($scope.interval) {
+                        case 'day':
+                            return line.day + '/' + line.month + '/' + line.year;
 
-                    data.forEach(function(line) {
-                        var lbl = label(line);
+                        case 'month':
+                            return line.month + '/' + line.year;
 
-                        if (weeks.indexOf(lbl) === -1) weeks.push(lbl);
-                    });
+                        case 'year':
+                            return line.year;
 
-                    $columns.all()
-                        .then(function(columns) {
-                            _.sortBy(columns, function (column) { return -column.position; })
+                        case 'week':
+                        default:
+                            return line.week + '/' + line.year;
+                    }
+                },
+                load = function() {
+                    var deferred = $q.defer();
+
+                    weeks = [];
+                    series = [];
+                    data = [];
+
+                    $scope.error = false;
+
+                    $http.get('/projects/' + $params.namespace + '/' + $params.project + '/issues/metrics')
+                        .success(function (res) {
+                            data = res;
+
+                            console.log(data);
+
+                            if (!data || !data.length) {
+                                deferred.reject();
+                            }
+
+                            data.forEach(function (line) {
+                                var lbl = label(line);
+
+                                if (weeks.indexOf(lbl) === -1) weeks.push(lbl);
+                            });
+
+                            deferred.resolve(data);
+                        });
+
+                    return deferred.promise;
+                },
+                render = function() {
+                    load()
+                        .then($columns.all, function() {
+                            $scope.error = true;
+                        })
+                        .then(function (columns) {
+                            _.sortBy(columns, 'position')
                                 .forEach(function (column) {
                                     var id = column.title.toLowerCase(),
                                         values = [];
@@ -32,14 +71,14 @@ angular.module('laboard-frontend')
 
                                     _.filter(
                                         data,
-                                        function(line) {
-                                            return line.from === id;
+                                        function (line) {
+                                            return line.column === id;
                                         }
                                     ).forEach(function (line) {
-                                        var weekIndex = weeks.indexOf(label(line));
+                                            var weekIndex = weeks.indexOf(label(line));
 
-                                        values[weekIndex] = round(line.days / 86400, 1);
-                                    });
+                                            values[weekIndex] = round(line.time / 86400, 1);
+                                        });
 
                                     series[series.length] = {
                                         name: column.title,
@@ -52,7 +91,7 @@ angular.module('laboard-frontend')
                                     chart: {
                                         type: 'area',
                                         spacingTop: 50,
-                                        height: $(document).height() - 100
+                                        height: $(document).height() - 120
                                     },
                                     plotOptions: {
                                         area: {
@@ -69,7 +108,7 @@ angular.module('laboard-frontend')
                                         }
                                     }
                                 },
-                                series: series.reverse(),
+                                series: series,
                                 xAxis: {
                                     categories: weeks,
                                     title: {
@@ -79,14 +118,32 @@ angular.module('laboard-frontend')
                                 yAxis: {
                                     title: {
                                         text: 'Days'
+                                    },
+                                    reversedStacks: false,
+                                    stackLabels: {
+                                        enabled: true,
+                                        formatter: function() {
+                                            return this.total + ' day(s)'
+                                        },
+                                        verticalAlign: 'top'
                                     }
                                 },
                                 title: {
-                                    text: 'Cumulative flow graph'
+                                    text: null
                                 },
                                 loading: false
                             };
                         });
-                });
+                };
+
+            $scope.interval = 'week';
+            render();
+
+            $scope.setInterval = function(interval) {
+                console.log(interval);
+                $scope.interval = interval;
+
+                render();
+            }
         }
     ]);
