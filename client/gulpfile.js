@@ -7,7 +7,9 @@ var gulp = require('gulp'),
     prefix = require('gulp-autoprefixer'),
     templateCache = require('gulp-angular-templatecache'),
     exec = require('child_process').exec,
-    http = require('http');
+    http = require('http'),
+    protractor = require("gulp-protractor").protractor,
+    webdriver_update = require("gulp-protractor").webdriver_update;
 
 gulp.task('font-awesome', function() {
     gulp.src('bower_components/font-awesome/fonts/*')
@@ -143,5 +145,16 @@ gulp.task('server', connect.server({
         ]
     }
 }));
+
+// Downloads the selenium webdriver
+gulp.task('webdriver_update', webdriver_update);
+
+gulp.task('protractor', ['webdriver_update'], function() {
+  gulp.src(["./src/tests/*.js"])
+    .pipe(protractor({
+      configFile: "./tests/e2e/protractor-conf.js"
+    }))
+    .on('error', function(e) { throw e })
+});
 
 gulp.task('default', ['app', 'watch']);
