@@ -118,7 +118,7 @@ angular.module('laboard-frontend')
                                 zIndex: 0
                             };
 
-                            var mean = total / weeks.length;
+                            var mean = round(total / weeks.length, 2);
 
                             weeks.forEach(function() {
                                 series[series.length - 1].data.push(mean);
