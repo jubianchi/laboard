@@ -152,7 +152,7 @@ gulp.task('webdriver_update', webdriver_update);
 gulp.task('protractor', ['webdriver_update'], function() {
   gulp.src(["./src/tests/*.js"])
     .pipe(protractor({
-      configFile: "./tests/e2e/conf.js"
+      configFile: "./tests/e2e/protractor-conf.js"
     }))
     .on('error', function(e) { throw e })
 });
