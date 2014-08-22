@@ -30,10 +30,9 @@ module.exports = function(router, container) {
         }
     );
 
-    router.authenticated.get('/projects/:ns/:name/issues/metrics',
+    router.authenticated.get('/projects/:ns/:name/issues/metrics/cycle',
         function(req, res) {
-            container.get('mysql').query(
-                'SELECT ' +
+            var sql = 'SELECT ' +
                 '    source.to AS \'column\', ' +
                 '    DAY(entry.date) as \'day\', ' +
                 '    WEEK(entry.date) as \'week\', ' +
@@ -42,8 +41,9 @@ module.exports = function(router, container) {
                 '    AVG(TIME_TO_SEC(TIMEDIFF(destination.date, source.date))) AS \'time\' ' +
                 'FROM ' +
                 '    ( ' +
-                '        SELECT date, issue ' +
+                '        SELECT entry.date, entry.issue ' +
                 '        FROM moves AS entry ' +
+                '        WHERE (entry.from IS NULL OR entry.from = \'\')' +
                 '    ) AS entry, ' +
                 '    moves AS source ' +
                 'LEFT JOIN ' +
@@ -58,9 +58,11 @@ module.exports = function(router, container) {
                 '    destination.namespace = \'' + req.params.ns + '\' AND ' +
                 '    destination.project = \'' + req.params.name + '\' ' +
                 'GROUP BY ' +
-                '    WEEK(entry.date), ' +
-                '    YEAR(entry.date), ' +
-                '    destination.from',
+                '    DATE_FORMAT(entry.date, \'%Y-%m-%d\'), ' +
+                '    source.to';
+
+            container.get('mysql').query(
+                sql,
                 function(err, result) {
                     if (err) {
                         res.error(err);

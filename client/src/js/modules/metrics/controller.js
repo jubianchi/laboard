@@ -1,9 +1,10 @@
 angular.module('laboard-frontend')
     .controller('MetricsController', [
-        '$rootScope', '$scope', '$http', '$stateParams', 'FlowGraphDataFactory', 'ProjectManager',
+        '$rootScope', '$scope', '$http', '$stateParams', 'GraphDataFactory', 'ProjectManager',
         function ($root, $scope, $http, $params, $graph, $projectManager) {
             var render = function() {
                 $scope.error = false;
+                $scope.interval = $graph.getInterval();
 
                 $graph.getData($params.namespace, $params.project)
                     .then(
@@ -51,10 +52,10 @@ angular.module('laboard-frontend')
                                     }
                                 },
                                 title: {
-                                    text: 'Cumulative flow graph (by ' + $graph.getInterval() + ')'
+                                    text: $graph.getTitle()
                                 },
                                 subtitle: {
-                                    text: 'Time spent in each column depending on issue\'s incoming date'
+                                    text: $graph.getSubTitle()
                                 }
                             };
                         },
@@ -81,14 +82,15 @@ angular.module('laboard-frontend')
         }
     ])
     .controller('MetricsMenuController', [
-        '$rootScope', '$scope', 'FlowGraphDataFactory',
+        '$rootScope', '$scope', 'GraphDataFactory',
         function ($root, $scope, $graph) {
             $scope.interval = 'week';
+
             $scope.setInterval = function(interval) {
                 $graph.setInterval(interval);
                 $scope.interval = interval;
 
                 $root.$broadcast('graph.interval');
-            }
+            };
         }
     ]);

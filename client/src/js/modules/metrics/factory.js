@@ -1,5 +1,5 @@
 angular.module('laboard-frontend')
-    .factory('FlowGraphDataFactory', [
+    .factory('GraphDataFactory', [
         '$rootScope', '$q', '$http', 'ColumnsRepository',
         function($root, $q, $http, $columns) {
             var weeks = [],
@@ -30,7 +30,7 @@ angular.module('laboard-frontend')
                     weeks = [];
                     data = [];
 
-                    $http.get('/projects/' + namespace + '/' + project + '/issues/metrics')
+                    $http.get('/projects/' + namespace + '/' + project + '/issues/metrics/cycle')
                         .success(function (res) {
                             data = res;
 
@@ -61,11 +61,20 @@ angular.module('laboard-frontend')
                     return interval;
                 },
 
-                getData: function(namespace, project) {
-                    var deferred = $q.defer(),
-                        series = [];
+                getTitle: function() {
+                    return 'Cycle time (by ' + interval + ')'
+                },
 
-                    load(namespace, project)
+                getSubTitle: function() {
+                    return 'Time spent in each column depending on issue\'s incoming date'
+                },
+
+                getCycleData: function(namespace, project) {
+                    var deferred = $q.defer(),
+                        series = [],
+                        total = 0;
+
+                    load(namespace, project, 'cycle')
                         .then($columns.all, function() {
                             deferred.reject();
                         })
@@ -85,16 +94,35 @@ angular.module('laboard-frontend')
                                             return line.column === id;
                                         }
                                     ).forEach(function (line) {
-                                            var weekIndex = weeks.indexOf(label(line));
+                                        var weekIndex = weeks.indexOf(label(line));
 
-                                            values[weekIndex] = round(line.time / 86400, 1);
-                                        });
+                                        values[weekIndex] = round(line.time / 86400, 1);
+                                    });
 
                                     series[series.length] = {
                                         name: column.title,
-                                        data: values
+                                        data: values,
+                                        zIndex: 1
                                     };
+
+                                    total += _(values).reduce(function(a, b) {
+                                        return a + b;
+                                    })
                                 });
+
+                            series[series.length] = {
+                                name: 'mean',
+                                data: [],
+                                type: 'line',
+                                stack: false,
+                                zIndex: 0
+                            };
+
+                            var mean = total / weeks.length;
+
+                            weeks.forEach(function() {
+                                series[series.length - 1].data.push(mean);
+                            });
 
                             deferred.resolve({
                                 series: series,
@@ -103,6 +131,10 @@ angular.module('laboard-frontend')
                         });
 
                     return deferred.promise;
+                },
+
+                getData: function(namespace, project) {
+                    return this.getCycleData(namespace, project);
                 }
             }
         }
