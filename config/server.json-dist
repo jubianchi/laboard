@@ -2,5 +2,11 @@
     "gitlab_url": "http://gitlab.example.com",
     "gitlab_version": "7.1",
     "data_dir": "../data",
-    "port": 80
+    "port": 80,
+    "mysql": {
+        "host": "localhost",
+        "user": "example",
+        "password": "p@s$word",
+        "database": "laboard"
+    }
 }

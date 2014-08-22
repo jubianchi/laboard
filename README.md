@@ -63,9 +63,29 @@ The Laboard configuration is minimal:
   * `gitlab_url` : The URL to your Gitlab instance (for example `http://gitlab.example.com`)
   * `data_dir` : Path to a directory where Laboard will store its data (columns definition)
   * `port`: Port to which the HTTP server is bound
+  * `mysql`: Configuration of the database
+    * `host`: Hostname of the server
+    * `user`: Username to connect with the server
+    * `password`: Password of the user
+    * `database`: Name of the database
 * `config/client.js`:
   * `gitlabUrl`: The URL to your Gitlab instance. **This should be the same as for the server** (for example `http://gitlab.example.com`)
   * `socketIoPort`: The port to which the Socket.io server is bound. When running in production, this will be the same as the HTTP server's port
+
+## Database
+
+To keep track of issues and generate fanct charts, we use a MySQL database. This structure is required:
+
+```mysql
+CREATE TABLE `moves` (
+  `namespace` varchar(255) DEFAULT NULL,
+  `project` varchar(255) DEFAULT NULL,
+  `issue` int(11) DEFAULT NULL,
+  `from` varchar(255) DEFAULT NULL,
+  `to` varchar(255) DEFAULT NULL,
+  `date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
 
 ## Start
 
