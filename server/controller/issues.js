@@ -17,6 +17,8 @@ module.exports = function(router, container) {
 
     router.post('/projects/:ns/:name/issues/hook',
         function(req, res) {
+            console.log(req.body.object_attributes);
+
             container.get('server.websocket').broadcast(
                 'issue.update',
                 {
@@ -48,11 +50,13 @@ module.exports = function(router, container) {
                 '    moves AS source ' +
                 'LEFT JOIN ' +
                 '    moves AS destination ON ( ' +
+                '        destination.to != \'__unpin__\' AND ' +
                 '        source.to=destination.from AND ' +
                 '        source.issue=destination.issue AND ' +
                 '        destination.date > source.date ' +
                 '    ) ' +
                 'WHERE ' +
+                '    source.to != \'__unpin__\' AND ' +
                 '    entry.issue = source.issue AND ' +
                 '    destination.from IS NOT NULL AND ' +
                 '    destination.namespace = \'' + req.params.ns + '\' AND ' +
@@ -213,7 +217,7 @@ module.exports = function(router, container) {
                                     req.params.name,
                                     issue.id,
                                     from,
-                                    to,
+                                    to || '__unpin__',
                                     new Date()
                                 ]
                             );
@@ -306,6 +310,18 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
+                        container.get('mysql').query(
+                            'INSERT INTO moves VALUES(?, ?, ?, ?, ?, ?)',
+                            [
+                                req.params.ns,
+                                req.params.name,
+                                issue.id,
+                                issue.column,
+                                '__close__',
+                                new Date()
+                            ]
+                        );
+
                         container.get('server.websocket').broadcast(
                             'issue.close',
                             {
