@@ -1,14 +1,14 @@
-<div class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="true" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
+<div class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix">
         <a class="pull-left" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank" data-ng-prevent-drag>
             <strong>#{{ issue.iid }}</strong> {{ issue.title }}
         </a>
-        <div class="btn-group" data-ng-prevent-drag>
+        <div class="btn-group" data-ng-prevent-drag data-authorize="developer">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <ul class="dropdown-menu dropdown-menu-right" data-authorize="developer">
                 <li><a data-ng-click="theme()" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada text-default"></i> Default</a></li>
                 <li><a data-ng-click="theme('info')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada text-info"></i> Blue</a></li>
                 <li><a data-ng-click="theme('success')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-success"></i> Green</a></li>
@@ -25,8 +25,8 @@
         <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
         <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
 
-        <div data-ng-click="assign()" class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
-            <div class="overlay">
+        <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
+            <div class="overlay" data-ng-click="assign()" data-authorize="developer">
                 <span>+</span>
             </div>
             <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>

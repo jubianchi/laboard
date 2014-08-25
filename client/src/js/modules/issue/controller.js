@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('IssueController', [
-        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', 'IssuesRepository', 'IssuesSocket',
-        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $issues, $socket) {
+        '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', 'IssuesRepository', 'AuthorizationFactory',
+        function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $issues, $authorization) {
             $scope.close = function() {
                 $issues.close($scope.issue)
             };
@@ -52,5 +52,7 @@ angular.module('laboard-frontend')
                         $issues.persist($scope.issue);
                     });
             };
+
+            $scope.draggable = $authorization.authorize('developer');
         }
     ]);

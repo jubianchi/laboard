@@ -42,8 +42,8 @@ angular.module('laboard-frontend')
         }
     ])
     .controller('ProjectMenuController', [
-        '$rootScope', '$scope', '$modal', 'ColumnsRepository', 'ProjectsRepository',
-        function ($root, $scope, $modal, $columns, $projects) {
+        '$rootScope', '$scope', '$modal', 'ColumnsRepository',
+        function ($root, $scope, $modal, $columns) {
             $scope.addColumn = function() {
                 $modal
                     .open({

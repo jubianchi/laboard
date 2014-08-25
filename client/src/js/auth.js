@@ -7,9 +7,9 @@ angular.module('laboard-frontend')
                 logoutUrl: 'logout',
                 loggedinUrl: 'login/check',
 
-                unauthorizedPage: '/unauthorized',  // url (frontend) of the unauthorized page
-                targetPage: '/',           // url (frontend) of the target page on login success
-                loginPage: '/login'                 // url (frontend) of the login page
+                unauthorizedPage: '/unauthorized',
+                targetPage: '/',
+                loginPage: '/login'
             });
         }
     ]);

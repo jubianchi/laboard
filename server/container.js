@@ -28,6 +28,42 @@ jimple
 
         return new Auth(container.get('config').gitlab_url, container.get('gitlab'));
     })
+    .share('authorization', function(container) {
+        return function(level) {
+            return function(req, res, next) {
+                var authorized = !!req.user;
+
+                if (!authorized) {
+                    res.error.forbidden({});
+                } else {
+                    container.get('gitlab.projects').one(
+                        req.user.private_token,
+                        req.params.ns,
+                        req.params.name,
+                        function(err, resp, body) {
+                            if (err) {
+                                res.error(err);
+                            } else {
+                                authorized = authorized && (
+                                    (level === 'guest' && body.access_level >= 10) ||
+                                    (level === 'reporter' && body.access_level >= 20) ||
+                                    (level === 'developer' && body.access_level >= 30) ||
+                                    (level === 'master' && body.access_level >= 40) ||
+                                    (level === 'owner' && body.access_level >= 50)
+                                );
+
+                                if (authorized) {
+                                    next();
+                                } else {
+                                    res.error.forbidden({});
+                                }
+                            }
+                        }
+                    );
+                }
+            };
+        }
+    })
     .share('router', function(container) {
         var Router = require('./lib/router'),
             router = new Router(container.get('auth').authenticate, container.get('logger'));

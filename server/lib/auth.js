@@ -22,7 +22,6 @@ auth.prototype = {
     setup: function (application) {
         application
             .use(this.passport.initialize())
-            //.use(this.passport.session())
             .use(function(req, res, next) {
                 if (req.cookies.access_token) {
                     try {

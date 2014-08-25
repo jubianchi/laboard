@@ -9,20 +9,20 @@
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                <li><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
-                <li><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
-                <li><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
-                <li class="divider"></li>
-                <li><a data-ng-click="pin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
-                <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li data-authorize="master"><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
+                <li data-authorize="master"><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
+                <li data-authorize="master"><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
+                <li data-authorize="master"><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
+                <li class="divider" data-authorize="master"></li>
+                <li data-authorize="master"><a data-ng-click="pin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
+                <li data-authorize="reporter"><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
                 <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
             </ul>
         </div>
     </div>
 
-    <div class="panel-body" data-ng-class="{full: column.limit > 0 && column.limit <= (project.issues.$objects|column:column).length}" data-ng-drop="true" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
+    <div class="panel-body" data-ng-class="{full: column.limit > 0 && column.limit <= (project.issues.$objects|column:column).length}" data-ng-drop="{{droppable}}" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
         <div data-ng-repeat="issue in project.issues.$objects | column:column | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
     </div>
 </div>

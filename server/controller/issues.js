@@ -144,6 +144,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/issues/:id',
+        container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
@@ -174,6 +175,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/issues/:id/move',
+        container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
@@ -242,6 +244,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/issues/:id/theme',
+        container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
             delete issue['access_token'];
@@ -298,6 +301,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/issues/:id/close',
+        container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
 

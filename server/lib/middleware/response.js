@@ -37,6 +37,10 @@ module.exports = function (req, res, next) {
         res.error(err, 401);
     };
 
+    res.error.forbidden = function (err) {
+        res.error(err, 403);
+    };
+
     res.error.notAcceptable = function (err) {
         res.error(err, 406);
     };

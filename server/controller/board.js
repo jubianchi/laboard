@@ -5,7 +5,7 @@ module.exports = function(router, container) {
     var config = container.get('config');
 
     router.authenticated.get('/projects/:ns/:name/columns',
-        function(req, res) {
+        function (req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 columns = [];
 
@@ -18,6 +18,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.post('/projects/:ns/:name/columns',
+        container.get('authorization')('master'),
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
@@ -57,6 +58,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/columns/:column',
+        container.get('authorization')('master'),
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,
@@ -93,6 +95,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.put('/projects/:ns/:name/columns/:column/move',
+        container.get('authorization')('master'),
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 columns = JSON.parse(fs.readFileSync(file)),
@@ -126,6 +129,7 @@ module.exports = function(router, container) {
     );
 
     router.authenticated.delete('/projects/:ns/:name/columns/:column',
+        container.get('authorization')('master'),
         function(req, res) {
             var file = config.data_dir + '/' + req.params.ns + '_' + req.params.name + '.json',
                 column = req.body,

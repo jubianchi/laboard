@@ -20,12 +20,13 @@ angular.module('laboard-frontend')
     ]);
 
 angular.module('laboard-frontend')
-    .run(['Restangular', '$state', '$rootScope', 'AuthenticateJS', 'Referer', 'ColumnsRepository', '$modal', 'LABOARD_CONFIG', 'SocketFactory',
-        function(Restangular, $state, $rootScope, Auth, Referer, $columns, $modal, LABOARD_CONFIG, SocketFactory) {
-            Restangular.setErrorInterceptor(function(response) {
+    .run([
+        'Restangular', '$state', '$rootScope', 'AuthenticateJS', 'LABOARD_CONFIG', 'Referer', 'SocketFactory',
+        function($rest, $state, $root, $auth, LABOARD_CONFIG, $referer, $socket) {
+            $rest.setErrorInterceptor(function(response) {
                 if(response.status === 401) {
-                    $rootScope.project = null;
-                    $rootScope.user = null;
+                    $root.project = null;
+                    $root.user = null;
 
                     $state.go('login');
 
@@ -33,50 +34,46 @@ angular.module('laboard-frontend')
                 }
             });
 
-            $rootScope.$on('AuthenticateJS.login', function(event, user) {
-                $rootScope.loggedin = true;
-                $rootScope.user = user;
+            $root.$on('AuthenticateJS.login', function(event, user) {
+                $root.loggedin = true;
+                $root.user = user;
 
-                SocketFactory.connect();
+                $socket.connect();
             });
 
-            $rootScope.$on('AuthenticateJS.logout', function(event) {
-                $rootScope.loggedin = false;
-                $rootScope.user = null;
+            $root.$on('AuthenticateJS.logout', function(event) {
+                $root.loggedin = false;
+                $root.user = null;
 
                 $state.go('login');
             });
 
-            var isFirstRun = true;
-            $rootScope.$on('$stateChangeStart', function (ev, to, toParams) {
-                if (!Auth.authorize(to.security)) {
+            $root.$on('$stateChangeStart', function (ev, to, toParams) {
+                if (!$auth.authorize(to.security)) {
                     ev.preventDefault();
-                    isFirstRun = false;
 
-                    if (Auth.isLoggedIn()) {
-                        $rootScope.project = null;
-                        $rootScope.user = null;
+                    $root.project = null;
+                    $root.user = null;
 
-                        $state.transitionTo('unauthorized');
+                    if ($auth.isLoggedIn()) {
+                        $state.go('unauthorized');
                     } else {
-                        $rootScope.project = null;
-                        $rootScope.user = null;
+                        $referer.set($state.href(to.name, toParams).substring(1));
 
-                        var referer = $state.href(to.name, toParams);
-                        Referer.set(referer.substring(1));
-                        $state.transitionTo('login');
+                        $state.go('login');
                     }
-                } else if (isFirstRun) {
-                    Auth.check();
-                    isFirstRun = false;
+                } else {
+                    if ($root.user) return;
+
+                    $auth.check();
                 }
             });
 
-            $rootScope.focusSearch = function() {
+            $root.focusSearch = function() {
                 $('[data-ng-model=globalSearch]').focus();
             };
 
-            $rootScope.LABOARD_CONFIG = LABOARD_CONFIG;
-            $rootScope.gitlabUrl = LABOARD_CONFIG.gitlabUrl;
+            $root.LABOARD_CONFIG = LABOARD_CONFIG;
+            $root.gitlabUrl = LABOARD_CONFIG.gitlabUrl;
         }
     ]);

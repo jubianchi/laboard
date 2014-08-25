@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('ColumnController', [
-        '$rootScope', '$scope', '$modal', '$filter', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository',
-        function($root, $scope, $modal, $filter, $columns, $socket, $issues) {
+        '$rootScope', '$scope', '$modal', '$filter', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository', 'AuthorizationFactory',
+        function($root, $scope, $modal, $filter, $columns, $socket, $issues, $authorization) {
             $scope.drop = function(issue) {
                 var from = issue.from;
                 issue.from = from.title;
@@ -145,5 +145,7 @@ angular.module('laboard-frontend')
                         });
                 }
             };
+
+            $scope.droppable = $authorization.authorize('developer');
         }
     ]);
