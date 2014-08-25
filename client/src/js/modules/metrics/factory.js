@@ -36,6 +36,8 @@ angular.module('laboard-frontend')
 
                             if (!data || !data.length) {
                                 deferred.reject();
+
+                                return;
                             }
 
                             data.forEach(function (line) {

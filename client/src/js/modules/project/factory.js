@@ -14,6 +14,8 @@ angular.module('laboard-frontend')
                                     $columns.clear();
                                     $issues.clear();
 
+                                    $root.$broadcast('project.select');
+
                                     deferred.resolve(project);
                                 },
                                 deferred.reject

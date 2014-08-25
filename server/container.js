@@ -144,6 +144,7 @@ jimple
     .share('controller.issues', jimple.protect(require('./controller/issues')), ['controller'])
     .share('controller.projects', jimple.protect(require('./controller/projects')), ['controller'])
     .share('http.client', jimple.protect(require('request')))
+    .share('http.logger', jimple.protect(require('morgan')('combined')), ['middleware'])
     .share('http.cookie', jimple.protect(require('cookie-parser')()), ['middleware'])
     .share('http.body', jimple.protect(require('body-parser')()), ['middleware'])
     .share('http.response', jimple.protect(require('./lib/middleware/response.js')), ['middleware'])

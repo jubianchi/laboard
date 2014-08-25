@@ -25,7 +25,8 @@
     "winston": "^0.7.3",
     "socket.io": "^1.0.6",
     "cookie": "^0.1.2",
-    "mysql": "^2.4.2"
+    "mysql": "^2.4.2",
+    "morgan": "^1.2.3"
   },
   "devDependencies": {
     "atoum.js": "0.0.11"
