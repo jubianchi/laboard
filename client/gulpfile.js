@@ -146,4 +146,15 @@ gulp.task('server', connect.server({
     }
 }));
 
+// Downloads the selenium webdriver
+gulp.task('webdriver_update', webdriver_update);
+
+gulp.task('protractor', ['webdriver_update'], function() {
+  gulp.src(["./src/tests/*.js"])
+    .pipe(protractor({
+      configFile: "./tests/e2e/protractor-conf.js"
+    }))
+    .on('error', function(e) { throw e })
+});
+
 gulp.task('default', ['app', 'watch']);
