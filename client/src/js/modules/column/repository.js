@@ -89,13 +89,13 @@ angular.module('laboard-frontend')
                         this.$objects.forEach(function(value, key) {
                             if (added) return;
 
-                            if(value.title === column.title) {
+                            if (value.title === column.title) {
                                 self.$objects[key] = column;
                                 added = true;
                             }
                         });
 
-                        if(added === false && column.title) {
+                        if (added === false && column.title) {
                             this.$objects.push(column);
                         }
 
@@ -105,7 +105,7 @@ angular.module('laboard-frontend')
                         var self = this;
 
                         this.$objects.forEach(function(value, key) {
-                            if(value.title === column.title) {
+                            if (value.title === column.title) {
                                 self.$objects.splice(key, 1);
                             }
                         });

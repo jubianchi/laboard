@@ -8,5 +8,5 @@
         <p data-authorize-unless="master"><a class="alert-link" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}" target="_blank">{{ project.path_with_namespace }}</a> team does not use laboard.</p>
     </div>
 
-    <div class="column-container" data-ng-include="'column/partials/column.html'" data-ng-repeat="column in project.columns.$objects | orderBy:'position' track by $id(column)"></div>
+    <div data-columns class="column-container" data-ng-include="'column/partials/column.html'" data-ng-repeat="column in project.columns.$objects | orderBy:'position' track by $id(column)"></div>
 </div>

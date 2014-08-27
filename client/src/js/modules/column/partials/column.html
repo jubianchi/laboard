@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <strong>{{column.title}}</strong>
 
-        <counter singular="'issue'" plural="'issues'" max="column.limit" value="(project.issues.$objects | column:column | search:globalSearch).length"></counter>
+        <counter singular="issue" plural="issues" max="column.limit" value="(project.issues.$objects | column:column | search:globalSearch).length"></counter>
 
         <div class="btn-group" data-ng-prevent-drag="true">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">

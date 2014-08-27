@@ -1,4 +1,4 @@
-angular.module('laboard-frontend',[
+angular.module('laboard-frontend', [
     'ui.router',
     'ui.bootstrap',
     'ui.gravatar',
@@ -24,7 +24,7 @@ angular.module('laboard-frontend')
         'Restangular', '$state', '$rootScope', 'AuthenticateJS', 'LABOARD_CONFIG', 'Referer', 'SocketFactory',
         function($rest, $state, $root, $auth, LABOARD_CONFIG, $referer, $socket) {
             $rest.setErrorInterceptor(function(response) {
-                if(response.status === 401) {
+                if (response.status === 401) {
                     $root.project = null;
                     $root.user = null;
 

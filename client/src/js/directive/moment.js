@@ -11,7 +11,7 @@ angular.module('laboard-frontend')
 
                         element.attr('datetime', datetime);
 
-                        if(datetime) {
+                        if (datetime) {
                             element.text(moment(datetime).fromNow());
                             unwatch();
                         }

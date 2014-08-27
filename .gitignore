@@ -7,3 +7,5 @@ client/tmp
 /data
 *.log
 .idea/
+coverage/
+karma_html/

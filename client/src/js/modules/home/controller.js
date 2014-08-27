@@ -19,7 +19,7 @@ angular.module('laboard-frontend')
 
                     modal.result
                         .then(function (project) {
-                            if(!project) {
+                            if (!project) {
                                 open();
                             } else {
                                 $state.transitionTo(

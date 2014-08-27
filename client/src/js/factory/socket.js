@@ -1,25 +1,30 @@
 angular.module('laboard-frontend')
     .factory('SocketFactory', [
-        '$rootScope',
-        function($root) {
+        '$rootScope', '$window', '$location',
+        function($root, $window, $location) {
             var connected = false,
                 handlers = {},
                 socket;
 
+            $root.$on(
+                'socket.ready',
+                function (event, socket) {
+                    connected = true;
+
+                    Object.keys(handlers).forEach(function(event) {
+                        handlers[event].forEach(function(callback) {
+                            socket.on(event, callback);
+                        });
+                    });
+                }
+            );
+
             return {
                 connect: function() {
-                    socket = io.connect(location.protocol + '//' + location.hostname + ':' + ($root.LABOARD_CONFIG.socketIoPort || location.port));
+                    socket = $window.io.connect($location.protocol() + '://' + $location.host() + ':' + ($root.LABOARD_CONFIG.socketIoPort || $location.port()));
 
                     socket.on('connect', function() {
-                        connected = true;
-
                         $root.$broadcast('socket.ready', socket);
-
-                        Object.keys(handlers).forEach(function(event) {
-                            handlers[event].forEach(function(callback) {
-                                socket.on(event, callback);
-                            });
-                        });
                     });
                 },
 
@@ -32,9 +37,9 @@ angular.module('laboard-frontend')
                         $root.$apply(function() {
                             var target = data.namespace + '/' + data.project;
 
-                            if (data.namespace && data.project && target !== $root.project.path_with_namespace) return;
-
-                            callback(data);
+                            if (target === $root.project.path_with_namespace) {
+                                callback(data);
+                            }
                         });
                     };
 

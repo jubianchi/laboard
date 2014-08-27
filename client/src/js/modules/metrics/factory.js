@@ -9,7 +9,7 @@ angular.module('laboard-frontend')
                     return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
                 },
                 label = function (line) {
-                    switch(interval) {
+                    switch (interval) {
                         case 'day':
                             return line.day + '/' + line.month + '/' + line.year;
 

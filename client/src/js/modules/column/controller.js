@@ -37,7 +37,7 @@ angular.module('laboard-frontend')
                     .then(
                         function() {
                             $columns.$objects.forEach(function(column) {
-                                if(column.title === $scope.column.title) return;
+                                if (column.title === $scope.column.title) return;
 
                                 if (column.position === $scope.column.position) {
                                     column.position += -step;

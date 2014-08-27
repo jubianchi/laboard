@@ -35,7 +35,7 @@ angular.module('laboard-frontend')
                                 milestone = milestone.join('.');
 
                                 return semver.satisfies(milestone, query)
-                            } catch(e) {
+                            } catch (e) {
                                 console.log(e);
                             }
                         }
@@ -82,7 +82,7 @@ angular.module('laboard-frontend')
                 };
 
             return function(values, query) {
-                if(query && values) {
+                if (query && values) {
                     if (/^(@|#|:)/.test(query)) {
                         var search;
 

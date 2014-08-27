@@ -6,6 +6,8 @@ var gulp = require('gulp'),
     path = require('path'),
     prefix = require('gulp-autoprefixer'),
     templateCache = require('gulp-angular-templatecache'),
+    jscs = require('gulp-jscs'),
+    karma = require('karma').server,
     exec = require('child_process').exec,
     http = require('http'),
     protractor = require("gulp-protractor").protractor,
@@ -24,6 +26,7 @@ gulp.task('bootstrap', function() {
 });
 
 var libs = [
+    'bower_components/es5-shim/es5-shim.js',
     'bower_components/jquery/dist/jquery.js',
     'bower_components/lodash/dist/lodash.js',
     'bower_components/angular/angular.js',
@@ -110,6 +113,22 @@ gulp.task('images', function() {
         .pipe(connect.reload());
 });
 
+gulp.task('cs', function() {
+    return gulp.src(['src/js/**/*.js', '../config/client.js-dist'])
+        .pipe(jscs(__dirname + '/.jscsrc'));
+});
+
+gulp.task('karma', function(done) {
+    return karma.start(
+        {
+            configFile: __dirname + '/karma.conf.js',
+            autoWatch: true
+        },
+        done
+    );
+});
+
+gulp.task('test', ['libs', 'cs']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
 

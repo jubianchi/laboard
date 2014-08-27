@@ -1,24 +1,21 @@
 angular.module('laboard-frontend')
-    .directive('column', [
+    .directive('columns', [
         function() {
             return {
                 restrict: 'A',
                 link: function($scope, $element, $attrs) {
                     var resizeHeight = function() {
-                            $element
-                                .css('height', $(window).height() - 50)
+                            var height = $(window).height();
+
+                            $('[data-column]', $element)
+                                .css('height', height - 50)
                                 .children('.panel-body')
-                                    .css('height', $(window).height() - (70 + 43));
+                                    .css('height', height - (70 + 43));
                         },
                         resizeWidth = function() {
-                            var width = 100;
+                            var columns = $('[data-column]', $element);
 
-                            if ($scope.project.columns.$objects) {
-                                width = 100 / $scope.project.columns.$objects.length;
-                            }
-
-
-                            $('.column').css('width', width + '%');
+                            columns.css('width', (100 / (columns.size() || 1)) + '%');
                         },
                         resize = function() {
                             resizeHeight();
@@ -31,11 +28,7 @@ angular.module('laboard-frontend')
 
                     $scope.$watch(
                         function() {
-                            if ($scope.project.columns.$objects) {
-                                return $scope.project.columns.$objects.length;
-                            } else {
-                                return 1;
-                            }
+                            return $('[data-column]', $element).size();
                         },
                         resizeWidth
                     );

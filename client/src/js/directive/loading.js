@@ -8,7 +8,7 @@ angular.module('laboard-frontend')
                     scope.$watch(
                         $parse(attrs.loading),
                         function(value) {
-                            if(!value) {
+                            if (!value) {
                                 if ($('.spinner-container', element).size() === 0) {
                                     element.prepend('<div class="spinner-container large clearfix"><i class="fa fa-spinner fa-spin"></i></div>');
                                 }
