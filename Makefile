@@ -33,13 +33,13 @@ config/client.js:
 	@sed -i "s#socketIoPort: 80#socketIoPort: $(SOCKETIO_PORT)#" config/client.js
 
 client/public: client/node_modules client/bower_components
-	@cd client && gulp app
+	@cd client && ./node_modules/.bin/gulp app
 
 client/node_modules:
 	@cd client && npm install
 
 client/bower_components:
-	@cd client && bower install
+	@cd client && ./node_modules/.bin/bower install
 
 server/node_modules:
 	@cd server && npm install
