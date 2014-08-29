@@ -35,9 +35,7 @@ angular.module('laboard-frontend')
                                 milestone = milestone.join('.');
 
                                 return semver.satisfies(milestone, query)
-                            } catch (e) {
-                                console.log(e);
-                            }
+                            } catch(e) {}
                         }
 
                         return regex.test(issue.milestone.title);
@@ -74,7 +72,7 @@ angular.module('laboard-frontend')
                     };
                 },
                 searchNumber = function(query) {
-                    var regex = new RegExp(escape(query), 'i');
+                    var regex = new RegExp('^' + escape(query), 'i');
 
                     return function(issue) {
                         return regex.test(issue.iid);

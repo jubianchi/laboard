@@ -5,24 +5,24 @@ angular.module('laboard-frontend')
             var render = function() {
                 $projects.members($root.project)
                     .then(
-                    function(members) {
-                        $root.project.members = members;
-                    }
-                );
+                        function(members) {
+                            $root.project.members = members;
+                        }
+                    );
 
                 $columns.all()
                     .then(
-                    function() {
-                        $root.project.columns = $columns;
-                    }
-                );
+                        function() {
+                            $root.project.columns = $columns;
+                        }
+                    );
 
                 $issues.all()
                     .then(
-                    function() {
-                        $root.project.issues = $issues;
-                    }
-                );
+                        function() {
+                            $root.project.issues = $issues;
+                        }
+                    );
             };
 
             if ($params.namespace && $params.project) {

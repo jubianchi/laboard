@@ -122,9 +122,10 @@ angular.module('laboard-frontend')
 
                     persist: function (column) {
                         var self = this,
-                            deferred = $q.defer();
+                            deferred = $q.defer(),
+                            project = $root.project.path_with_namespace;
 
-                        $rest.all('projects/' + $root.project.path_with_namespace + '/columns')
+                        $rest.all('projects/' + project + '/columns')
                             .post(column)
                             .then(
                                 function (column) {
@@ -133,7 +134,7 @@ angular.module('laboard-frontend')
                                     deferred.resolve(column);
                                 },
                                 function() {
-                                    $rest.all('projects/' + $root.project.path_with_namespace + '/columns')
+                                    $rest.all('projects/' + project + '/columns')
                                         .one(column.title)
                                         .customPUT(column)
                                         .then(

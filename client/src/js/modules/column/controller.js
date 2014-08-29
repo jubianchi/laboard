@@ -33,6 +33,8 @@ angular.module('laboard-frontend')
             $scope.move = function(step) {
                 $scope.column.position += step;
 
+                if ($scope.column.position < 0) return;
+
                 $columns.move($scope.column)
                     .then(
                         function() {

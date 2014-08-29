@@ -15,6 +15,7 @@ angular.module('laboard-frontend')
                         resizeWidth = function() {
                             var columns = $('[data-column]', $element);
 
+
                             columns.css('width', (100 / (columns.size() || 1)) + '%');
                         },
                         resize = function() {
@@ -28,9 +29,9 @@ angular.module('laboard-frontend')
 
                     $scope.$watch(
                         function() {
-                            return $('[data-column]', $element).size();
+                            return $('[data-column]', $element).size() || 1;
                         },
-                        resizeWidth
+                        resize
                     );
                 }
             };

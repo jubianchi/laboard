@@ -1,8 +1,42 @@
 angular.module('laboard-frontend')
     .factory('ProjectManager', [
-        '$rootScope', '$q', '$http', 'ProjectsRepository', 'ColumnsRepository', 'IssuesRepository',
-        function($root, $q, $http, $projects, $columns, $issues) {
+        '$rootScope', '$q', '$modal', 'ProjectsRepository', 'ColumnsRepository', 'IssuesRepository',
+        function($root, $q, $modal, $projects, $columns, $issues) {
+            var open = function (select) {
+                    var deferred = $q.defer(),
+                        modal = $modal
+                        .open({
+                            templateUrl: 'home/partials/projects.html',
+                            backdrop: !!$root.project || 'static',
+                            keyboard: !!$root.project,
+                            controller: function($scope) {
+                                $scope.projects = $projects;
+                                $scope.selectProject = function (project) {
+                                    select(project.path_with_namespace).then(modal.close(project));
+                                };
+                            }
+                        });
+
+                    modal.result
+                        .then(
+                            function (project) {
+                                if (!project) {
+                                    open();
+                                } else {
+                                    deferred.resolve(project);
+                                }
+                            },
+                            deferred.reject()
+                        );
+
+                    return deferred.promise;
+                };
+
             return {
+                prompt: function() {
+                    return open(this.select);
+                },
+
                 select: function(project) {
                     var deferred = $q.defer();
 
