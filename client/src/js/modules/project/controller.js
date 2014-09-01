@@ -1,3 +1,34 @@
+var addColumn = function($modal, $columns) {
+    return function() {
+        $modal
+            .open({
+                templateUrl: 'column/partials/modal.html',
+                controller: function ($scope, $modalInstance) {
+                    $scope.theme = 'default';
+                    $scope.closable = false;
+                    $scope.error = false;
+
+                    $scope.save = function () {
+                        var column = {
+                            title: $scope.title,
+                            theme: $scope.theme,
+                            position: $columns.$objects.length,
+                            limit: $scope.limit ? ($scope.limit < 0 ? 0 : $scope.limit) : 0
+                        };
+
+                        $columns.persist(column)
+                            .then(
+                            $modalInstance.close,
+                            function () {
+                                $scope.error = true;
+                            }
+                        );
+                    };
+                }
+            });
+    };
+};
+
 angular.module('laboard-frontend')
     .controller('ProjectController', [
         '$rootScope', '$scope', '$stateParams', '$state', '$modal', 'ColumnsRepository', 'ProjectsRepository', 'IssuesRepository', 'ProjectManager',
@@ -36,6 +67,8 @@ angular.module('laboard-frontend')
                 render();
             }
 
+            $scope.addColumn = addColumn($modal, $columns);
+
             $scope.bootstrap = function() {
                 $root.LABOARD_CONFIG.defaultColumns.forEach($columns.persist, $columns);
             };
@@ -44,33 +77,6 @@ angular.module('laboard-frontend')
     .controller('ProjectMenuController', [
         '$rootScope', '$scope', '$modal', 'ColumnsRepository',
         function ($root, $scope, $modal, $columns) {
-            $scope.addColumn = function() {
-                $modal
-                    .open({
-                        templateUrl: 'column/partials/modal.html',
-                        controller: function ($scope, $modalInstance) {
-                            $scope.theme = 'default';
-                            $scope.closable = false;
-                            $scope.error = false;
-
-                            $scope.save = function () {
-                                var column = {
-                                    title: $scope.title,
-                                    theme: $scope.theme,
-                                    position: $columns.$objects.length,
-                                    limit: $scope.limit ? ($scope.limit < 0 ? 0 : $scope.limit) : 0
-                                };
-
-                                $columns.persist(column)
-                                    .then(
-                                    $modalInstance.close,
-                                    function () {
-                                        $scope.error = true;
-                                    }
-                                );
-                            };
-                        }
-                    });
-            };
+            $scope.addColumn = addColumn($modal, $columns);
         }
     ]);

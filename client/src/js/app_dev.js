@@ -53,6 +53,10 @@ var mock = {
             return [200, self.issues[path]];
         });
 
+        this.backend.whenPOST(/\/columns$/).respond(function(method, url, data, headers) {
+            return [200, data];
+        });
+
         this.backend.whenGET(/\/columns$/).respond(function(method, url, data, headers) {
             console.log(url);
             var parts = url.split('/'),
@@ -98,6 +102,22 @@ var mock = {
 
         this.columns[namespace + '/' + name] = [];
         this.issues[namespace + '/' + name] = [];
+    },
+
+    setAccessLevel: function(project, role) {
+        var levels = {
+            guest: 10,
+            reporter: 20,
+            developer: 30,
+            master: 40,
+            owner: 50
+        };
+
+        if (!this.projects[project]) {
+            this.addProject(project.split('/')[0], project.split('/')[1]);
+        }
+
+        this.projects[project].access_level = levels[role];
     }
 };
 
@@ -107,4 +127,5 @@ angular.module('laboard-frontend-e2e', ['laboard-frontend', 'ngMockE2E'])
 
         //mock.addUser('foo', 'bar');
         //mock.addProject('foo', 'bar');
+        //mock.setAccessLevel('foo/bar', 'master');
     });

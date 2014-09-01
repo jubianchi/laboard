@@ -1,3 +1,4 @@
+var fs = require('fs');
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -6,9 +7,10 @@ var expect = chai.expect;
 
 module.exports = function() {
     var ptor = protractor.getInstance(),
-        iGoTo, iTypeIn, iClick, iAmOnLaboard;
+        iGoTo, iTypeIn, iClick, iAmOnLaboard, iShouldSeeAElement;
 
     this.Before(function(next) {
+        browser.manage().window().setSize(1024, 768);
         iAmOnLaboard(next);
     });
 
@@ -27,6 +29,12 @@ module.exports = function() {
     this.Given(/^project "([^"]*)" exists in namespace "([^"]*)"/, function(project, namespace, next) {
         browser
             .executeScript('mock.addProject(\'' + namespace + '\', \'' + project + '\');')
+            .then(next);
+    });
+
+    this.Given(/^I am "([^"]*)" on "([^"]*)"$/, function (role, project, next) {
+        browser
+            .executeScript('mock.setAccessLevel(\'' + project + '\', \'' + role + '\');')
             .then(next);
     });
 
@@ -68,10 +76,30 @@ module.exports = function() {
             .and.notify(next);
     });
 
-    this.Then(/I should see a "([^"]*)" element$/, function(element, next) {
+    this.Then(/I should see a "([^"]*)" element$/, iShouldSeeAElement = function(element, next) {
         expect(ptor.findElement(by.css(element)).isDisplayed())
             .to.eventually.equal(true)
             .and.notify(next);
+    });
+
+    this.Then(/I should see a modal dialog$/, function(next) {
+        var condition = function() {
+            return ptor.findElement(by.css('.modal-dialog')).isDisplayed();
+        };
+
+        browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
+            .then(function() { next(); });
+    });
+
+    this.Then(/I should see a column with title "([^"]*)"$/, function(title, next) {
+        var condition = function() {
+            return ptor
+                .findElement(by.cssContainingText('.column .panel-heading', title))
+                .isDisplayed();
+        };
+
+        browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
+            .then(function() { next(); });
     });
 
     this.Then(/I should see "([^"]*)" in "([^"]*)"$/, function(text, element, next) {
