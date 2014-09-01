@@ -20,14 +20,16 @@ config:
 .PHONY: server install config test
 
 config/server.json:
-	@cp config/server.json-dist config/server.json
-	@sed -i "s#http://gitlab.example.com#$(GITLAB_URL)#" config/server.json
-	@sed -i "s#\"port\": 80#\"port\": $(LABOARD_PORT)#" config/server.json
+	@sed \
+	    -e "s#http://gitlab.example.com#$(GITLAB_URL)#" \
+	    -e "s#\"port\": 80#\"port\": $(LABOARD_PORT)#" \
+	    config/server.json-dist > config/server.json
 
 config/client.js:
-	@cp config/client.js-dist config/client.js
-	@sed -i "s#http://gitlab.example.com#$(GITLAB_URL)#" config/client.js
-	@sed -i "s#socketIoPort: 80#socketIoPort: $(SOCKETIO_PORT)#" config/client.js
+	@sed \
+	    -e "s#http://gitlab.example.com#$(GITLAB_URL)#" \
+	    -e "s#socketIoPort: 80#socketIoPort: $(SOCKETIO_PORT)#" \
+	    config/client.js-dist > config/client.js
 
 client/public: client/node_modules client/bower_components
 	@cd client && node_modules/gulp/bin/gulp.js app
