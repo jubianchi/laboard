@@ -3,7 +3,7 @@ LABOARD_PORT ?= $(shell read -p "Laboard port (defaults to 80): ";echo $$REPLY)
 SOCKETIO_PORT ?= $(shell read -p "Socket IO port (defaults to 80): ";echo $$REPLY)
 
 server: config install
-	cd client && gulp
+	cd client && node_modules/gulp/bin/gulp.js
 
 install: config
 	@echo "\033[34m=> Installing Laboard backend\033[0m"
@@ -33,7 +33,7 @@ config/client.js:
 	@sed -i "s#socketIoPort: 80#socketIoPort: $(SOCKETIO_PORT)#" config/client.js
 
 client/public: client/node_modules client/bower_components
-	@cd client && gulp app
+	@cd client && node_modules/gulp/bin/gulp.js app
 
 client/node_modules:
 	@cd client && npm install
