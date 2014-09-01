@@ -6,7 +6,7 @@
   "author": "Julien Bianchi <julien.bianchi@pmsipilot.com>",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "~3.5.6",
+    "gulp": "^3.8.7",
     "gulp-less": "~1.2.3",
     "gulp-watch": "~0.5.3",
     "gulp-connect": "~1.0.10",
