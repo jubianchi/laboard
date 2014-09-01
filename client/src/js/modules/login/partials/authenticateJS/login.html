@@ -1,10 +1,10 @@
 <div class="login">
     <div class="panel panel-default" data-ng-show="ready" data-ng-class="{'panel-danger': error, 'panel-default': !error}">
-        <div class="panel-heading">Identification</div>
+        <div class="panel-heading">Authentication</div>
 
         <div class="panel-body">
             <div class="alert alert-danger" data-ng-show="error">
-                Check your username or password
+                Authentication failed, please check your token.
                 <button class="close" data-ng-click="error = false">&times;</button>
             </div>
 

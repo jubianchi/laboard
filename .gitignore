@@ -5,6 +5,7 @@ bower_components
 client/public
 client/tmp
 /data
+/tmp
 *.log
 .idea/
 coverage/

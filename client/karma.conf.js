@@ -1,7 +1,7 @@
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
-    plugins: ['karma-firefox-launcher', 'karma-chrome-launcher', 'karma-phantomjs-launcher', 'karma-jasmine', 'karma-jasmine-html-reporter', 'karma-story-reporter', 'karma-coverage'],
+    plugins: ['karma-phantomjs-launcher', 'karma-jasmine', 'karma-jasmine-html-reporter', 'karma-story-reporter', 'karma-coverage'],
     browsers: ['PhantomJS'],
     reporters: ['story', 'coverage', 'html'],
 

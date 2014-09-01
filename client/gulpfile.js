@@ -11,7 +11,7 @@ var gulp = require('gulp'),
     exec = require('child_process').exec,
     http = require('http'),
     protractor = require("gulp-protractor").protractor,
-    webdriver_update = require("gulp-protractor").webdriver_update;
+    webdriver = require("gulp-protractor").webdriver_update;
 
 gulp.task('font-awesome', function() {
     gulp.src('bower_components/font-awesome/fonts/*')
@@ -47,6 +47,10 @@ var libs = [
     'bower_components/highcharts/highcharts-all.js',
     'bower_components/highcharts-ng/dist/highcharts-ng.js'
 ];
+gulp.task('libs:mock', function() {
+    libs.push('bower_components/angular-mocks/angular-mocks.js');
+});
+
 gulp.task('libs', function(cb) {
     exec(
         'cd bower_components/node-semver && make semver.browser.js',
@@ -76,6 +80,8 @@ gulp.task('libs', function(cb) {
     );
 });
 
+gulp.task('libs:dev', ['libs:mock', 'libs']);
+
 gulp.task('less', function() {
     gulp.src('src/less/main.less')
         .pipe(less())
@@ -93,13 +99,24 @@ gulp.task('cache', function() {
         .pipe(connect.reload());
 });
 
-var js;
+var js = [
+    'src/js/**/*.js',
+    '../config/client.js',
+    'tmp/templates.js'
+];
+
+gulp.task('js:mock', function() {
+    js.push('src/app_dev.js');
+});
+
 gulp.task('js', ['cache'], function() {
-    gulp.src(js = ['src/js/**/*.js', '../config/client.js', 'tmp/templates.js'])
+    gulp.src(js)
         .pipe(concat('app.js'))
         .pipe(gulp.dest('public/assets/js'))
         .pipe(connect.reload());
 });
+
+gulp.task('js:dev', ['js:mock', 'js']);
 
 gulp.task('html', function() {
     gulp.src(['src/*.html'])
@@ -128,9 +145,21 @@ gulp.task('karma', function(done) {
     );
 });
 
-gulp.task('test', ['libs', 'cs']);
+gulp.task('webdriver', webdriver);
+
+gulp.task('protractor', ['app:dev', 'webdriver'], function() {
+    gulp.src(['./tests/features/**/*.feature'])
+        .pipe(protractor({
+            configFile: __dirname + '/protractor.conf.js'
+        }))
+        .on('error', function(e) { throw e })
+});
+
+gulp.task('test', ['libs', 'cs', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
+gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
 gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
+gulp.task('app:dev', ['vendor:dev', 'less', 'js:dev', 'html', 'images']);
 
 gulp.task('watch', ['server'], function() {
     var watched = {
@@ -165,15 +194,4 @@ gulp.task('server', connect.server({
     }
 }));
 
-// Downloads the selenium webdriver
-gulp.task('webdriver_update', webdriver_update);
-
-gulp.task('protractor', ['webdriver_update'], function() {
-  gulp.src(["./src/tests/*.js"])
-    .pipe(protractor({
-      configFile: "./tests/e2e/protractor-conf.js"
-    }))
-    .on('error', function(e) { throw e })
-});
-
-gulp.task('default', ['app', 'watch']);
+gulp.task('default', ['app:dev', 'watch']);

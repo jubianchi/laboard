@@ -20,8 +20,10 @@ gitlab.prototype = {
                 }
 
                 if (resp.statusCode !== 200) {
+                    console.log(err, resp.statusCode, body);
+
                     if (req) req.res.status(resp.statusCode);
-                    done(err);
+                    done(JSON.parse(body));
 
                     return;
                 }
