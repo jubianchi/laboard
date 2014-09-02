@@ -13,7 +13,7 @@ module.exports = function(config) {
       'src/js/auth.js',
       'src/js/router.js',
       'src/js/**/*.js',
-      'tests/**/*.js'
+      'tests/units/**/*.js'
     ],
 
     preprocessors: {
