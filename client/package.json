@@ -1,10 +1,14 @@
 {
   "name": "laboard",
   "version": "2.0.0",
-  "description": "",
+  "description": "labord client - A kanban board made for Gitlab",
   "main": "gulpfile.js",
   "author": "Julien Bianchi <julien.bianchi@pmsipilot.com>",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://gitlab.com/jubianchi/laboard.git"
+  },
   "devDependencies": {
     "gulp": "^3.8.7",
     "gulp-less": "~1.2.3",
