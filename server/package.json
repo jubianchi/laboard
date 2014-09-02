@@ -1,10 +1,14 @@
 {
   "name": "laboard",
   "version": "2.0.0",
-  "description": "",
+  "description": "labord server - A kanban board made for Gitlab",
   "main": "index.js",
   "author": "Julien Bianchi <julien.bianchi@pmsipilot.com>",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://gitlab.com/jubianchi/laboard.git"
+  },
   "scripts": {
     "test": "node_modules/atoum.js/bin/atoum -d tests"
   },
