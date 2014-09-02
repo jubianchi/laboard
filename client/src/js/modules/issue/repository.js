@@ -84,13 +84,13 @@ angular.module('laboard-frontend')
                         this.$objects.forEach(function(value, key) {
                             if (added) return;
 
-                            if(value.id === issue.id) {
+                            if (value.id === issue.id) {
                                 self.$objects[key] = issue;
                                 added = true;
                             }
                         });
 
-                        if(added === false && issue.id) {
+                        if (added === false && issue.id) {
                             this.$objects.push(issue);
                         }
 
@@ -100,7 +100,7 @@ angular.module('laboard-frontend')
                         var self = this;
 
                         this.$objects.forEach(function(value, key) {
-                            if(value.id === issue.id) {
+                            if (value.id === issue.id) {
                                 self.$objects.splice(key, 1);
                             }
                         });
@@ -198,7 +198,11 @@ angular.module('laboard-frontend')
                 };
 
             var handler = function(data) {
-                repository.add(data.issue);
+                if (data.issue.state === 'closed') {
+                    repository.unadd(data.issue);
+                } else {
+                    repository.add(data.issue);
+                }
             };
 
             $socket
@@ -206,16 +210,8 @@ angular.module('laboard-frontend')
                 .on('move', handler)
                 .on('theme', handler)
                 .on('edit', handler)
-                .on('update',
-                    function(data) {
-                        repository.one(data.issue.id);
-                    }
-                )
-                .on('close',
-                    function(data) {
-                        repository.unadd(data.issue);
-                    }
-                );
+                .on('update', handler)
+                .on('close', handler);
 
             return repository;
         }
