@@ -18,7 +18,7 @@ Feature: Login with private token
     When I go to "/"
     Then I should be on "/login"
 
-    When I click on "[type=submit]"
+    When I click on "Login"
     Then I should see "Authentication failed, please check your token" in ".alert.alert-danger"
 
   Scenario: Authentication success
@@ -26,5 +26,5 @@ Feature: Login with private token
     Then I should be on "/login"
 
     When I type "foobar" in "#password"
-    And I click on "[type=submit]"
+    And I click on "Login"
     Then I should be on "/"

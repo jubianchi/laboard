@@ -1,6 +1,7 @@
 angular.module('laboard-frontend')
     .directive('columns', [
-        function() {
+        '$rootScope',
+        function($root) {
             return {
                 restrict: 'A',
                 link: function($scope, $element, $attrs) {
@@ -15,7 +16,6 @@ angular.module('laboard-frontend')
                         resizeWidth = function() {
                             var columns = $('[data-column]', $element);
 
-
                             columns.css('width', (100 / (columns.size() || 1)) + '%');
                         },
                         resize = function() {
@@ -26,6 +26,7 @@ angular.module('laboard-frontend')
                     resize();
 
                     $(window).resize(resize);
+                    $root.$on('column.ready', resize);
 
                     $scope.$watch(
                         function() {

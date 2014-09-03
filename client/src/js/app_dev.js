@@ -104,6 +104,17 @@ var mock = {
         this.issues[namespace + '/' + name] = [];
     },
 
+    addColumn: function(project, name) {
+        if (!this.projects[project]) {
+            this.addProject(project.split('/')[0], project.split('/')[1]);
+        }
+
+        this.columns[project].push({
+            title: name,
+            position: this.columns[project].length
+        });
+    },
+
     setAccessLevel: function(project, role) {
         var levels = {
             guest: 10,

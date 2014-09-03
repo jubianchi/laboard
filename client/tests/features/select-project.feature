@@ -24,5 +24,5 @@ Feature: Select project
     And I should see "foo/bar" in ".modal-body"
     And I should see "bar/foo" in ".modal-body"
 
-    When I click on "td" containing "foo/bar"
+    When I click on "foo/bar"
     Then I should be on "/foo/bar"

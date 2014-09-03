@@ -149,5 +149,6 @@ angular.module('laboard-frontend')
             };
 
             $scope.droppable = $authorization.authorize('developer');
+            $root.$broadcast('column.ready');
         }
     ]);

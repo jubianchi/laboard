@@ -7,7 +7,7 @@ var expect = chai.expect;
 
 module.exports = function() {
     var ptor = protractor.getInstance(),
-        iGoTo, iTypeIn, iClick, iAmOnLaboard, iShouldSeeAElement;
+        iGoTo, iTypeIn, iClickOn, iAmOnLaboard;
 
     this.Before(function(next) {
         browser.manage().window().setSize(1024, 768);
@@ -32,6 +32,12 @@ module.exports = function() {
             .then(next);
     });
 
+    this.Given(/^project "([^"]*)" has column "([^"]*)"/, function(project, column, next) {
+        browser
+            .executeScript('mock.addColumn(\'' + project + '\', \'' + column + '\');')
+            .then(next);
+    });
+
     this.Given(/^I am "([^"]*)" on "([^"]*)"$/, function (role, project, next) {
         browser
             .executeScript('mock.setAccessLevel(\'' + project + '\', \'' + role + '\');')
@@ -44,16 +50,33 @@ module.exports = function() {
             .then(next);
     });
 
-    this.When(/I click on "([^"]*)"/, iClick = function(button, next) {
-        ptor.findElement(by.css(button))
-            .click()
-            .then(next);
-    });
-
     this.When(/I click on "([^"]*)" containing "([^"]*)"/, function(elem, text, next) {
         ptor.findElement(by.cssContainingText(elem, text))
             .click()
             .then(next);
+    });
+
+    this.When(/I click on "([^"]*)"$/, iClickOn = function(text, next) {
+        var elements,
+            fallback = function() {
+                elements = by.cssContainingText('a,button,[type=button],[type=submit],[data-ng-click]', text);
+
+                ptor.findElement(elements)
+                    .click()
+                    .then(next);
+            };
+
+        $$('[data-tooltip="' + text + '"],[value="' + text + '"]')
+            .then(
+                function(elements) {
+                    if (elements.length === 0) {
+                        fallback();
+                    } else {
+                        elements[0].click().then(next);
+                    }
+                },
+                fallback
+            );
     });
 
     this.When(/I type "([^"]*)" in "([^"]*)"$/, iTypeIn = function(text, element, next) {
@@ -65,7 +88,7 @@ module.exports = function() {
     this.When(/^I login with token "([^"]*)"$/, function(token, next) {
         iGoTo('/', function() {
             iTypeIn(token, '#password', function() {
-                iClick('[type=submit]', next);
+                iClickOn('Login', next);
             })
         });
     });
@@ -76,7 +99,7 @@ module.exports = function() {
             .and.notify(next);
     });
 
-    this.Then(/I should see a "([^"]*)" element$/, iShouldSeeAElement = function(element, next) {
+    this.Then(/I should see a "([^"]*)" element$/, function(element, next) {
         expect(ptor.findElement(by.css(element)).isDisplayed())
             .to.eventually.equal(true)
             .and.notify(next);
@@ -100,6 +123,35 @@ module.exports = function() {
 
         browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
             .then(function() { next(); });
+    });
+
+    this.Then(/I should not see a column with title "([^"]*)"$/, function(title, next) {
+        var condition = function() {
+            return ptor
+                .findElement(by.cssContainingText('.column .panel-heading', title))
+                .isDisplayed();
+        };
+
+        browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
+            .then(
+                function() { throw new Error('Column "' + title + '" was seen in page'); },
+                function() { next(); }
+            );
+    });
+
+    this.Then(/I should see a column with title "([^"]*)"$/, function(title, next) {
+        var condition = function() {
+            return ptor
+                .findElement(by.cssContainingText('.column .panel-heading', title))
+                .isDisplayed();
+        };
+
+        browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
+            .then(
+                function() {
+                    next();
+                }
+            );
     });
 
     this.Then(/I should see "([^"]*)" in "([^"]*)"$/, function(text, element, next) {

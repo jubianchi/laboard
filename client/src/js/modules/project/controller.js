@@ -57,12 +57,13 @@ angular.module('laboard-frontend')
             };
 
             if ($params.namespace && $params.project) {
-                $projectManager.select($params.namespace + '/' + $params.project).then(
-                    render,
-                    function() {
-                        $state.go('home');
-                    }
-                );
+                $projectManager.select($params.namespace + '/' + $params.project)
+                    .then(
+                        render,
+                        function() {
+                            $state.go('home');
+                        }
+                    );
             } else {
                 render();
             }
