@@ -38,7 +38,7 @@ client/node_modules:
 	@cd client && npm install
 
 client/bower_components:
-	@cd client && bower install
+	@cd client && node_modules/bower/bin/bower install
 
 server/node_modules:
 	@cd server && npm install

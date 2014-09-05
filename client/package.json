@@ -6,8 +6,8 @@
   "author": "Julien Bianchi <julien.bianchi@pmsipilot.com>",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://gitlab.com/jubianchi/laboard.git"
+    "type": "git",
+    "url": "https://gitlab.com/jubianchi/laboard.git"
   },
   "devDependencies": {
     "gulp": "^3.8.7",
@@ -34,6 +34,7 @@
     "cucumber": "~0.3.3",
     "mocha": "^1.21.4",
     "chai": "~1.8.1",
-    "chai-as-promised": "~4.1.0"
+    "chai-as-promised": "~4.1.0",
+    "bower": "^1.3.9"
   }
 }
