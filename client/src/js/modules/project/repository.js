@@ -78,7 +78,7 @@ angular.module('laboard-frontend')
                         this.$objects = this.$objects || [];
 
                         this.$objects.forEach(function(value, key) {
-                            if (added) return;
+                            if (added) { return; }
 
                             if (value.path_with_namespace === project.path_with_namespace) {
                                 self.$objects[key] = project;

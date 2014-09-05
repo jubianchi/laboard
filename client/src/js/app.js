@@ -63,7 +63,7 @@ angular.module('laboard-frontend')
                         $state.go('login');
                     }
                 } else {
-                    if ($root.user) return;
+                    if ($root.user) { return; }
 
                     $auth.check();
                 }

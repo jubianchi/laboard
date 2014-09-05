@@ -42,7 +42,7 @@ describe('module: home', function() {
             $rootScope.$apply();
 
             expect(ProjectManager.prompt).toHaveBeenCalled();
-            expect($state.transitionTo).toHaveBeenCalledWith('home.project', { namespace: 'foo', project: 'bar'});
+            expect($state.transitionTo).toHaveBeenCalledWith('home.project', { namespace: 'foo', project: 'bar' });
         }));
     });
 });

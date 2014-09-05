@@ -3,7 +3,7 @@ angular.module('laboard-frontend')
         '$filter', '$rootScope',
         function () {
             return function(issues, column) {
-                if (!issues) return [];
+                if (!issues) { return []; }
 
                 return _.filter(issues, function(issue) {
                     return issue.column === column.title.toLowerCase();
@@ -21,7 +21,7 @@ angular.module('laboard-frontend')
                     var regex = new RegExp(escape(query), 'i');
 
                     return function(issue) {
-                        if (!issue.milestone) return;
+                        if (!issue.milestone) { return; }
 
                         if (/^[\w\s]+$/.test(query) === false) {
                             try {
@@ -35,7 +35,7 @@ angular.module('laboard-frontend')
                                 milestone = milestone.join('.');
 
                                 return semver.satisfies(milestone, query)
-                            } catch(e) {}
+                            } catch (e) {}
                         }
 
                         return regex.test(issue.milestone.title);
