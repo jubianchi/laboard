@@ -6,10 +6,10 @@ Feature: Select project
 
   Background:
     Given user "test" has token "foobar"
+    And I go to laboard
 
   Scenario: User has no project
-    When I go to "/"
-    And I login with token "foobar"
+    When I login with token "foobar"
     Then I should see a ".modal-dialog" element
     And I should see "0 project" in ".modal-header"
 
@@ -17,8 +17,7 @@ Feature: Select project
     Given project "foo" exists in namespace "bar"
     And project "bar" exists in namespace "foo"
 
-    When I go to "/"
-    And I login with token "foobar"
+    When I login with token "foobar"
     Then I should see a ".modal-dialog" element
     And I should see "2 projects" in ".modal-header"
     And I should see "foo/bar" in ".modal-body"

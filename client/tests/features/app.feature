@@ -4,6 +4,6 @@ Feature: Laboard
   I should be able to use Laboard
 
   Scenario: Homepage
-    When I go to "/"
+    When I go to laboard
     Then the title should be equal to "Laboard"
     And I should see "Authentication"

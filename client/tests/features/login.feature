@@ -7,24 +7,18 @@ Feature: Login with private token
 
   Background:
     Given user "test" has token "foobar"
+    And I go to laboard
 
   Scenario: Display login form
-    When I go to "/"
     Then I should be on "/login"
     And I should see a "#password" element
     And I should see a "[type=submit]" element
 
   Scenario: Authentication failure
-    When I go to "/"
-    Then I should be on "/login"
-
     When I click on "Login"
     Then I should see "Authentication failed, please check your token" in ".alert.alert-danger"
 
   Scenario: Authentication success
-    When I go to "/"
-    Then I should be on "/login"
-
     When I type "foobar" in "#password"
     And I click on "Login"
     Then I should be on "/"

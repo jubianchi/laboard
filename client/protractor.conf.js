@@ -14,7 +14,7 @@ module.exports.config = {
     framework: 'cucumber',
 
     cucumberOpts: {
-        require: 'tests/features/definition.js',
+        require: 'tests/features/support/bootstrap.js',
         format: 'pretty'
     }
 };

@@ -148,7 +148,7 @@ gulp.task('karma', function(done) {
 gulp.task('webdriver', webdriver);
 
 gulp.task('protractor', ['app:dev', 'webdriver'], function() {
-    gulp.src(['./tests/features/**/.feature'])
+    gulp.src(['./tests/features/**/*.feature'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
         }))

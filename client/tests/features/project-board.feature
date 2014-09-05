@@ -8,8 +8,8 @@ Feature: Project board
     And project "bar" exists in namespace "foo"
     And project "foo/bar" has column "Sandbox"
     And project "foo/bar" has column "Todo"
-    And I am "master" on "foo/bar"
-    And I go to "/"
+    And I am "master" on project "foo/bar"
+    And I go to laboard
     And I login with token "foobar"
     And I click on "foo/bar"
 

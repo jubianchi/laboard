@@ -7,8 +7,8 @@ Feature: New project board
   Background:
     Given user "test" has token "foobar"
     And project "bar" exists in namespace "foo"
-    And I am "master" on "foo/bar"
-    And I go to "/"
+    And I am "master" on project "foo/bar"
+    And I go to laboard
     And I login with token "foobar"
     And I click on "foo/bar"
 
