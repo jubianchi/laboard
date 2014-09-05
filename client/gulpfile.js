@@ -135,27 +135,34 @@ gulp.task('cs', function() {
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 
+var autoWatch = true;
 gulp.task('karma', function(done) {
     return karma.start(
         {
             configFile: __dirname + '/karma.conf.js',
-            autoWatch: true
+            autoWatch: autoWatch,
+            singleRun: !autoWatch
         },
         done
     );
 });
 
+gulp.task('karma:ci', function() {
+    autoWatch = false;
+});
+
 gulp.task('webdriver', webdriver);
 
-gulp.task('protractor', ['app:dev', 'webdriver'], function() {
+gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
     gulp.src(['./tests/features/**/*.feature'])
         .pipe(protractor({
             configFile: __dirname + '/protractor.conf.js'
         }))
-        .on('error', function(e) { throw e })
+        .on('error', function(e) { throw e; })
+        .on('end', function(e) { done(); })
 });
 
-gulp.task('test', ['libs', 'cs', 'karma', 'protractor']);
+gulp.task('test', ['libs', 'cs', 'karma:ci', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
 gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
@@ -177,21 +184,23 @@ gulp.task('watch', ['server'], function() {
     });
 });
 
-gulp.task('server', connect.server({
-    root: [path.resolve('public')],
-    port: 4242,
-    livereload: true,
-    middleware: function(connect, opt) {
-        var container = require('../server/container');
+gulp.task('server', function() {
+    connect.server({
+        root: [path.resolve('public')],
+        port: 4242,
+        livereload: true,
+        middleware: function(connect, opt) {
+            var container = require('../server/container');
 
-        require('../server');
+            require('../server');
 
-        return [
-            function(req, res, next) {
-                container.get('app').handle(req, res, next);
-            }
-        ]
-    }
-}));
+            return [
+                function(req, res, next) {
+                    container.get('app').handle(req, res, next);
+                }
+            ]
+        }
+    })
+});
 
 gulp.task('default', ['app:dev', 'watch']);

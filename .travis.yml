@@ -1,0 +1,14 @@
+language: node_js
+
+node_js:
+  - "0.10"
+  - "0.11"
+
+install:
+  - make install
+
+script:
+  - cd server && node_modules/atoum.js/bin/atoum -d tests
+  - cd client && node_modules/gulp/bin/gulp.js server &
+  - cd client && node_modules/gulp/bin/gulp.js test
+  - kill %1 
