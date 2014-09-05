@@ -12,6 +12,7 @@ script:
   - node_modules/atoum.js/bin/atoum -d tests
   - cd ../client
   - node_modules/gulp/bin/gulp.js server &
+  - sleep 5
   - node_modules/gulp/bin/gulp.js test
 
 after_script:
