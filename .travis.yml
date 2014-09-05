@@ -4,13 +4,8 @@ node_js:
   - "0.10"
   - "0.11"
 
-env:
-  - GITLAB_URL=http://127.0.0.1
-  - LABOARD_PORT=4242
-  - SOCKETIO_PORT=4242
-
 install:
-  - make install
+  - make GITLAB_URL=http://127.0.0.1 LABOARD_PORT=4242 SOCKETIO_PORT=4242 install
 
 script:
   - cd server && node_modules/atoum.js/bin/atoum -d tests
