@@ -43,7 +43,7 @@ angular.module('laboard-frontend')
                             data.forEach(function (line) {
                                 var lbl = label(line);
 
-                                if (weeks.indexOf(lbl) === -1) weeks.push(lbl);
+                                if (weeks.indexOf(lbl) === -1) { weeks.push(lbl); }
                             });
 
                             deferred.resolve(data);

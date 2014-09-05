@@ -33,13 +33,13 @@ angular.module('laboard-frontend')
             $scope.move = function(step) {
                 $scope.column.position += step;
 
-                if ($scope.column.position < 0) return;
+                if ($scope.column.position < 0) { return; }
 
                 $columns.move($scope.column)
                     .then(
                         function() {
                             $columns.$objects.forEach(function(column) {
-                                if (column.title === $scope.column.title) return;
+                                if (column.title === $scope.column.title) { return; }
 
                                 if (column.position === $scope.column.position) {
                                     column.position += -step;
@@ -115,7 +115,7 @@ angular.module('laboard-frontend')
                     column = $scope.column;
 
                 $issues.$objects.forEach(function(issue) {
-                    if (!issue.column) issues.push(issue);
+                    if (!issue.column) { issues.push(issue); }
                 });
 
                 if (issues.length && (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length)) {

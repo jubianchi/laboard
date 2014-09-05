@@ -87,7 +87,7 @@ angular.module('laboard-frontend')
                         this.$objects = this.$objects || [];
 
                         this.$objects.forEach(function(value, key) {
-                            if (added) return;
+                            if (added) { return; }
 
                             if (value.title === column.title) {
                                 self.$objects[key] = column;
