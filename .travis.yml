@@ -5,6 +5,7 @@ node_js:
   - "0.11"
 
 install:
+  - sudo npm install -g phantomjs@^1.9.7-15
   - make GITLAB_URL=http://127.0.0.1 LABOARD_PORT=1337 SOCKETIO_PORT=1337 install
 
 script:
