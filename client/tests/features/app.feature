@@ -1,4 +1,4 @@
-Feature: Labord
+Feature: Laboard
 
   As a Gitlab user
   I should be able to use Laboard
