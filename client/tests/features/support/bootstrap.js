@@ -1,4 +1,6 @@
 var chai = require('chai'),
+    path = require('path'),
+    fs = require('fs'),
     expect = chai.expect;
 
 chai.use(require('chai-as-promised'));
@@ -12,9 +14,11 @@ module.exports = function() {
     require('./steps/navigation.js')(this);
     require('./steps/interaction.js')(this);
     require('./steps/ui.js')(this);
+    require('./screenshots.js')(this);
+
+    browser.manage().window().setSize(1024, 768);
 
     this.Before(function(next) {
-        browser.manage().window().setSize(1024, 768);
         browser.goToHomepage(next);
     });
 
@@ -57,8 +61,6 @@ module.exports = function() {
             .sendKeys(text)
             .then(next);
     };
-
-
 
     this.Then(/I should be on "([^"]*)"/, function(url, next) {
         expect(ptor.getCurrentUrl())
