@@ -57,6 +57,10 @@ var mock = {
             return [200, data];
         });
 
+        this.backend.whenPUT(/\/columns/).respond(function(method, url, data, headers) {
+            return [200, data];
+        });
+
         this.backend.whenGET(/\/columns$/).respond(function(method, url, data, headers) {
             console.log(url);
             var parts = url.split('/'),

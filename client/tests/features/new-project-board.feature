@@ -19,11 +19,11 @@ Feature: New project board
 
   Scenario: Use default columns set
     When I click on "use the default columns"
-    Then I should see a column with title "Sandbox"
-    And I should see a column with title "Backlog"
-    And I should see a column with title "Accepted"
-    And I should see a column with title "Review"
-    And I should see a column with title "Done"
+    Then I should see the "Sandbox" column
+    And I should see the "Backlog" column
+    And I should see the "Accepted" column
+    And I should see the "Review" column
+    And I should see the "Done" column
 
   Scenario: Manually create column
     When I click on "create some columns"
@@ -31,4 +31,4 @@ Feature: New project board
 
     When I type "Todo" in "#title"
     And I click on "Save"
-    Then I should see a column with title "Todo"
+    Then I should see the "Todo" column

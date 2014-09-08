@@ -13,6 +13,20 @@ module.exports = function(cucumber) {
             .then(next);
     });
 
+    cucumber.Given(/^I am not "([^"]*)" on project "([^"]*)"$/, function (role, project, next) {
+        var roles = [
+            'guest',
+            'reporter',
+            'developer',
+            'master',
+            'owner'
+        ];
+
+        browser
+            .executeScript('mock.setAccessLevel(\'' + project + '\', \'' + roles[roles.indexOf(role) - 1] + '\');')
+            .then(next);
+    });
+
     cucumber.When(/^I login with token "([^"]*)"$/, function(token, next) {
         browser.goTo('/', function() {
             browser.typeTextInElement(

@@ -11,6 +11,7 @@ module.exports = function() {
     require('./steps/users.js')(this);
     require('./steps/navigation.js')(this);
     require('./steps/interaction.js')(this);
+    require('./steps/ui.js')(this);
 
     this.Before(function(next) {
         browser.manage().window().setSize(1024, 768);
@@ -31,9 +32,9 @@ module.exports = function() {
 
     browser.clickOn = function(text, next) {
         var fallback = function() {
-                var elements = by.cssContainingText('a,button,[type=button],[type=submit],[data-ng-click]', text);
+                var elements = by.cssContainingText('a,button,[type=button],[type=submit],[data-ng-click],label', text);
 
-                ptor.findElement(elements)
+                element(elements)
                     .click()
                     .then(next);
             };
@@ -51,44 +52,13 @@ module.exports = function() {
             );
     };
 
-    browser.typeTextInElement = function(text, element, next) {
-        ptor.findElement(by.css(element))
+    browser.typeTextInElement = function(text, elem, next) {
+        element(by.css(elem))
             .sendKeys(text)
             .then(next);
     };
 
-    this.Then(/the title should be equal to "([^"]*)"$/, function(title, next) {
-        expect(browser.getTitle())
-            .to.eventually.equal(title)
-            .and.notify(next);
-    });
 
-    this.Then(/I should see a "([^"]*)" element$/, function(element, next) {
-        expect(ptor.findElement(by.css(element)).isDisplayed())
-            .to.eventually.equal(true)
-            .and.notify(next);
-    });
-
-    this.Then(/I should see a modal dialog$/, function(next) {
-        var condition = function() {
-            return ptor.findElement(by.css('.modal-dialog')).isDisplayed();
-        };
-
-        browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
-            .then(function() { next(); });
-    });
-
-    this.Then(/I should see "([^"]*)" in "([^"]*)"$/, function(text, element, next) {
-        expect(ptor.findElement(by.css(element)).getText())
-            .to.eventually.match(new RegExp(text))
-            .and.notify(next);
-    });
-
-    this.Then(/I should see "([^"]*)"$/, function(text, next) {
-        expect(ptor.findElement(by.css('body')).getText())
-            .to.eventually.match(new RegExp(text))
-            .and.notify(next);
-    });
 
     this.Then(/I should be on "([^"]*)"/, function(url, next) {
         expect(ptor.getCurrentUrl())

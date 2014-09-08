@@ -159,7 +159,7 @@ gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
             configFile: __dirname + '/protractor.conf.js'
         }))
         .on('error', function(e) { throw e; })
-        .on('end', function(e) { done(); })
+        .on('end', function() { done(); })
 });
 
 gulp.task('test', ['libs', 'cs', 'karma:ci', 'karma', 'protractor']);

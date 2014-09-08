@@ -7,11 +7,10 @@
         <div class="btn-group" data-ng-prevent-drag="true">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-                <span class="sr-only">Open {{column.title}} column menu</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
                 <li data-authorize="master"><a data-ng-click="edit()" class="faa-parent animated-hover"><i class="fa fa-cog faa-spin"></i> Settings</a></li>
-                <li data-authorize="master"><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop <span class="sr-only">column {{column.title}}</span></a></li>
+                <li data-authorize="master"><a data-ng-click="remove()" class="faa-parent animated-hover"><i class="fa fa-trash-o faa-wrench"></i> Drop</a></li>
                 <li data-authorize="master"><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
                 <li data-authorize="master"><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                 <li class="divider" data-authorize="master"></li>
