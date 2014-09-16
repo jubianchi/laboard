@@ -60,7 +60,7 @@ module.exports = function(cucumber) {
                     stream.end();
 
                     next();
-                });
+                }, function() {});
         } else {
             next();
         }

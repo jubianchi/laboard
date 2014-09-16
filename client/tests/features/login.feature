@@ -22,3 +22,14 @@ Feature: Login with private token
     When I type "foobar" in "#password"
     And I click on "Login"
     Then I should be on "/"
+
+  Scenario: Logout
+    Given project "bar" exists in namespace "foo"
+    And I login with token "foobar"
+
+    When I click on "foo/bar"
+    And I click on "test"
+    And I click on "Logout"
+    Then I should be on "/login"
+
+

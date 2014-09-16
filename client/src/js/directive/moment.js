@@ -16,7 +16,14 @@ angular.module('laboard-frontend')
                             unwatch();
                         }
 
-                        $timeout(update, 10000);
+                        setTimeout(
+                            function() {
+                                update();
+
+                                scope.$apply();
+                            },
+                            10000
+                        );
                     };
 
                     var unwatch = scope.$watch(attrs.datetime, update);

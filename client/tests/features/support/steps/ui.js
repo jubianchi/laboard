@@ -2,8 +2,6 @@ var chai = require('chai'),
     expect = chai.expect;
 
 module.exports = function(cucumber) {
-    var ptor = protractor.getInstance();
-
     cucumber.Then(/the title should be equal to "([^"]*)"$/, function(title, next) {
         expect(browser.getTitle())
             .to.eventually.equal(title)

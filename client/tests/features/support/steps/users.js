@@ -1,5 +1,7 @@
 module.exports = function(cucumber) {
-    var ptor = protractor.getInstance();
+    browser.logout = function() {
+        return browser.executeScript('mock.reset();');
+    };
 
     cucumber.Given(/^user "([^"]*)" has token "([^"]*)"/, function(user, token, next) {
         browser
@@ -28,14 +30,11 @@ module.exports = function(cucumber) {
     });
 
     cucumber.When(/^I login with token "([^"]*)"$/, function(token, next) {
-        browser.goTo('/', function() {
-            browser.typeTextInElement(
-                token,
-                '#password',
-                function() {
+        browser.goTo('/').then(function() {
+            browser.typeTextInElement(token, '#password')
+                .then(function() {
                     browser.clickOn('Login', next);
-                }
-            )
+                });
         });
     });
 };

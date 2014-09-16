@@ -2,47 +2,49 @@ var chai = require('chai'),
     expect = chai.expect;
 
 module.exports = function(cucumber) {
-    var ptor = protractor.getInstance();
-
-    browser.findColumn = function(title, callback) {
+    browser.findColumn = function(title) {
         var condition = function () {
             return element(by.cssContainingText('.column .panel-heading', title))
                 .isDisplayed();
         };
 
-        browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
+        return browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
             .then(function() {
-                callback(element(by.cssContainingText('.column .panel-heading', title))
-                    .element(by.xpath('ancestor::div[1]')));
+                return element(by.cssContainingText('.column .panel-heading', title))
+                    .element(by.xpath('ancestor::div[1]'));
             });
     };
 
-    browser.findColumnMenu = function(title, callback) {
-        browser.findColumn(title, function(column) {
-            callback(column.element(by.css('.panel-heading .dropdown-menu')));
-        });
+    browser.findColumnMenu = function(title) {
+        return browser.findColumn(title)
+            .then(function(column) {
+                return column.element(by.css('.panel-heading .dropdown-menu'));
+            });
     };
 
     cucumber.When(/^I open the menu of the "([^"]*)" column$/, function(title, next) {
-        browser.findColumn(title, function(column) {
-            column.element(by.css('[data-toggle=dropdown]'))
-                .click()
-                .then(next);
-        });
+        browser.findColumn(title)
+            .then(function(column) {
+                column.element(by.css('[data-toggle=dropdown]'))
+                    .click()
+                    .then(next);
+            });
     });
 
     cucumber.When(/^I click on "([^"]*)" in the menu of the "([^"]*)" column$/, function(text, title, next) {
-        browser.findColumnMenu(title, function(menu) {
-            menu.element(by.cssContainingText('a', text))
-                .click()
-                .then(next);
-        });
+        browser.findColumnMenu(title)
+            .then(function(menu) {
+                menu.element(by.cssContainingText('a', text))
+                    .click()
+                    .then(next);
+            });
     });
 
     cucumber.Then(/I should see the "([^"]*)" column$/, function(title, next) {
-        browser.findColumn(title, function() {
-            next();
-        });
+        browser.findColumn(title)
+            .then(function() {
+                next();
+            });
     });
 
     cucumber.Then(/I should see the "([^"]*)" column before the "([^"]*)" column$/, function(first, second, next) {
@@ -119,8 +121,18 @@ module.exports = function(cucumber) {
     });
 
     cucumber.Then(/the "([^"]*)" column should have the "([^"]*)" theme$/, function(title, theme, next) {
-        browser.findColumn(title, function(column) {
-            expect(column.getAttribute('class')).to.eventually.contain(theme).and.notify(next);
-        });
+        browser.findColumn(title)
+            .then(function(column) {
+                expect(column.getAttribute('class')).to.eventually.contain(theme).and.notify(next);
+            });
+    });
+
+    cucumber.Then(/the "([^"]*)" column should be empty$/, function(title, next) {
+        browser.findColumn(title)
+            .then(function(column) {
+                expect(column.all(by.css('.panel-body *')).count())
+                    .to.eventually.equal(0, 'Column ' + title + ' is not empty')
+                    .and.notify(next);
+            });
     });
 };
