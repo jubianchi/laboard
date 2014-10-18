@@ -7,8 +7,8 @@ module.exports = function(cucumber) {
         slugify = function(str) {
             return str
                 .toLowerCase()
-                .replace(/\s/g,'-')
-                .replace(/[^\w-]+/g,'');
+                .replace(/\s/g, '-')
+                .replace(/[^\w-]+/g, '');
         },
         mkdir = function(dir) {
             try {
