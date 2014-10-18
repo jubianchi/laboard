@@ -1,17 +1,17 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{$parent.edit ? 'Edit' : 'New'}} column<span data-ng-if="$parent.title">: {{$parent.title}}</span></h3>
+    <h3 class="modal-title">{{edit ? 'Edit' : 'New'}} column<span data-ng-if="title">: {{title}}</span></h3>
 </div>
 <div class="modal-body">
     <form class="form-horizontal" role="form">
-        <div class="form-group" data-ng-class="{'has-error has-feedback': $parent.error}">
+        <div class="form-group" data-ng-class="{'has-error has-feedback': error}">
             <label for="title" class="col-sm-3 control-label">Title</label>
-            <div class="col-sm-9" data-ng-show="!$parent.edit">
-                <input type="text" class="form-control" id="title" placeholder="title" data-ng-model="$parent.title" />
-                <span class="fa fa-times form-control-feedback" data-ng-if="$parent.error"></span>
+            <div class="col-sm-9" data-ng-show="!edit">
+                <input type="text" class="form-control" id="title" placeholder="title" data-ng-model="title" />
+                <span class="fa fa-times form-control-feedback" data-ng-if="error"></span>
             </div>
 
-            <div class="col-sm-10" data-ng-show="$parent.edit">
-                <p class="form-control-static" data-ng-bind="$parent.title"></p>
+            <div class="col-sm-10" data-ng-show="edit">
+                <p class="form-control-static" data-ng-bind="title"></p>
             </div>
         </div>
 
@@ -20,31 +20,31 @@
             <div class="col-sm-9">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="theme" value="default" data-ng-model="$parent.theme"/>
+                        <input type="radio" name="theme" value="default" data-ng-model="theme"/>
                         <span class="text-default"><i class="fa fa-circle"></i> Default</span>
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="theme" value="info" data-ng-model="$parent.theme"/>
+                        <input type="radio" name="theme" value="info" data-ng-model="theme"/>
                         <span class="text-info"><i class="fa fa-circle"></i> Blue</span>
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="theme" value="success" data-ng-model="$parent.theme"/>
+                        <input type="radio" name="theme" value="success" data-ng-model="theme"/>
                         <span class="text-success"><i class="fa fa-circle"></i> Green</span>
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="theme" value="warning" data-ng-model="$parent.theme"/>
+                        <input type="radio" name="theme" value="warning" data-ng-model="theme"/>
                         <span class="text-warning"><i class="fa fa-circle"></i> Yellow</span>
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="theme" value="danger" data-ng-model="$parent.theme"/>
+                        <input type="radio" name="theme" value="danger" data-ng-model="theme"/>
                         <span class="text-danger"><i class="fa fa-circle"></i> Red</span>
                     </label>
                 </div>
@@ -56,13 +56,13 @@
             <div class="col-sm-9">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="closable" value="1" data-ng-model="$parent.closable"/>
+                        <input type="radio" name="closable" value="1" data-ng-model="closable"/>
                         Yes
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="closable" value="0" data-ng-model="$parent.closable"/>
+                        <input type="radio" name="closable" value="0" data-ng-model="closable"/>
                         No
                     </label>
                 </div>
@@ -71,7 +71,7 @@
         <div class="form-group">
             <label for="title" class="col-sm-3 control-label">Limit issues</label>
             <div class="col-sm-9">
-                <input class="form-control" type="number" name="limit" value="0" data-ng-model="$parent.limit"/>
+                <input class="form-control" type="number" name="limit" value="0" data-ng-model="limit"/>
             </div>
         </div>
     </form>

@@ -64,7 +64,8 @@ angular.module('laboard-frontend')
             $scope.edit = function() {
                 var column = $scope.column,
                     theme = column.theme,
-                    closable = column.closable;
+                    closable = column.closable,
+                    limit = column.limit;
 
                 $modal
                     .open({
@@ -87,6 +88,7 @@ angular.module('laboard-frontend')
                                         function() {
                                             column.theme = theme;
                                             column.closable = closable;
+                                            column.limit = limit;
 
                                             $modalInstance.dismiss('error');
                                         }
