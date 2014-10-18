@@ -136,7 +136,7 @@ gulp.task('cs', function() {
 });
 
 var autoWatch = true;
-gulp.task('karma', function(done) {
+gulp.task('karma', ['libs:dev'], function(done) {
     return karma.start(
         {
             configFile: __dirname + '/karma.conf.js',
@@ -162,7 +162,7 @@ gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
         .on('end', function() { done(); })
 });
 
-gulp.task('test', ['libs', 'cs', 'karma:ci', 'karma', 'protractor']);
+gulp.task('test', ['cs', 'karma:ci', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
 gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
@@ -184,7 +184,7 @@ gulp.task('watch', ['server'], function() {
     });
 });
 
-gulp.task('server', function() {
+gulp.task('server', ['app:dev'], function() {
     connect.server({
         root: [path.resolve('public')],
         port: 4242,
