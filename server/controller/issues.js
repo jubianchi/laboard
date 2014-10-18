@@ -65,7 +65,7 @@ module.exports = function(router, container) {
                 '    DATE_FORMAT(entry.date, \'%Y-%m-%d\'), ' +
                 '    source.to';
 
-            container.get('mysql').query(
+            container.get('mysql').execute(
                 sql,
                 function(err, result) {
                     if (err) {
@@ -212,7 +212,7 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
-                            container.get('mysql').query(
+                            container.get('mysql').execute(
                                 'INSERT INTO moves VALUES(?, ?, ?, ?, ?, ?)',
                                 [
                                     req.params.ns,
@@ -314,7 +314,7 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
-                        container.get('mysql').query(
+                        container.get('mysql').execute(
                             'INSERT INTO moves VALUES(?, ?, ?, ?, ?, ?)',
                             [
                                 req.params.ns,
