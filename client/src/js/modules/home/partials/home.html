@@ -8,7 +8,7 @@
         <form class="navbar-form navbar-left" data-ng-show="project">
             <div class="form-group has-feedback">
                 <div class="dropdown" data-ng-init="globalSearch = ''">
-                    <input type="text" class="form-control dropdown-toggle" placeholder="Global search" data-ng-model="globalSearch">
+                    <input type="text" class="form-control" placeholder="Global search" data-ng-model="globalSearch" data-toggle="dropdown">
                     <span class="text-muted form-control-feedback" data-ng-click="globalSearch = ''" data-ng-show="globalSearch"><i class="fa fa-times-circle"></i></span>
                     <ul class="dropdown-menu" data-ng-show="globalSearch[0] != '@' || (project.members|filter:globalSearch.replace('@from ', '').replace('@to ', '').replace('@', '')).length > 0">
                         <li data-ng-show="globalSearch[0] != '@'"><a data-ng-click="globalSearch = '@from '; focusSearch()"><i class="fa fa-user fa-fw"></i> Search authors</a></li>
@@ -34,7 +34,7 @@
 
         <ul class="nav navbar-nav navbar-right" data-ng-show="loggedin">
             <li class="dropdown">
-                <a class="dropdown-toggle">
+                <a data-toggle="dropdown">
                     <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
                     {{ user.name }}
                     <b class="fa fa-caret-down"></b>
