@@ -157,11 +157,15 @@ jimple
     .share('socket', function(container) {
         return container.get('server.websocket').websocket;
     })
+    .share('http.client', function(container) {
+        var request = require('request');
+
+        return request.defaults(container.get('config').request || {});
+    })
     .share('controller.auth', jimple.protect(require('./controller/auth')), ['controller'])
     .share('controller.board', jimple.protect(require('./controller/board')), ['controller'])
     .share('controller.issues', jimple.protect(require('./controller/issues')), ['controller'])
     .share('controller.projects', jimple.protect(require('./controller/projects')), ['controller'])
-    .share('http.client', jimple.protect(require('request')))
     .share('http.logger', jimple.protect(require('morgan')('combined')), ['middleware'])
     .share('http.cookie', jimple.protect(require('cookie-parser')()), ['middleware'])
     .share('http.body', jimple.protect(require('body-parser')()), ['middleware'])
