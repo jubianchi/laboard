@@ -4,6 +4,7 @@
     "data_dir": "../data",
     "port": 80,
     "column_prefix": "column:",
+    "theme_prefix": "theme:","
     "mysql": {
         "host": "localhost",
         "user": "example",

@@ -256,8 +256,8 @@ module.exports = function(router, container) {
             } else {
                 var before = (issue.before || '').toLowerCase(),
                     after = (issue.after || '').toLowerCase(),
-                    old = 'theme:' + (before || 'default'),
-                    nw = 'theme:' + (after || 'default');
+                    old = container.get('config').theme_prefix + (before || 'default'),
+                    nw = container.get('config').theme_prefix + (after || 'default');
 
                 (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {

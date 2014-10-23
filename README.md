@@ -63,7 +63,8 @@ The Laboard configuration is minimal:
   * `gitlab_url` : The URL to your Gitlab instance (for example `http://gitlab.example.com`)
   * `data_dir` : Path to a directory where Laboard will store its data (columns definition)
   * `port`: Port to which the HTTP server is bound
-  * `column_prefix`: Prefix for gitlab issue label, ie `column:backlog`
+  * `column_prefix`: Prefix for gitlab issue label to map columns, for example an issue in the column _backlog_ will have the label `column:backlog`
+  * `theme_prefix`: Prefix for gitlab issue label, for example a red issue will have label `theme:danger`
   * `mysql`: Configuration of the database
     * `host`: Hostname of the server
     * `user`: Username to connect with the server

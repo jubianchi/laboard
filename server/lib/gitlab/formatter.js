@@ -7,15 +7,16 @@ var  _ = require('lodash'),
             issue.theme = null;
 
             (issue.labels || []).forEach(function(label, key) {
-                var regEx = new RegExp("^" + container.get('config').column_prefix);
+                var regExCol = new RegExp("^" + container.get('config').column_prefix),
+                    regExTheme = new RegExp("^" + container.get('config').theme_prefix);
 
-                if (regEx.test(label)) {
-                    issue.column = label.replace(regEx, '');
+                if (regExCol.test(label)) {
+                    issue.column = label.replace(regExCol, '');
                     delete issue.labels[key];
                 }
 
-                if (/^theme:/.test(label)) {
-                    issue.theme = label.replace(/^theme:/, '');
+                if (regExTheme.test(label)) {
+                    issue.theme = label.replace(regExTheme, '');
                     delete issue.labels[key];
                 }
             });
@@ -34,8 +35,8 @@ var  _ = require('lodash'),
                 issue.labels.push(container.get('config').column_prefix + issue.column)
             }
 
-            if (issue.theme && issue.labels.indexOf('theme:' + issue.theme) === -1) {
-                issue.labels.push('theme:' + issue.theme)
+            if (issue.theme && issue.labels.indexOf(container.get('config').theme_prefix + issue.theme) === -1) {
+                issue.labels.push(container.get('config').theme_prefix + issue.theme)
             }
 
             if (issue.labels.length === 0) {
