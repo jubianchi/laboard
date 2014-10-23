@@ -1,4 +1,5 @@
 var  _ = require('lodash'),
+    container = require('../../container.js'),
     formatter = module.exports = {
         formatIssueFromGitlab: function(issue) {
             issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone']);
@@ -6,8 +7,10 @@ var  _ = require('lodash'),
             issue.theme = null;
 
             (issue.labels || []).forEach(function(label, key) {
-                if (/^column:/.test(label)) {
-                    issue.column = label.replace(/^column:/, '');
+                var regEx = new RegExp("^" + container.get('config').column_prefix);
+
+                if (regEx.test(label)) {
+                    issue.column = label.replace(regEx, '');
                     delete issue.labels[key];
                 }
 
@@ -27,8 +30,8 @@ var  _ = require('lodash'),
                 issue.labels = issue.labels.split(',');
             }
 
-            if (issue.column && issue.labels.indexOf('column:' + issue.column) === -1) {
-                issue.labels.push('column:' + issue.column)
+            if (issue.column && issue.labels.indexOf(container.get('config').column_prefix + issue.column) === -1) {
+                issue.labels.push(container.get('config').column_prefix + issue.column)
             }
 
             if (issue.theme && issue.labels.indexOf('theme:' + issue.theme) === -1) {

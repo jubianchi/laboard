@@ -3,6 +3,7 @@
     "gitlab_version": "7.1",
     "data_dir": "../data",
     "port": 80,
+    "column_prefix": "column:",
     "mysql": {
         "host": "localhost",
         "user": "example",

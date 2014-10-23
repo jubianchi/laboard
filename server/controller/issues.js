@@ -187,8 +187,8 @@ module.exports = function(router, container) {
             } else {
                 var from = (issue.from || '').toLowerCase(),
                     to = (issue.to || '').toLowerCase(),
-                    old = 'column:' + from,
-                    nw = 'column:' + to;
+                    old = container.get('config').column_prefix + from,
+                    nw = container.get('config').column_prefix + to;
 
                 (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {
