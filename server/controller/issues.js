@@ -187,8 +187,8 @@ module.exports = function(router, container) {
             } else {
                 var from = (issue.from || '').toLowerCase(),
                     to = (issue.to || '').toLowerCase(),
-                    old = 'column:' + from,
-                    nw = 'column:' + to;
+                    old = container.get('config').column_prefix + from,
+                    nw = container.get('config').column_prefix + to;
 
                 (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {
@@ -256,8 +256,8 @@ module.exports = function(router, container) {
             } else {
                 var before = (issue.before || '').toLowerCase(),
                     after = (issue.after || '').toLowerCase(),
-                    old = 'theme:' + (before || 'default'),
-                    nw = 'theme:' + (after || 'default');
+                    old = container.get('config').theme_prefix + (before || 'default'),
+                    nw = container.get('config').theme_prefix + (after || 'default');
 
                 (issue.labels || []).forEach(function(label, key) {
                     if ([old, nw].indexOf(label) > -1) {
