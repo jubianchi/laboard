@@ -13,9 +13,7 @@ install:
   - make GITLAB_URL=http://127.0.0.1 LABOARD_PORT=1337 SOCKETIO_PORT=1337 install
 
 script:
-  - cd server
   - node_modules/atoum.js/bin/atoum -d tests
-  - cd ../client
   - node_modules/gulp/bin/gulp.js server > /dev/null 2>&1 &
   - sleep 5
   - node_modules/gulp/bin/gulp.js karma:ci karma
