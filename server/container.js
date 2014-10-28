@@ -13,6 +13,14 @@ jimple
             fs.mkdirSync(config.data_dir);
         }
 
+        if (!config.column_prefix) {
+            config.column_prefix = 'column:';
+        }
+
+        if (!config.theme_prefix) {
+            config.theme_prefix = 'theme:';
+        }
+
         return config;
     })
     .share('logger', function() {
@@ -127,8 +135,8 @@ jimple
               cb(err, rows);
             });
 
-            connection.end();            
-        }
+            connection.end();
+        };
 
         return connection;
     })
