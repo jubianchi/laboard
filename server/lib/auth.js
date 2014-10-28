@@ -27,7 +27,7 @@ auth.prototype = {
                     try {
                         req.cookies.access_token = JSON.parse(req.cookies.access_token);
                         req.body.access_token = req.cookies.access_token;
-                    } catch(e) {}
+                    } catch (e) {}
                 }
 
                 next();

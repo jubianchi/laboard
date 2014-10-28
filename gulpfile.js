@@ -15,13 +15,13 @@ var gulp = require('gulp'),
 
 gulp.task('font-awesome', function() {
     gulp.src('bower_components/font-awesome/fonts/*')
-        .pipe(gulp.dest('public/assets/font'))
+        .pipe(gulp.dest('client/public/assets/font'))
         .pipe(connect.reload());
 });
 
 gulp.task('bootstrap', function() {
     gulp.src('bower_components/bootstrap/fonts/*')
-        .pipe(gulp.dest('public/assets/font'))
+        .pipe(gulp.dest('client/public/assets/font'))
         .pipe(connect.reload());
 });
 
@@ -60,20 +60,20 @@ gulp.task('libs', function(cb) {
 
             gulp.src(libs)
                 .pipe(concat('vendor.js'))
-                .pipe(gulp.dest('public/assets/js'));
+                .pipe(gulp.dest('client/public/assets/js'));
 
             gulp.src([
                 'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
                 'bower_components/angular-loading-bar/build/loading-bar.css'
             ])
-                .pipe(gulp.dest('public/assets/styles'));
+                .pipe(gulp.dest('client/public/assets/styles'));
 
             gulp.src([
                 'bower_components/nyancat/nyancat.gif',
                 'bower_components/nyancat/nyancat.mp3',
                 'bower_components/nyancat/nyancat.ogg'
             ])
-                .pipe(gulp.dest('public/assets'));
+                .pipe(gulp.dest('client/public/assets'));
 
             cb(err);
         }
@@ -83,15 +83,15 @@ gulp.task('libs', function(cb) {
 gulp.task('libs:dev', ['libs:mock', 'libs']);
 
 gulp.task('less', function() {
-    gulp.src('src/less/main.less')
+    gulp.src('client/src/less/main.less')
         .pipe(less())
         .pipe(prefix({ cascade: true }))
-        .pipe(gulp.dest('public/assets/styles'))
+        .pipe(gulp.dest('client/public/assets/styles'))
         .pipe(connect.reload());
 });
 
 gulp.task('cache', function() {
-    gulp.src('src/js/modules/**/partials/**/*.html')
+    gulp.src('client/src/js/modules/**/partials/**/*.html')
         .pipe(templateCache('templates.js', {
             module: 'laboard-frontend'
         }))
@@ -100,38 +100,38 @@ gulp.task('cache', function() {
 });
 
 var js = [
-    'src/js/**/*.js',
-    '../config/client.js',
+    'client/src/js/**/*.js',
+    'config/client.js',
     'tmp/templates.js'
 ];
 
 gulp.task('js:mock', function() {
-    js.push('src/app_dev.js');
+    js.push('client/src/app_dev.js');
 });
 
 gulp.task('js', ['cache'], function() {
     gulp.src(js)
         .pipe(concat('app.js'))
-        .pipe(gulp.dest('public/assets/js'))
+        .pipe(gulp.dest('client/public/assets/js'))
         .pipe(connect.reload());
 });
 
 gulp.task('js:dev', ['js:mock', 'js']);
 
 gulp.task('html', function() {
-    gulp.src(['src/*.html'])
-        .pipe(gulp.dest('public'))
+    gulp.src(['client/src/*.html'])
+        .pipe(gulp.dest('client/public'))
         .pipe(connect.reload());
 });
 
 gulp.task('images', function() {
-    gulp.src('src/images/**/*')
-        .pipe(gulp.dest('public/assets/images'))
+    gulp.src('client/src/images/**/*')
+        .pipe(gulp.dest('client/public/assets/images'))
         .pipe(connect.reload());
 });
 
 gulp.task('cs', function() {
-    return gulp.src(['src/js/**/*.js', '../config/client.js-dist', 'tests/**/*.js'])
+    return gulp.src(['client/src/js/**/*.js', 'config/client.js-dist', 'tests/**/*.js', 'server/**/*.js'])
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 
@@ -139,7 +139,7 @@ var autoWatch = true;
 gulp.task('karma', ['libs:dev'], function(done) {
     return karma.start(
         {
-            configFile: __dirname + '/karma.conf.js',
+            configFile: __dirname + '/tests/client/karma.conf.js',
             autoWatch: autoWatch,
             singleRun: !autoWatch
         },
@@ -154,15 +154,27 @@ gulp.task('karma:ci', function() {
 gulp.task('webdriver', webdriver);
 
 gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
-    gulp.src(['./tests/features/**/*.feature'])
+    gulp.src(['./tests/client/features/**/*.feature'])
         .pipe(protractor({
-            configFile: __dirname + '/protractor.conf.js'
+            configFile: __dirname + '/tests/client/protractor.conf.js'
         }))
         .on('error', function(e) { throw e; })
         .on('end', function() { done(); })
 });
 
-gulp.task('test', ['cs', 'karma:ci', 'karma', 'protractor']);
+gulp.task('atoum', function(cb) {
+    exec(
+        'node_modules/atoum.js/bin/atoum -d tests/server',
+        function (err, stdout, stderr) {
+            console.log(stdout);
+            console.log(stderr);
+
+            cb(err);
+        }
+    );
+});
+
+gulp.task('test', ['cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
 gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
@@ -170,13 +182,13 @@ gulp.task('app:dev', ['vendor:dev', 'less', 'js:dev', 'html', 'images']);
 
 gulp.task('watch', ['server'], function() {
     var watched = {
-        js: js.concat(['src/**/*.html']),
+        js: js.concat(['client/src/**/*.html']),
         libs: libs.concat(['bower_components/node-semver/semver.js']),
-        less: ['src/less/**/*.less'],
+        less: ['client/src/less/**/*.less'],
         'font-awesome': ['bower_components/font-awesome/fonts/*'],
         bootstrap: ['bower_components/bootstrap/fonts/*'],
-        html: ['src/**/*.html'],
-        images: ['src/images/**/*']
+        html: ['client/src/**/*.html'],
+        images: ['client/src/images/**/*']
     };
 
     Object.keys(watched).forEach(function(key) {
@@ -186,13 +198,13 @@ gulp.task('watch', ['server'], function() {
 
 gulp.task('server', ['app:dev'], function() {
     connect.server({
-        root: [path.resolve('public')],
+        root: [path.resolve('client/public')],
         port: 4242,
         livereload: true,
         middleware: function(connect, opt) {
-            var container = require('../server/container');
+            var container = require('./server/container');
 
-            require('../server');
+            require('./server');
 
             return [
                 function(req, res, next) {

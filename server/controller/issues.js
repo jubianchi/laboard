@@ -147,7 +147,7 @@ module.exports = function(router, container) {
         container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
-            delete issue['access_token'];
+            delete issue.access_token;
 
             container.get('gitlab.issues').persist(
                 req.user.private_token,
@@ -178,7 +178,7 @@ module.exports = function(router, container) {
         container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
-            delete issue['access_token'];
+            delete issue.access_token;
 
             if (!issue.from && !issue.to) {
                 res.error.notAcceptable({
@@ -247,7 +247,7 @@ module.exports = function(router, container) {
         container.get('authorization')('developer'),
         function(req, res) {
             var issue = req.body;
-            delete issue['access_token'];
+            delete issue.access_token;
 
             if (!issue.before && !issue.after) {
                 res.error.notAcceptable({

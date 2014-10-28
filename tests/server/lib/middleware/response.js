@@ -1,5 +1,5 @@
 var atoum = require('atoum.js')(module),
-    testedFunction = require('../../../lib/middleware/response');
+    testedFunction = require('../../../../server/lib/middleware/response');
 
 module.exports = {
     testCall: function() {

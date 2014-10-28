@@ -24,7 +24,7 @@ var cookie = require('cookie'),
 
                 try {
                     var token = JSON.parse(cookies.access_token);
-                } catch(e) {}
+                } catch (e) {}
 
                 if (!token || !token.private_token) {
                     return next(new Error('Unauthorized'));
@@ -89,7 +89,9 @@ var cookie = require('cookie'),
 websocket.prototype = {
     start: function (server) {
         if (this.websocket === null) {
-            if(this.logger) this.logger.info('Listening on port %d', server.address().port);
+            if (this.logger) {
+                this.logger.info('Listening on port %d', server.address().port);
+            }
 
             this.websocket = setup(require('socket.io')(server), this.gitlab, this.projects);
 

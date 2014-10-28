@@ -5,18 +5,18 @@ module.exports.config = {
     seleniumServerJar: 'node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar',
 
     specs: [
-        'tests/features/**/*.feature'
+        '../tests/features/**/*.feature'
     ],
 
     capabilities: {
         browserName: 'phantomjs',
-        'phantomjs.binary.path': require('phantomjs').path,
+        'phantomjs.binary.path': require('phantomjs').path
     },
 
     framework: 'cucumber',
 
     cucumberOpts: {
-        require: 'tests/features/support/bootstrap.js',
+        require: 'features/support/bootstrap.js',
         format: 'pretty'
     }
 };

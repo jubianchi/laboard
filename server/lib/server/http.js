@@ -7,15 +7,16 @@ var server = module.exports = function server(port, logger) {
 server.prototype = {
     start: function (application) {
         if (this.server === null) {
-            var logger = this.logger,
-                server = application.listen(
-                    this.port,
-                    function() {
-                        if(logger) logger.info('Listening on port %d', server.address().port);
-                    }
-                );
+            var logger = this.logger;
 
-            this.server = server;
+            this.server = application.listen(
+                this.port,
+                function() {
+                    if (logger) {
+                        logger.info('Listening on port %d', server.address().port);
+                    }
+                }
+            );
         }
 
         return this;
