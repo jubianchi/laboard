@@ -49,7 +49,7 @@ projects.prototype = {
         var url = this.url(),
             format = this.formatter.formatProjectFromGitlab;
 
-        if (!params) params = {};
+        params = params || {};
 
         if (!params.per_page) {
             params.per_page = 100;

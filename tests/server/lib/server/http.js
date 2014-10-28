@@ -1,5 +1,5 @@
 var atoum = require('atoum.js')(module),
-    testedClass = require('../../../lib/server/http');
+    testedClass = require('../../../../server/lib/server/http');
 
 module.exports = {
     testClass: function() {

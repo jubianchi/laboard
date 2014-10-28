@@ -4,7 +4,9 @@ var express = require('express'),
             var m = router[method];
 
             router[method] = function() {
-                if(logger) logger.info('Adding %sroute %s %s', secure ? 'secured ' : '', method.toUpperCase(), arguments[0]);
+                if (logger) {
+                    logger.info('Adding %sroute %s %s', secure ? 'secured ' : '', method.toUpperCase(), arguments[0]);
+                }
 
                 var args = Array.prototype.slice.call(arguments);
                 if (secure) {

@@ -22,7 +22,10 @@ gitlab.prototype = {
                 if (resp.statusCode !== 200) {
                     console.log(err, resp.statusCode, body);
 
-                    if (req) req.res.status(resp.statusCode);
+                    if (req) {
+                        req.res.status(resp.statusCode);
+                    }
+
                     done(JSON.parse(body));
 
                     return;
@@ -40,7 +43,7 @@ gitlab.prototype = {
             params = [];
         }
 
-        params['private_token'] = token;
+        params.private_token = token;
 
         Object.keys(params).forEach(function (key) {
             query += sep + key + '=' + params[key];

@@ -6,14 +6,14 @@ module.exports = function(config) {
     reporters: ['story', 'coverage', 'html'],
 
     files: [
-      'public/assets/js/vendor.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'src/js/app.js',
-      '../config/client.js-dist',
-      'src/js/auth.js',
-      'src/js/router.js',
-      'src/js/**/*.js',
-      'tests/units/**/*.js'
+      '../../client/public/assets/js/vendor.js',
+      '../../bower_components/angular-mocks/angular-mocks.js',
+      '../../client/src/js/app.js',
+      '../../config/client.js-dist',
+      '../../client/src/js/auth.js',
+      '../../client/src/js/router.js',
+      '../../client/src/js/**/*.js',
+      'units/**/*.js'
     ],
 
     preprocessors: {

@@ -1,5 +1,5 @@
 var atoum = require('atoum.js')(module),
-    testedClass = require('../../../lib/server/websocket');
+    testedClass = require('../../../../server/lib/server/websocket');
 
 module.exports = {
     testClass: function() {
