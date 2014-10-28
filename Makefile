@@ -3,11 +3,11 @@ LABOARD_PORT ?= $(shell read -p "Laboard port (defaults to 80): ";echo $$REPLY)
 SOCKETIO_PORT ?= $(shell read -p "Socket IO port (defaults to 80): ";echo $$REPLY)
 
 server: config install
-	cd client && node_modules/gulp/bin/gulp.js
+	@node_modules/gulp/bin/gulp.js
 
 install: config
 	@echo "\033[34m=> Installing Laboard backend\033[0m"
-	@make server/node_modules
+	@make node_modules
 	@echo "\033[34m=> Installing Laboard frontend\033[0m"
 	@make client/public
 
@@ -31,14 +31,11 @@ config/client.js:
 	    -e "s#socketIoPort: 80#socketIoPort: $(SOCKETIO_PORT)#" \
 	    config/client.js-dist > config/client.js
 
-client/public: client/node_modules client/bower_components
-	@cd client && node_modules/gulp/bin/gulp.js app
+client/public: bower_components
+	@node_modules/gulp/bin/gulp.js app
 
-client/node_modules:
-	@cd client && npm install
+node_modules:
+	@npm install
 
-client/bower_components:
-	@cd client && node_modules/bower/bin/bower install
-
-server/node_modules:
-	@cd server && npm install
+bower_components: node_modules
+	@node_modules/bower/bin/bower install
