@@ -13,6 +13,7 @@ module.exports = {
             .if(server = new (
                 this.generateMock({
                     listen: function () {},
+                    address: function() { return { port: 1337 }; },
                     on: function () {},
                     listeners: function () {
                         return [];

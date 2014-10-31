@@ -88,7 +88,7 @@ var cookie = require('cookie'),
 
 websocket.prototype = {
     start: function (server) {
-        if (this.websocket === null) {
+        if (this.websocket === null && server.address()) {
             if (this.logger) {
                 this.logger.info('Listening on port %d', server.address().port);
             }

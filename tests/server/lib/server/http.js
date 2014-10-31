@@ -10,7 +10,7 @@ module.exports = {
         var application, server;
 
         this
-            .if(application = new (this.generateMock({ 'listen': function () {} })))
+            .if(application = new (this.generateMock({ listen: function () { return this; }, on: function() {} })))
             .and(server = new testedClass(42))
             .then()
                 .object(server.start(application)).isIdenticalTo(server)
