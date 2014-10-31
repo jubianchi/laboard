@@ -164,7 +164,7 @@ gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
 
 gulp.task('atoum', function(cb) {
     exec(
-        'node_modules/atoum.js/bin/atoum -d tests/server',
+        'node_modules/atoum.js/bin/atoum -d tests/server --coverage --coverage-dir server',
         function (err, stdout, stderr) {
             console.log(stdout);
             console.log(stderr);
