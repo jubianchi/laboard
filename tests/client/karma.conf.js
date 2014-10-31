@@ -25,6 +25,11 @@ module.exports = function(config) {
         'src/js/modules/metrics/*.js': ['coverage'],
         'src/js/modules/login/*.js': ['coverage'],
         'src/js/modules/home/*.js': ['coverage']
+    },
+
+    coverageReporter: {
+      type: 'html',
+      dir: '../../tmp/coverage/'
     }
   });
 };

@@ -8,5 +8,6 @@ client/tmp
 /tmp
 *.log
 .idea/
-coverage/
+covershot/
 karma_html/
+server-cov/
