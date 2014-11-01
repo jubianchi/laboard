@@ -3,7 +3,7 @@ var path = require('path'),
 
 module.exports = function(cucumber) {
     var screenshotId = 0,
-        screenshotDir = path.resolve(__dirname, '../../../tmp/screenshots'),
+        screenshotDir = path.resolve(__dirname, '../../../../tmp/screenshots'),
         slugify = function(str) {
             return str
                 .toLowerCase()

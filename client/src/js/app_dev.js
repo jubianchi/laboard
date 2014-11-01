@@ -192,9 +192,11 @@ angular.module('laboard-frontend-e2e', ['laboard-frontend', 'ngMockE2E'])
         mock.addProject('foo', 'bar');
         mock.addColumn('foo/bar', 'Sandbox');
         mock.addColumn('foo/bar', 'Todo');
-        mock.addIssue('foo/bar', 42, 'Foobar');
+        mock.addIssue('foo/bar', 13, 'Foobar');
         mock.addIssue('foo/bar', 1337, 'Foobar');
-        mock.addIssueToColumn('foo/bar', 42, 'Sandbox');
+        mock.addIssue('foo/bar', 42, 'Foobar');
+        mock.addIssueToColumn('foo/bar', 13, 'Sandbox');
         mock.addIssueToColumn('foo/bar', 1337, 'Todo');
+        mock.addIssueToColumn('foo/bar', 42, 'Todo');
         mock.setAccessLevel('foo/bar', 'master');*/
     });
