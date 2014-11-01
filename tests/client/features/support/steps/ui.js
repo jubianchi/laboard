@@ -14,9 +14,21 @@ module.exports = function(cucumber) {
             .and.notify(next);
     });
 
+    cucumber.Then(/I should not see a "([^"]*)" element$/, function(elem, next) {
+        expect(element(by.css(elem)).isDisplayed())
+            .not.to.eventually.equal(true)
+            .and.notify(next);
+    });
+
     cucumber.Then(/I should see "([^"]*)" in "([^"]*)"$/, function(text, elem, next) {
         expect(element(by.css(elem)).getText())
             .to.eventually.match(new RegExp(text))
+            .and.notify(next);
+    });
+
+    cucumber.Then(/I should not see "([^"]*)" in "([^"]*)"$/, function(text, elem, next) {
+        expect(element(by.css(elem)).getText())
+            .not.to.eventually.match(new RegExp(text))
             .and.notify(next);
     });
 

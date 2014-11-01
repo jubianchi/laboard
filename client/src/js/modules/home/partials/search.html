@@ -1,0 +1,16 @@
+<div class="form-group has-feedback" data-ng-controller="SearchController">
+    <div class="dropdown">
+        <input data-toggle="dropdown" type="text" class="form-control" placeholder="Global search" data-ng-model="$root.globalSearch" data-ng-focus="$root.globalSearch = $root.globalSearch || ''">
+        <span class="text-muted form-control-feedback" data-ng-click="$root.globalSearch = ''" data-ng-show="$root.globalSearch">
+            <i class="fa fa-times-circle"></i>
+        </span>
+
+        <ul class="dropdown-menu" data-ng-show="showDropdown">
+            <li data-ng-repeat="item in items">
+                <a data-ng-click="searchFor($event, item.value)">
+                    <i class="fa fa-fw {{ item.icon }}"></i> {{ item.label }} <small class="text-muted" data-ng-if="item.sub">{{ item.sub }}</small>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

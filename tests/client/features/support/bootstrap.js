@@ -11,7 +11,7 @@ module.exports = function() {
     require('./steps/navigation.js')(this);
     require('./steps/interaction.js')(this);
     require('./steps/ui.js')(this);
-    //require('./screenshots.js')(this);
+    require('./screenshots.js')(this);
 
     browser.manage().window().setSize(1024, 768);
 
