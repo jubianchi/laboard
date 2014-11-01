@@ -58,6 +58,8 @@
     "chai": "~1.8.1",
     "chai-as-promised": "~4.1.0",
     "bower": "^1.3.9",
-    "atoum.js": "~0.0.11"
+    "atoum.js": "~0.0.11",
+    "gulp-template": "^1.1.1",
+    "gulp-prompt": "^0.1.1"
   }
 }

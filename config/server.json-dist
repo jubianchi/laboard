@@ -1,8 +1,8 @@
 {
-    "gitlab_url": "http://gitlab.example.com",
-    "gitlab_version": "7.1",
-    "data_dir": "../data",
-    "port": 80,
+    "gitlab_url": "<%= gitlabUrl %>",
+    "gitlab_version": "<%= gitlabVersion %>",
+    "data_dir": "<%= dataDir %>",
+    "port": <%= serverPort %>,
     "column_prefix": "column:",
     "theme_prefix": "theme:",
     "mysql": {
