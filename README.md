@@ -25,34 +25,18 @@ a clear view on the board.
 
 ## Installation
 
-The installation proccess is quite simple: a `Makefile` is provided in the repository to let you get started quickly.
+The installation proccess is quite simple. You will first have to install some tools:
 
+```sh
+$ npm install -g bower gulp
 ```
+
+Then clone the source repository and run `gulp`:
+
+```sh
 $ git clone https://gitlab.com/jubianchi/laboard.git
 $ cd laboard
-$ make install
-```
-
-### Manual installation
-
-```
-$ git clone https://github.com/jubianchi/laboard.git
-$ cd laboard
-
-$ cd client
-$ npm install
-$ bower install
 $ gulp app
-
-$ cd ../server
-$ npm install
-
-$ cd ../
-$ cp config/client.js-dist config/client.js
-$ vim config/client.js
-
-$ cp config/server.json-dist config/server.json
-$ vim config/server.json
 ```
 
 ## Configuration
@@ -93,19 +77,15 @@ CREATE TABLE `moves` (
 
 Starting the application is really easy:
 
-```
+```sh
 $ cd laboard
-$ node server
+$ npm start
 ```
 
 ## Hacking
 
 If you want to hack into Laboard, first, follow the installation guide. Once you are done, you'll be able to start Laboard 
-locally thanks to the Gulp `server` task.
-
-When running Laboard in development, you will have to map the nodejs server and the Socket.io server to two distinct ports.
-Check out the configuration files for the server and the client.
-
+locally thanks to the Gulp `server` (or `default`) task.
 
 **PRs/MRs/Issues are appreciated**
 
