@@ -195,7 +195,7 @@ gulp.task('config:server', function(cb) {
                     type: 'input',
                     name: 'gitlabUrl',
                     message: '[SEVRER] Url of your Gitlab instance',
-                    default: 'https://gitlab.com'
+                    default: process.env['GITLAB_URL'] || 'https://gitlab.com'
                 },
                 {
                     type: 'checkbox',
@@ -211,7 +211,7 @@ gulp.task('config:server', function(cb) {
                     type: 'input',
                     name: 'serverPort',
                     message: '[SEVRER] Laboard server port',
-                    default: 4343,
+                    default: process.env['LABOARD_PORT'] || 4343,
                     validate: function(value){
                         return parseInt(value, 10) > 0;
                     }
@@ -248,6 +248,9 @@ gulp.task('config:client', ['config:server'], function(cb) {
 
     var defaults = require('./config/server.json'),
         vars;
+
+    defaults.gitlab_url = process.env['GITLAB_URL'] || defaults.gitlab_url;
+    defaults.port = process.env['LABOARD_PORT'] || defaults.port;
 
     gulp.src('config/client.js-dist')
         .pipe(prompt.prompt(
