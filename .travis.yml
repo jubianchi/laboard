@@ -8,18 +8,21 @@ matrix:
   allow_failures:
     - node_js: "0.11"
 
+env:
+  - GULP_COMMAND=atoum
+  - GULP_COMMAND=karma:ci karma
+  - GULP_COMMAND=protractor
+
 install:
-  - npm install -g phantomjs@^1.9.7-15 gulp bower
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then npm install -g phantomjs@^1.9.7-15 gulp bower; else true; fi;'
   - npm install
-  - bower install
-  - echo -n | GITLAB_URL=http://127.0.0.1 LABOARD_PORT=4242 gulp app
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then bower install; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo -n | GITLAB_URL=http://127.0.0.1 LABOARD_PORT=4242 gulp app; else true; fi;'
 
 script:
-  - gulp atoum
-  - npm start > /dev/null 2>&1 &
-  - sleep 5
-  - gulp karma:ci karma
-  - gulp protractor
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then npm start > /dev/null; else true; fi;' &
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sleep 5; else true; fi;'
+  - gulp $GULP_COMMAND
 
 after_script:
-  - kill %1
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then kill %1; else true; fi;'
