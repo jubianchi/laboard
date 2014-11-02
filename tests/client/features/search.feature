@@ -12,8 +12,8 @@ Feature: Search
     And project "foo/bar" has issue #42 "Second"
     And project "foo/bar" has issue #1337 "Third"
     And issue #13 of "foo/bar" is in the "Sandbox" column
-    And issue #1337 of "foo/bar" is in the "Todo" column
     And issue #42 of "foo/bar" is in the "Todo" column
+    And issue #1337 of "foo/bar" is in the "Todo" column
     And I am not "master" on project "foo/bar"
     And I go to laboard
     And I login with token "foobar"
