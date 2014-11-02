@@ -136,7 +136,7 @@ gulp.task('images', function() {
 });
 
 gulp.task('cs', function() {
-    return gulp.src(['client/src/js/**/*.js', 'config/*-dist', 'tests/**/*.js', 'server/**/*.js'])
+    return gulp.src(['client/src/js/**/*.js', 'tests/**/*.js', 'server/**/*.js'])
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 

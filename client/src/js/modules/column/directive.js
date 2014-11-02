@@ -12,7 +12,7 @@ angular.module('laboard-frontend')
                                 width = $('.column-container').width();
 
                             $('[data-column]', $element)
-                                .css('height', height - (50 + + (width > $(window).width() ? 5 : 0)))
+                                .css('height', height - (50 + (width > $(window).width() ? 5 : 0)))
                                 .children('.panel-body')
                                     .css('height', height - (70 + 48 - (width > $(window).width() ? 0 : 5)));
                         },

@@ -29,18 +29,18 @@ describe('module: column', function() {
             it("should set width", function() {
                 scope.$digest();
 
-                expect(element.find('div[data-column]').css('width')).toBe('50%');
+                expect(element.find('div[data-column]').css('width')).toBe('300px');
             });
 
             it("should update width when new column is added", function() {
                 scope.$digest();
 
-                expect(element.find('div[data-column]').css('width')).toBe('50%');
+                expect(element.find('div[data-column]').css('width')).toBe('300px');
 
                 element.append('<div data-column></div><div data-column></div>');
                 scope.$digest();
 
-                expect(element.find('div[data-column]').css('width')).toBe('25%');
+                expect(element.find('div[data-column]').css('width')).toBe('300px');
             });
         });
     });

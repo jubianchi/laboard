@@ -32,7 +32,7 @@ angular.module('laboard-frontend')
                     });
 
                     socket.on('reconnect', function() {
-                        $root.$broadcast('socket.reconnect', socket);
+                        $root.$broadcast('socket.ready', socket);
                     });
                 },
 

@@ -11,7 +11,7 @@ angular.module('laboard-frontend')
                         $('img:first', $element).attr('src', '/assets/images/logo_inverse.png');
                     });
 
-                    $root.$on('socket.reconnect', function() {
+                    $root.$on('socket.ready', function() {
                         $element.removeClass('navbar-inverse');
                         $element.addClass('navbar-default');
                         $('img:first', $element).attr('src', '/assets/images/logo.png');
