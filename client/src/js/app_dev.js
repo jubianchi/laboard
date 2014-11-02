@@ -151,7 +151,7 @@ var mock = {
             id: iid,
             iid: iid,
             title: name,
-            created_at: Date.now().toLocaleString(),
+            created_at: new Date('01-01-1970').toLocaleString(),
             author: {
                 name: 'foo',
                 email: 'foo@bar.com'
