@@ -26,6 +26,14 @@ angular.module('laboard-frontend')
                     socket.on('connect', function() {
                         $root.$broadcast('socket.ready', socket);
                     });
+
+                    socket.on('disconnect', function() {
+                        $root.$broadcast('socket.disconnect', socket);
+                    });
+
+                    socket.on('reconnect', function() {
+                        $root.$broadcast('socket.reconnect', socket);
+                    });
                 },
 
                 on: function(event, callback) {
