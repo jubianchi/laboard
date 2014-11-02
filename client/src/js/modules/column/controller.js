@@ -7,8 +7,13 @@ angular.module('laboard-frontend')
                 issue.from = from.title;
                 issue.to = $scope.column.title;
 
+                console.log(
+                    $scope.column.limit,
+                    $filter('column')($issues.$objects, $scope.column).length
+                );
+
                 if (
-                    ($scope.column.limit > 0 || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length) ||
+                    ($scope.column.limit > 0 && $scope.column.limit <= $filter('column')($issues.$objects, $scope.column).length) ||
                     (issue.from === issue.to || !issue.to || !issue.from)
                 ) {
                     issue.column = from.title.toLowerCase();
