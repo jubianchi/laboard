@@ -90,6 +90,11 @@ jimple
 
         return new Websocket(container.get('gitlab'), container.get('gitlab.projects'), container.get('logger'));
     })
+    .share('server.websocket.adapter', function(container) {
+        var redis = require('socket.io-redis');
+
+        return redis({ host: container.get('config').redis.host, port: container.get('config').redis.port });
+    })
     .share('server.http', function(container) {
         var Server = require('./lib/server/http');
 
@@ -161,6 +166,45 @@ jimple
         container.get('server.websocket').start(server);
 
         return http;
+    })
+    .share('cluster', function(container) {
+        var cluster = require('cluster');
+
+        if (cluster.isMaster) {
+            for (var i = 0, cpus = require('os').cpus().length; i < cpus; i++) {
+                cluster.fork();
+            }
+
+            cluster.on('exit', function(worker, code, signal) {
+                var message = 'worker ' + worker.process.pid;
+
+                if (code) {
+                    message += ' exited with status ' + code;
+                } else {
+                    message += 'died';
+                }
+
+                if (signal) {
+                    message += ' (' + signal + ')';
+                }
+
+                console.log(message);
+
+                cluster.fork();
+            });
+        } else {
+            var sticky = require('sticky-session'),
+                http;
+
+            sticky(function() {
+                var http = container.get('server.http'),
+                    server = http.start(container.get('app')).server;
+
+                container.get('server.websocket').start(server, container.get('server.websocket.adapter'));
+
+                return server;
+            });
+        }
     })
     .share('socket', function(container) {
         return container.get('server.websocket').websocket;

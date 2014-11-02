@@ -10,5 +10,9 @@
         "user": "example",
         "password": "p@s$word",
         "database": "laboard"
+    },
+    "redis": {
+        "host": "localhost",
+        "port": 6379
     }
 }

@@ -13,7 +13,7 @@ server.prototype = {
             this.server = application.listen(
                 port,
                 function() {
-                    logger.info('Listening on port %d', port);
+                    logger.info('Http listening on port %d', port);
                 }
             );
 

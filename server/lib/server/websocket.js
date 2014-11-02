@@ -87,13 +87,19 @@ var cookie = require('cookie'),
     };
 
 websocket.prototype = {
-    start: function (server) {
-        if (this.websocket === null && server.address()) {
+    start: function (server, adapter) {
+        if (this.websocket === null) {
+            var io = require('socket.io')(server);
+
             if (this.logger) {
-                this.logger.info('Listening on port %d', server.address().port);
+                this.logger.info('Websocket listening');
             }
 
-            this.websocket = setup(require('socket.io')(server), this.gitlab, this.projects);
+            this.websocket = setup(io, this.gitlab, this.projects);
+
+            if (adapter) {
+                io.adapter(adapter);
+            }
 
             this.websocket.sockets.on('connection', function(socket) {
                 socket.emit('message', { message: 'laboard' });
