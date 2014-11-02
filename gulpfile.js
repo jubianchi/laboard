@@ -136,7 +136,7 @@ gulp.task('images', function() {
 });
 
 gulp.task('cs', function() {
-    return gulp.src(['client/src/js/**/*.js', 'config/client.js-dist', 'tests/**/*.js', 'server/**/*.js'])
+    return gulp.src(['client/src/js/**/*.js', 'config/*-dist', 'tests/**/*.js', 'server/**/*.js'])
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 
@@ -159,7 +159,7 @@ gulp.task('karma:ci', function() {
 gulp.task('webdriver', webdriver);
 
 gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
-    gulp.src(['./tests/client/features/**/*search*.feature'])
+    gulp.src(['./tests/client/features/**/*.feature'])
         .pipe(protractor({
             configFile: __dirname + '/tests/client/protractor.conf.js'
         }))
@@ -192,10 +192,11 @@ gulp.task('config:server', function(cb) {
             serverPort: process.env['LABOARD_PORT'] || 4343,
             gitlabVersion: process.env['GITLAB_VERSION'] || '7.4',
             dataDir: process.env['LABOARD_DATA_DIR'] || '../data'
-        },
-        vars;
+        };
 
     if (process.stdin.isTTY) {
+        var vars;
+
         src
             .pipe(prompt.prompt(
                 [
@@ -267,13 +268,14 @@ gulp.task('config:client', ['config:server'], function(cb) {
     }
 
     var defaults = require('./config/server.json'),
-        src = gulp.src('config/client.js-dist'),
-        vars;
+        src = gulp.src('config/client.js-dist');
 
     defaults.gitlab_url = process.env['GITLAB_URL'] || defaults.gitlab_url;
     defaults.port = process.env['LABOARD_PORT'] || defaults.port;
 
     if (process.stdin.isTTY) {
+        var vars;
+
         src
             .pipe(prompt.prompt(
                 [
@@ -316,10 +318,10 @@ gulp.task('config:client', ['config:server'], function(cb) {
     }
 });
 
-gulp.task('test', ['cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
 gulp.task('config', ['config:server', 'config:client']);
+gulp.task('test', ['config', 'cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('app', ['config', 'vendor', 'less', 'js', 'html', 'images']);
 gulp.task('app:dev', ['config', 'vendor:dev', 'less', 'js:dev', 'html', 'images']);
 

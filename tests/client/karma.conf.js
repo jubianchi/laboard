@@ -9,7 +9,7 @@ module.exports = function(config) {
       '../../client/public/assets/js/vendor.js',
       '../../bower_components/angular-mocks/angular-mocks.js',
       '../../client/src/js/app.js',
-      '../../config/client.js-dist',
+      '../../config/client.js',
       '../../client/src/js/auth.js',
       '../../client/src/js/router.js',
       '../../client/src/js/**/*.js',
