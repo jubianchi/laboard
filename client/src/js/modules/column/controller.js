@@ -7,14 +7,10 @@ angular.module('laboard-frontend')
                 issue.from = from.title;
                 issue.to = $scope.column.title;
 
-                console.log(
-                    $scope.column.limit,
-                    $filter('column')($issues.$objects, $scope.column).length
-                );
-
                 if (
                     ($scope.column.limit > 0 && $scope.column.limit <= $filter('column')($issues.$objects, $scope.column).length) ||
-                    (issue.from === issue.to || !issue.to || !issue.from)
+                    (issue.from === issue.to || !issue.to || !issue.from) ||
+                    (!from.canGoBackward && $scope.column.position < from.position)
                 ) {
                     issue.column = from.title.toLowerCase();
 
@@ -70,7 +66,8 @@ angular.module('laboard-frontend')
                 var column = $scope.column,
                     theme = column.theme,
                     closable = column.closable,
-                    limit = column.limit;
+                    limit = column.limit,
+                    canGoBackward = column.canGoBackward;
 
                 $modal
                     .open({
@@ -81,11 +78,13 @@ angular.module('laboard-frontend')
                             $scope.theme = column.theme || 'default';
                             $scope.title = column.title;
                             $scope.limit = column.limit ? (column.limit < 0 ? 0 : column.limit) : 0;
+                            $scope.canGoBackward = column.canGoBackward ? 1 : 0;
 
                             $scope.save = function () {
                                 column.theme = $scope.theme;
                                 column.closable = $scope.closable == 1;
                                 column.limit = $scope.limit;
+                                column.canGoBackward = $scope.canGoBackward;
 
                                 $columns.persist(column)
                                     .then(
@@ -94,6 +93,7 @@ angular.module('laboard-frontend')
                                             column.theme = theme;
                                             column.closable = closable;
                                             column.limit = limit;
+                                            column.canGoBackward = canGoBackward;
 
                                             $modalInstance.dismiss('error');
                                         }

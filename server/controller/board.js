@@ -32,6 +32,7 @@ module.exports = function(router, container) {
                 columns[column.title] = {
                     title: column.title,
                     closable: !!column.closable,
+                    canGoBackward: !!column.canGoBackward,
                     position: column.position || 0,
                     theme: column.theme || 'default',
                     limit: column.limit ? (column.limit < 0 ? 0 : column.limit) : 0
@@ -72,6 +73,7 @@ module.exports = function(router, container) {
                 if (typeof column.theme !== "undefined") { columns[req.params.column].theme = column.theme; }
                 if (typeof column.position !== "undefined") { columns[req.params.column].position = column.position; }
                 if (typeof column.closable !== "undefined") { columns[req.params.column].closable = column.closable; }
+                if (typeof column.canGoBackward !== "undefined") { columns[req.params.column].canGoBackward = column.canGoBackward; }
                 if (typeof column.limit !== "undefined") { columns[req.params.column].limit = column.limit < 0 ? 0 : column.limit; }
 
                 fs.writeFileSync(file, JSON.stringify(columns));
