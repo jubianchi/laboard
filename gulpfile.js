@@ -186,57 +186,77 @@ gulp.task('config:server', function(cb) {
         return;
     }
 
-    var vars;
+    var src = gulp.src('config/server.json-dist'),
+        defaults= {
+            gitlabUrl: process.env['GITLAB_URL'] || 'https://gitlab.com',
+            serverPort: process.env['LABOARD_PORT'] || 4343,
+            gitlabVersion: process.env['GITLAB_VERSION'] || '7.4',
+            dataDir: process.env['LABOARD_DATA_DIR'] || '../data'
+        },
+        vars;
 
-    gulp.src('config/server.json-dist')
-        .pipe(prompt.prompt(
-            [
-                {
-                    type: 'input',
-                    name: 'gitlabUrl',
-                    message: '[SEVRER] Url of your Gitlab instance',
-                    default: process.env['GITLAB_URL'] || 'https://gitlab.com'
-                },
-                {
-                    type: 'checkbox',
-                    name: 'gitlabVersion',
-                    message: '[SEVRER] Version of your Gitlab instance',
-                    choices: ['7.1', '7.2', '7.3', '7.4'],
-                    default: '7.4',
-                    validate: function(values){
-                        return values.length === 1;
+    if (process.stdin.isTTY) {
+        src
+            .pipe(prompt.prompt(
+                [
+                    {
+                        type: 'input',
+                        name: 'gitlabUrl',
+                        message: '[SEVRER] Url of your Gitlab instance',
+                        default: defaults.gitlabUrl
+                    },
+                    {
+                        type: 'list',
+                        name: 'gitlabVersion',
+                        message: '[SEVRER] Version of your Gitlab instance',
+                        choices: ['7.1', '7.2', '7.3', '7.4'],
+                        default: defaults.gitlabVersion,
+                        validate: function (values) {
+                            return values.length === 1;
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'serverPort',
+                        message: '[SEVRER] Laboard server port',
+                        default: defaults.serverPort,
+                        validate: function (value) {
+                            return parseInt(value, 10) > 0;
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'dataDir',
+                        message: '[SEVRER] Laboard data directory',
+                        default: defaults.dataDir,
+                        validate: function (value) {
+                            return fs.existsSync(value);
+                        }
                     }
-                },
-                {
-                    type: 'input',
-                    name: 'serverPort',
-                    message: '[SEVRER] Laboard server port',
-                    default: process.env['LABOARD_PORT'] || 4343,
-                    validate: function(value){
-                        return parseInt(value, 10) > 0;
-                    }
-                },
-                {
-                    type: 'input',
-                    name: 'dataDir',
-                    message: '[SEVRER] Laboard data directory',
-                    default: '../data',
-                    validate: function(value){
-                        return fs.existsSync(value);
-                    }
+                ],
+                function (res) {
+                    vars = res;
                 }
-            ],
-            function(res) {
-                vars = res;
-            }
-        ))
-        .pipe(data(function() {
-            return vars;
-        }))
-        .pipe(template())
-        .pipe(rename('server.json'))
-        .pipe(gulp.dest('config'))
-        .on('end', cb);
+            ))
+            .pipe(data(function () {
+                return vars;
+            }))
+            .pipe(template())
+            .pipe(rename('server.json'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    } else {
+        src
+            .pipe(template({
+                gitlabUrl: defaults.gitlabUrl,
+                gitlabVersion: defaults.gitlabVersion,
+                serverPort: defaults.serverPort,
+                dataDir: defaults.dataDir
+            }))
+            .pipe(rename('server.json'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    }
 });
 
 gulp.task('config:client', ['config:server'], function(cb) {
@@ -247,41 +267,53 @@ gulp.task('config:client', ['config:server'], function(cb) {
     }
 
     var defaults = require('./config/server.json'),
+        src = gulp.src('config/client.js-dist'),
         vars;
 
     defaults.gitlab_url = process.env['GITLAB_URL'] || defaults.gitlab_url;
     defaults.port = process.env['LABOARD_PORT'] || defaults.port;
 
-    gulp.src('config/client.js-dist')
-        .pipe(prompt.prompt(
-            [
-                {
-                    type: 'input',
-                    name: 'gitlabUrl',
-                    message: '[CLIENT] Url of your Gitlab instance',
-                    default: defaults.gitlab_url ||  'https://gitlab.com'
-                },
-                {
-                    type: 'input',
-                    name: 'serverPort',
-                    message: '[CLIENT] Laboard server port',
-                    default: defaults.port || 4343,
-                    validate: function(value){
-                        return parseInt(value, 10) > 0;
+    if (process.stdin.isTTY) {
+        src
+            .pipe(prompt.prompt(
+                [
+                    {
+                        type: 'input',
+                        name: 'gitlabUrl',
+                        message: '[CLIENT] Url of your Gitlab instance',
+                        default: defaults.gitlab_url || 'https://gitlab.com'
+                    },
+                    {
+                        type: 'input',
+                        name: 'serverPort',
+                        message: '[CLIENT] Laboard server port',
+                        default: defaults.port || 4343,
+                        validate: function (value) {
+                            return parseInt(value, 10) > 0;
+                        }
                     }
+                ],
+                function (res) {
+                    vars = res;
                 }
-            ],
-            function(res) {
-                vars = res;
-            }
-        ))
-        .pipe(data(function() {
-            return vars;
-        }))
-        .pipe(template())
-        .pipe(rename('client.js'))
-        .pipe(gulp.dest('config'))
-        .on('end', cb);
+            ))
+            .pipe(data(function () {
+                return vars;
+            }))
+            .pipe(template())
+            .pipe(rename('client.js'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    } else {
+        src
+            .pipe(template({
+                gitlabUrl: defaults.gitlab_url,
+                serverPort: defaults.port
+            }))
+            .pipe(rename('client.js'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    }
 });
 
 gulp.task('test', ['cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
