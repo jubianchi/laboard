@@ -6,6 +6,8 @@ var gulp = require('gulp'),
     path = require('path'),
     prefix = require('gulp-autoprefixer'),
     template = require('gulp-template'),
+    data = require('gulp-data'),
+    rename = require('gulp-rename'),
     prompt = require('gulp-prompt'),
     templateCache = require('gulp-angular-templatecache'),
     jscs = require('gulp-jscs'),
@@ -13,7 +15,8 @@ var gulp = require('gulp'),
     exec = require('child_process').exec,
     http = require('http'),
     protractor = require("gulp-protractor").protractor,
-    webdriver = require("gulp-protractor").webdriver_update;
+    webdriver = require("gulp-protractor").webdriver_update,
+    fs = require('fs');
 
 gulp.task('font-awesome', function() {
     gulp.src('bower_components/font-awesome/fonts/*')
@@ -111,7 +114,7 @@ gulp.task('js:mock', function() {
     js.push('client/src/app_dev.js');
 });
 
-gulp.task('js', ['cache'], function() {
+gulp.task('js', ['config', 'cache'], function() {
     gulp.src(js)
         .pipe(concat('app.js'))
         .pipe(gulp.dest('client/public/assets/js'))
@@ -176,11 +179,114 @@ gulp.task('atoum', function(cb) {
     );
 });
 
+gulp.task('config:server', function(cb) {
+    if (fs.existsSync('config/server.json')) {
+        cb();
+
+        return;
+    }
+
+    var vars;
+
+    gulp.src('config/server.json-dist')
+        .pipe(prompt.prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'gitlabUrl',
+                    message: '[SEVRER] Url of your Gitlab instance',
+                    default: 'https://gitlab.com'
+                },
+                {
+                    type: 'checkbox',
+                    name: 'gitlabVersion',
+                    message: '[SEVRER] Version of your Gitlab instance',
+                    choices: ['7.1', '7.2', '7.3', '7.4'],
+                    default: '7.4',
+                    validate: function(values){
+                        return values.length === 1;
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'serverPort',
+                    message: '[SEVRER] Laboard server port',
+                    default: 4343,
+                    validate: function(value){
+                        return parseInt(value, 10) > 0;
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'dataDir',
+                    message: '[SEVRER] Laboard data directory',
+                    default: '../data',
+                    validate: function(value){
+                        return fs.existsSync(value);
+                    }
+                }
+            ],
+            function(res) {
+                vars = res;
+            }
+        ))
+        .pipe(data(function() {
+            return vars;
+        }))
+        .pipe(template())
+        .pipe(rename('server.json'))
+        .pipe(gulp.dest('config'))
+        .on('end', cb);
+});
+
+gulp.task('config:client', ['config:server'], function(cb) {
+    if (fs.existsSync('config/client.js')) {
+        cb();
+
+        return;
+    }
+
+    var defaults = require('./config/server.json'),
+        vars;
+
+    gulp.src('config/client.js-dist')
+        .pipe(prompt.prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'gitlabUrl',
+                    message: '[CLIENT] Url of your Gitlab instance',
+                    default: defaults.gitlab_url ||  'https://gitlab.com'
+                },
+                {
+                    type: 'input',
+                    name: 'serverPort',
+                    message: '[CLIENT] Laboard server port',
+                    default: defaults.port || 4343,
+                    validate: function(value){
+                        return parseInt(value, 10) > 0;
+                    }
+                }
+            ],
+            function(res) {
+                vars = res;
+            }
+        ))
+        .pipe(data(function() {
+            return vars;
+        }))
+        .pipe(template())
+        .pipe(rename('client.js'))
+        .pipe(gulp.dest('config'))
+        .on('end', cb);
+});
+
 gulp.task('test', ['cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
 gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
-gulp.task('app', ['vendor', 'less', 'js', 'html', 'images']);
-gulp.task('app:dev', ['vendor:dev', 'less', 'js:dev', 'html', 'images']);
+gulp.task('config', ['config:server', 'config:client']);
+gulp.task('app', ['config', 'vendor', 'less', 'js', 'html', 'images']);
+gulp.task('app:dev', ['config', 'vendor:dev', 'less', 'js:dev', 'html', 'images']);
 
 gulp.task('watch', ['server'], function() {
     var watched = {
