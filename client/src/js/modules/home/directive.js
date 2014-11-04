@@ -9,10 +9,10 @@ angular.module('laboard-frontend')
                 link: function($scope, $element, $attrs) {
                     $root.$on('socket.disconnect', function() {
                         if (cancel) {
-                            cancel();
+                            $timeout.cancel(cancel);
                         }
 
-                        cancel = $timeout.delay(
+                        cancel = $timeout(
                             function() {
                                 $element.removeClass('navbar-default');
                                 $element.addClass('navbar-inverse');
@@ -24,10 +24,10 @@ angular.module('laboard-frontend')
 
                     $root.$on('socket.ready', function() {
                         if (cancel) {
-                            cancel();
+                            $timeout.cancel(cancel);
                         }
 
-                        cancel = $timeout.delay(
+                        cancel = $timeout(
                             function() {
                                 $element.removeClass('navbar-inverse');
                                 $element.addClass('navbar-default');
