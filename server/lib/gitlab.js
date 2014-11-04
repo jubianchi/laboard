@@ -26,7 +26,13 @@ gitlab.prototype = {
                         req.res.status(resp.statusCode);
                     }
 
-                    done(JSON.parse(body));
+                    try {
+                        done(JSON.parse(body));
+                    } catch(e) {
+                        done({
+                            status: resp.statusCode
+                        });
+                    }
 
                     return;
                 }
