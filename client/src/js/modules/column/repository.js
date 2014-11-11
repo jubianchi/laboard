@@ -115,9 +115,14 @@ angular.module('laboard-frontend')
                     clear: function() {
                         this.$objects = null;
 
+                        return this.uncache();
+                    },
+                    uncache: function() {
                         this.all = function() {
                             return all(this);
                         };
+
+                        return this;
                     },
 
                     persist: function (column) {

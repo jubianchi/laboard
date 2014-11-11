@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('ColumnController', [
-        '$rootScope', '$scope', '$modal', '$filter', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository', 'AuthorizationFactory',
-        function($root, $scope, $modal, $filter, $columns, $socket, $issues, $authorization) {
+        '$rootScope', '$scope', '$modal', '$filter', '$q', 'ColumnsRepository', 'ColumnsSocket', 'IssuesRepository', 'AuthorizationFactory',
+        function($root, $scope, $modal, $filter, $q, $columns, $socket, $issues, $authorization) {
             $scope.drop = function(issue) {
                 var from = issue.from;
                 issue.from = from.title;
@@ -121,38 +121,46 @@ angular.module('laboard-frontend')
                 var issues = [],
                     column = $scope.column;
 
-                $issues.$objects.forEach(function(issue) {
-                    if (!issue.column) { issues.push(issue); }
-                });
-
-                if (issues.length && (!$scope.column.limit || $scope.column.limit > $filter('column')($issues.$objects, $scope.column).length)) {
-                    $modal
-                        .open({
-                            templateUrl: 'issue/partials/modal.html',
-                            controller: function($scope, $modalInstance) {
-                                $scope.issues = issues;
-                                $scope.import = function(issue) {
-                                    issue.from = null;
-                                    issue.to = column.title;
-
-                                    $issues.move(issue)
-                                        .then(
-                                            function() {
-                                                var index = issues.indexOf(issue);
-
-                                                if (index > -1) {
-                                                    $scope.issues.splice(index, 1);
-                                                }
-
-                                                if ($scope.issues.length === 0) {
-                                                    $modalInstance.close();
-                                                }
-                                            }
-                                        );
-                                }
-                            }
-                        });
+                if ($scope.column.limit && $scope.column.limit <= $filter('column')($issues.$objects, $scope.column).length) {
+                    return;
                 }
+
+                $modal
+                    .open({
+                        templateUrl: 'issue/partials/modal.html',
+                        controller: function($scope, $modalInstance) {
+                            $issues.uncache().all()
+                                .then(
+                                    function() {
+                                        $issues.$objects.forEach(function(issue) {
+                                            if (!issue.column) { issues.push(issue); }
+                                        });
+
+                                        $scope.issues = issues;
+                                    }
+                                );
+
+                            $scope.import = function(issue) {
+                                issue.from = null;
+                                issue.to = column.title;
+
+                                $issues.move(issue)
+                                    .then(
+                                    function() {
+                                        var index = issues.indexOf(issue);
+
+                                        if (index > -1) {
+                                            $scope.issues.splice(index, 1);
+                                        }
+
+                                        if ($scope.issues.length === 0) {
+                                            $modalInstance.close();
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    });
             };
 
             $scope.droppable = $authorization.authorize('developer');
