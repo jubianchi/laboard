@@ -4,6 +4,53 @@ var gitlab = module.exports = function gitlab(url, http) {
 };
 
 gitlab.prototype = {
+    login: function(username, password, req, done) {
+        var self = this;
+
+        if (typeof req === 'function') {
+            done = req;
+            req = null;
+        }
+
+        this.http(
+            {
+                method: 'POST',
+                uri: this.base + '/session',
+                body: JSON.stringify({
+                    login: username,
+                    password: password
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            },
+            function(err, resp, body) {
+                if (err) {
+                    done(err);
+
+                    return;
+                }
+
+                if (resp.statusCode !== 201) {
+                    if (req) {
+                        req.res.status(resp.statusCode);
+                    }
+
+                    try {
+                        done(JSON.parse(body));
+                    } catch(e) {
+                        done({
+                            status: resp.statusCode
+                        });
+                    }
+
+                    return;
+                }
+
+                done(null, JSON.parse(body));
+            }
+        )
+    },
     auth: function(token, req, done) {
         if (typeof req === 'function') {
             done = req;
@@ -20,8 +67,6 @@ gitlab.prototype = {
                 }
 
                 if (resp.statusCode !== 200) {
-                    console.log(err, resp.statusCode, body);
-
                     if (req) {
                         req.res.status(resp.statusCode);
                     }

@@ -1,23 +1,25 @@
 module.exports = function(router, container) {
     router.post('/login',
         function(req, res) {
-            container.get('gitlab').auth(
-                req.body.password,
-                req,
-                function (err, token) {
-                    if (err) {
-                        res.error(err);
+            var callback = function (err, token) {
+                if (err) {
+                    res.error(err);
 
-                        return;
-                    }
-
-                    var expire = new Date();
-                    expire.setDate(expire.getDate() + 7);
-
-                    res.cookie('access_token', JSON.stringify(token), { expires: expire });
-                    res.response.ok(token);
+                    return;
                 }
-            );
+
+                var expire = new Date();
+                expire.setDate(expire.getDate() + 7);
+
+                res.cookie('access_token', JSON.stringify(token), { expires: expire });
+                res.response.ok(token);
+            };
+
+            if (req.body.username) {
+                container.get('gitlab').login(req.body.username, req.body.password, req, callback);
+            } else {
+                container.get('gitlab').auth(req.body.token, req, callback);
+            }
         }
     );
 

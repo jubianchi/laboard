@@ -1,24 +1,39 @@
 <div class="login">
-    <div class="panel panel-default" data-ng-show="ready" data-ng-class="{'panel-danger': error, 'panel-default': !error}">
+    <div class="panel panel-default" data-ng-show="ready" data-ng-class="{'panel-danger': error, 'panel-default': error}">
         <div class="panel-heading">Authentication</div>
 
         <div class="panel-body">
-            <div class="alert alert-danger" data-ng-show="error">
-                Authentication failed, please check your token.
-                <button class="close" data-ng-click="error = false">&times;</button>
+            <div class="row">
+                <ul class="nav nav-pills nav-justified" data-ng-init="authType = 'token'">
+                    <li data-ng-class="{active: authType == 'token'}"><a data-ng-click="authType = 'token'">Token</a></li>
+                    <li data-ng-class="{active: authType == 'password'}"><a data-ng-click="authType = 'password'">Password</a></li>
+                </ul>
             </div>
 
             <form class="form-horizontal" data-ng-submit="submit()">
-                <div class="form-group">
-                    <label for="password" class="col-sm-3 control-label">Token</label>
+                <div class="alert alert-danger" data-ng-show="error">
+                    Authentication failed, please check your token.
+                    <button class="close" data-ng-click="error = false">&times;</button>
+                </div>
+
+                <div class="form-group" data-ng-show="authType == 'password'">
+                    <label for="username" class="col-sm-3 control-label">Username</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" id="password" placeholder="private token" data-ng-model="password">
-                        <div class="alert alert-info help-block ">
+                        <input type="text" class="form-control" id="username" placeholder="username" data-ng-model="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-3 control-label">{{ authType == 'password' ? 'Password' : 'Token' }}</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="password" placeholder="{{ authType }}" data-ng-model="password">
+                        <div class="alert alert-info help-block" data-ng-show="authType == 'token'">
                             <h3>Gitlab private token</h3>
                             <a target="_blank" class="alert-link" href="{{ ::gitlabUrl }}/profile/account">Follow this link</a> to get your private token
                         </div>
                     </div>
                 </div>
+
                 <div class="form-actions">
                     <div class="col-sm-offset-3 col-sm-10">
                         <input class="btn btn-success" type="submit" value="Login" />
