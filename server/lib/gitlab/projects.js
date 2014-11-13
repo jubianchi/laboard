@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    projects = module.exports = function projects(client, formatter) {
+var projects = module.exports = function projects(client, formatter) {
         this.client = client;
         this.formatter = formatter;
     };
