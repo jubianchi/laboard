@@ -13,6 +13,6 @@ default[:laboard][:pid_dir]        = "/var/run/#{node[:laboard][:app_name]}"
 default[:laboard][:bind]           = '0.0.0.0'
 default[:laboard][:port]           = '4343'
 default[:laboard][:domain]         = node[:laboard][:app_name]
-default[:laboard][:gitlab_url]     = "http://#{node[:laboard][:domain]}"
+default[:laboard][:gitlab_url]     = "https://gitlab.com"
 default[:laboard][:gitlab_version] = '7.4'
 default[:laboard][:data_dir]       = "/var/#{node[:laboard][:app_name]}"
