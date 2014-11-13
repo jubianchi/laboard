@@ -54,6 +54,9 @@ The Laboard configuration is minimal:
     * `user`: Username to connect with the server
     * `password`: Password of the user
     * `database`: Name of the database
+  * `redis`: Configuration of the redis server
+    * `host`: Hostname of the server
+    * `port`: Port to connect to
 * `config/client.js`:
   * `gitlabUrl`: The URL to your Gitlab instance. **This should be the same as for the server** (for example `http://gitlab.example.com`)
   * `socketIoPort`: The port to which the Socket.io server is bound. When running in production, this will be the same as the HTTP server's port
