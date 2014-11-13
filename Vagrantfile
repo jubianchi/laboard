@@ -1,8 +1,6 @@
 Vagrant.configure('2') do |config|
   config.vm.box = 'jubianchi/debian-wheezy-chef-amd64'
-
   config.vm.network :private_network, ip: '192.168.13.37'
-
   config.vm.hostname = 'laboard'
 
   config.vm.provider 'virtualbox' do |vbox|

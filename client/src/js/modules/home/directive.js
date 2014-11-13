@@ -18,7 +18,7 @@ angular.module('laboard-frontend')
                                 $element.addClass('navbar-inverse');
                                 $('img:first', $element).attr('src', '/assets/images/logo_inverse.png');
                             },
-                            1000
+                            500
                         );
                     });
 
@@ -33,7 +33,7 @@ angular.module('laboard-frontend')
                                 $element.addClass('navbar-default');
                                 $('img:first', $element).attr('src', '/assets/images/logo.png');
                             },
-                            1000
+                            500
                         );
                     });
                 }

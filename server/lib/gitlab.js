@@ -5,8 +5,6 @@ var gitlab = module.exports = function gitlab(url, http) {
 
 gitlab.prototype = {
     login: function(username, password, req, done) {
-        var self = this;
-
         if (typeof req === 'function') {
             done = req;
             req = null;

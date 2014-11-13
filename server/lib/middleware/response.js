@@ -9,7 +9,7 @@ var response = function (res) {
         return function (err, code) {
             code = code || 500;
 
-            res.status(err.code || code).json(err);
+            res.status(err.code || code).end(JSON.stringify(err));
         }
     };
 

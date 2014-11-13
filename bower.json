@@ -29,7 +29,7 @@
     "font-awesome": "~4.1.0",
     "font-awesome-animation": "~0.0.5",
     "jquery": "~2.1.1",
-    "socket.io-client": "automattic/socket.io-client#~1.0.6",
+    "socket.io-client": "automattic/socket.io-client#1.2.0",
     "node-semver": "https://github.com/npm/node-semver.git",
     "nyancat": "https://github.com/jfix/nyancat.git",
     "lodash": "~2.4.1",

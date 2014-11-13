@@ -17,8 +17,6 @@ module.exports = function(router, container) {
 
     router.post('/projects/:ns/:name/issues/hook',
         function(req, res) {
-            console.log(req.body.object_attributes);
-
             container.get('server.websocket').broadcast(
                 'issue.update',
                 {
