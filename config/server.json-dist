@@ -1,6 +1,5 @@
 {
     "gitlab_url": "<%= gitlabUrl %>",
-    "gitlab_version": "<%= gitlabVersion %>",
     "data_dir": "<%= dataDir %>",
     "port": <%= serverPort %>,
     "column_prefix": "column:",

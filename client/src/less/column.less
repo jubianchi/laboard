@@ -13,6 +13,9 @@
   border-top: none;
   border-bottom: none;
   display: inline-block;
+  border-width: 1px;
+  border-right: none;
+  border-radius: 0;
 
   & > .panel-heading {
     .clearfix;
@@ -27,36 +30,6 @@
 
   & > .panel-heading > small {
     .pull-left;
-  }
-
-  &[class*='panel-'] {
-    border-width: 1px;
-    border-right: none;
-    border-radius: 0;
-
-    & > .panel-heading {
-      border-radius: 0;
-    }
-
-    &.panel-default {
-      border-color: @panel-default-border;
-    }
-
-    &.panel-info {
-      border-color: @panel-info-border;
-    }
-
-    &.panel-success {
-      border-color: @panel-success-border;
-    }
-
-    &.panel-warning {
-      border-color: @panel-warning-border;
-    }
-
-    &.panel-danger {
-      border-color: @panel-danger-border;
-    }
   }
 
   .fa {

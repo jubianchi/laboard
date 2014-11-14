@@ -9,9 +9,11 @@ angular.module('laboard-frontend')
                         .getList()
                         .then(
                             function (columns) {
-                                self.$objects = _.sortBy(columns, 'position');
+                                columns.forEach(function(column) { self.add(column); });
 
-                                deferred.resolve(columns);
+                                self.$objects = self.$objects || [];
+
+                                deferred.resolve(self.$objects);
                             },
                             deferred.reject
                         );
@@ -80,7 +82,6 @@ angular.module('laboard-frontend')
                             self = this;
 
                         column.position = column.position || this.all.length;
-                        column.theme = column.theme || 'default';
                         column.closable = column.closable == true;
                         column.issues = column.issues || [];
 
@@ -97,6 +98,8 @@ angular.module('laboard-frontend')
 
                         if (added === false && column.title) {
                             this.$objects.push(column);
+
+                            this.$objects = _.sortBy(this.$objects, 'position');
                         }
 
                         return column;

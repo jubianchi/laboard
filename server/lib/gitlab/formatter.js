@@ -44,7 +44,7 @@ module.exports = {
             issue.labels = [''];
         }
 
-        if (this.version !== '7.1' && issue.labels.join) {
+        if (issue.labels.join) {
             issue.labels = issue.labels.join(',');
         }
 

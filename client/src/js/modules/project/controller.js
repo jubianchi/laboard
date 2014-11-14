@@ -4,14 +4,12 @@ var addColumn = function($modal, $columns) {
             .open({
                 templateUrl: 'column/partials/modal.html',
                 controller: function ($scope, $modalInstance) {
-                    $scope.theme = 'default';
                     $scope.closable = false;
                     $scope.error = false;
 
                     $scope.save = function () {
                         var column = {
                             title: $scope.title,
-                            theme: $scope.theme,
                             position: $columns.$objects.length,
                             limit: $scope.limit ? ($scope.limit < 0 ? 0 : $scope.limit) : 0
                         };
@@ -40,6 +38,8 @@ angular.module('laboard-frontend')
                             $root.project.members = members;
                         }
                     );
+
+                $root.project.labels = $projects.labels($root.project);
 
                 $columns.all()
                     .then(

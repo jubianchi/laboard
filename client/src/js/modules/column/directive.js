@@ -1,3 +1,31 @@
+function alpha(color, A) {
+    var rgb = torgb(color);
+
+    return 'rgba(' + rgb.R + ',' + rgb.G + ',' + rgb.B + ',' + A + ')';
+}
+
+function lumi(color, A) {
+    var rgb = torgb(color),
+        hex = '#';
+
+    Object.keys(rgb).forEach(function(key) {
+        var c = Math.round(Math.min(Math.max(0, rgb[key] + (rgb[key] * A)), 255)).toString(16);
+
+        hex += ('00' + c ).substr(c.length);
+    });
+
+    return hex;
+}
+
+function torgb(color) {
+    return {
+        R: parseInt(color.substring(1,3),16),
+        G: parseInt(color.substring(3,5),16),
+        B: parseInt(color.substring(5,7),16)
+    };
+}
+
+
 angular.module('laboard-frontend')
     .directive('columns', [
         '$rootScope',
@@ -46,5 +74,36 @@ angular.module('laboard-frontend')
                     );
                 }
             };
+        }
+    ])
+    .directive('column', [
+        function() {
+            return {
+                restrict: 'A',
+                link: function($scope, $element, $attrs) {
+                    $scope.$watch(
+                        function() {
+                            return $attrs.columnColor;
+                        },
+                        function(color) {
+                            if (color) {
+                                $('> .panel-heading, > .panel-heading .btn', $element).css({
+                                    'background-color': alpha(color, 0.4),
+                                    'border-color': color,
+                                    'color': lumi(color, -0.4)
+                                });
+
+                                $('> .panel-heading .text-muted', $element).css({
+                                    'color': lumi(color, -0.4)
+                                });
+
+                                $element.css({
+                                    'border-color': color
+                                });
+                            }
+                        }
+                    );
+                }
+            }
         }
     ]);

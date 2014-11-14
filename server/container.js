@@ -117,14 +117,18 @@ jimple
 
         return new Projects(container.get('gitlab'), container.get('gitlab.formatter'));
     })
+    .share('gitlab.labels', function(container) {
+        var Projects = require('./lib/gitlab/labels');
+
+        return new Projects(container.get('gitlab'));
+    })
     .share('gitlab.issues', function(container) {
         var Issues = require('./lib/gitlab/issues');
 
         return new Issues(
             container.get('gitlab'),
             container.get('gitlab.projects'),
-            container.get('gitlab.formatter'),
-            container.get('config').gitlab_version
+            container.get('gitlab.formatter')
         );
     })
     .define('mysql', function(container) {

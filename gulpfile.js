@@ -210,7 +210,7 @@ gulp.task('config:server', function(cb) {
                         type: 'list',
                         name: 'gitlabVersion',
                         message: '[SEVRER] Version of your Gitlab instance',
-                        choices: ['7.1', '7.2', '7.3', '7.4'],
+                        choices: ['7.2', '7.3', '7.4'],
                         default: defaults.gitlabVersion,
                         validate: function (values) {
                             return values.length === 1;

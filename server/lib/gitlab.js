@@ -158,5 +158,29 @@ gitlab.prototype = {
                 callback(err, resp, body);
             }
         );
+    },
+    post: function(token, url, body, params, callback) {
+        if (typeof params === "function") {
+            callback = params;
+            params = [];
+        }
+
+        this.http(
+            {
+                method: 'POST',
+                uri: this.url(token, url, params),
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            },
+            function(err, resp, body) {
+                try {
+                    body = JSON.parse(body);
+                } catch (e) {}
+
+                callback(err, resp, body);
+            }
+        );
     }
 };

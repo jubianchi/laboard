@@ -113,6 +113,21 @@ angular.module('laboard-frontend')
                             );
 
                         return deferred.promise;
+                    },
+
+                    labels: function (project) {
+                        var deferred = $q.defer();
+
+                        $rest.all('projects/' + project.path_with_namespace + '/labels')
+                            .getList()
+                            .then(
+                            function (labels) {
+                                deferred.resolve(labels);
+                            },
+                            deferred.reject
+                        );
+
+                        return deferred.promise;
                     }
                 };
 

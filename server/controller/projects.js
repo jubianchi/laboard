@@ -95,4 +95,21 @@ module.exports = function(router, container) {
             );
         }
     );
+
+    router.authenticated.get('/projects/:ns/:name/labels',
+        function(req, res) {
+            container.get('gitlab.labels').all(
+                req.user.private_token,
+                req.params.ns,
+                req.params.name,
+                function (err, resp, body) {
+                    callback(
+                        req,
+                        res,
+                        res.response.ok
+                    )(err, resp, body);
+                }
+            );
+        }
+    );
 };

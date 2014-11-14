@@ -64,7 +64,6 @@ angular.module('laboard-frontend')
 
             $scope.edit = function() {
                 var column = $scope.column,
-                    theme = column.theme,
                     closable = column.closable,
                     limit = column.limit,
                     canGoBackward = column.canGoBackward;
@@ -75,13 +74,11 @@ angular.module('laboard-frontend')
                         controller: function($scope, $modalInstance) {
                             $scope.edit = true;
                             $scope.closable = column.closable ? 1 : 0;
-                            $scope.theme = column.theme || 'default';
                             $scope.title = column.title;
                             $scope.limit = column.limit ? (column.limit < 0 ? 0 : column.limit) : 0;
                             $scope.canGoBackward = column.canGoBackward ? 1 : 0;
 
                             $scope.save = function () {
-                                column.theme = $scope.theme;
                                 column.closable = $scope.closable == 1;
                                 column.limit = $scope.limit;
                                 column.canGoBackward = $scope.canGoBackward;
@@ -90,7 +87,6 @@ angular.module('laboard-frontend')
                                     .then(
                                         $modalInstance.close,
                                         function() {
-                                            column.theme = theme;
                                             column.closable = closable;
                                             column.limit = limit;
                                             column.canGoBackward = canGoBackward;
