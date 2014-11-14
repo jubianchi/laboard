@@ -46,7 +46,7 @@ module.exports = function(router, container) {
                         closable: !!column.closable,
                         canGoBackward: !!column.canGoBackward,
                         position: column.position || 0,
-                        limit: column.limit ? (column.limit < 0 ? 0 : column.limit) : 0,
+                        limit: column.limit ? (column.limit < 0 ? 0 : parseInt(column.limit, 10)) : 0,
                         color: label.color
                     };
 
@@ -71,6 +71,14 @@ module.exports = function(router, container) {
                     req.params.name,
                     function(err, resp, labels) {
                         var label;
+
+                        if (!column.title) {
+                            res.error({
+                                message: 'Conflict'
+                            }, 400);
+
+                            return;
+                        }
 
                         if (labels) {
                             label = _.find(labels, { name: config.column_prefix + column.title.toLowerCase() });
@@ -119,7 +127,7 @@ module.exports = function(router, container) {
                 if (typeof column.position !== "undefined") { columns[req.params.column].position = column.position; }
                 if (typeof column.closable !== "undefined") { columns[req.params.column].closable = column.closable; }
                 if (typeof column.canGoBackward !== "undefined") { columns[req.params.column].canGoBackward = column.canGoBackward; }
-                if (typeof column.limit !== "undefined") { columns[req.params.column].limit = column.limit < 0 ? 0 : column.limit; }
+                if (typeof column.limit !== "undefined") { columns[req.params.column].limit = column.limit ? (column.limit < 0 ? 0 : parseInt(column.limit, 10)) : 0; }
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 

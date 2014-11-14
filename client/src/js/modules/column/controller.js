@@ -75,7 +75,7 @@ angular.module('laboard-frontend')
                             $scope.edit = true;
                             $scope.closable = column.closable ? 1 : 0;
                             $scope.title = column.title;
-                            $scope.limit = column.limit ? (column.limit < 0 ? 0 : column.limit) : 0;
+                            $scope.limit = $scope.limit ? ($scope.limit < 0 ? 0 : parseInt($scope.limit, 10)) : 0;
                             $scope.canGoBackward = column.canGoBackward ? 1 : 0;
 
                             $scope.save = function () {

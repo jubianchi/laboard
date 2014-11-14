@@ -5,22 +5,23 @@ var addColumn = function($modal, $columns) {
                 templateUrl: 'column/partials/modal.html',
                 controller: function ($scope, $modalInstance) {
                     $scope.closable = false;
+                    $scope.canGoBackward = false;
                     $scope.error = false;
 
                     $scope.save = function () {
                         var column = {
                             title: $scope.title,
                             position: $columns.$objects.length,
-                            limit: $scope.limit ? ($scope.limit < 0 ? 0 : $scope.limit) : 0
+                            limit: $scope.limit ? ($scope.limit < 0 ? 0 : parseInt($scope.limit, 10)) : 0
                         };
 
                         $columns.persist(column)
                             .then(
-                            $modalInstance.close,
-                            function () {
-                                $scope.error = true;
-                            }
-                        );
+                                $modalInstance.close,
+                                function () {
+                                    $scope.error = true;
+                                }
+                            );
                     };
                 }
             });
