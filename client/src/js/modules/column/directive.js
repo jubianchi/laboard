@@ -72,6 +72,37 @@ angular.module('laboard-frontend')
                         },
                         resize
                     );
+
+                    $element.on('mousemove', '.issue.dragging', function(ev) {
+                        var main = $element.closest('.main'),
+                            moveLeft = function($e) {
+                                var left = $e.offset().left,
+                                    width = $e.width(),
+                                    limit = $(document).width();
+
+                                if ((left + width) > $(document).width() && (main.scrollLeft() + limit) < $element.width()) {
+                                    main.stop(true, true).animate(
+                                        { scrollLeft: '+=5' },
+                                        50,
+                                        function() { moveLeft($e); }
+                                    );
+                                }
+                            },
+                            moveRight = function($e) {
+                                var left = $e.offset().left;
+
+                                if (left <= 0 && main.scrollLeft() > 0) {
+                                    main.stop(true, true).animate(
+                                        { scrollLeft: '-=5' },
+                                        50,
+                                        function() { moveRight($e); }
+                                    );
+                                }
+                            };
+
+                        moveLeft($(this));
+                        moveRight($(this));
+                    });
                 }
             };
         }
