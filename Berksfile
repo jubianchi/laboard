@@ -1,3 +1,3 @@
 source "https://api.berkshelf.com"
 
-cookbook 'laboard', path: 'resources/cookbook/laboard'
+cookbook 'laboard', git: 'https://gitlab.com/laboard/cookbook.git'

@@ -1,6 +1,7 @@
 DEPENDENCIES
   laboard
-    path: resources/cookbook/laboard
+    git: https://gitlab.com/laboard/cookbook.git
+    revision: 0943176302a619487ae44c15786e5227246ab3dd
 
 GRAPH
   7-zip (1.0.2)
