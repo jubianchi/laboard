@@ -211,11 +211,12 @@ angular.module('laboard-frontend')
             };
 
             $socket
-                .on('update', handler)
+                .on('update', function(data) {
+                    repository.fetchOn(data.object_attributes.id);
+                })
                 .on('move', handler)
                 .on('theme', handler)
                 .on('edit', handler)
-                .on('update', handler)
                 .on('close', handler);
 
             return repository;
