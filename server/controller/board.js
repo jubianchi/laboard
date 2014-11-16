@@ -41,7 +41,7 @@ module.exports = function(router, container) {
                         if (!label) {
                             label = {
                                 name: config.column_prefix + column.title.toLowerCase(),
-                                color: '#B5B5B5'
+                                color: '#E5E5E5'
                             };
 
                             container.get('gitlab.labels').persist(
@@ -124,7 +124,7 @@ module.exports = function(router, container) {
                         if (!label) {
                             label = {
                                 name: config.column_prefix + column.title.toLowerCase(),
-                                color: '#B5B5B5'
+                                color: '#E5E5E5'
                             };
 
                             container.get('gitlab.labels').persist(
