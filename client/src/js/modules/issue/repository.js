@@ -212,7 +212,9 @@ angular.module('laboard-frontend')
 
             $socket
                 .on('update', function(data) {
-                    repository.fetchOn(data.object_attributes.id);
+                    if (data.object_attributes) {
+                        repository.fetchOn(data.object_attributes.id);
+                    }
                 })
                 .on('move', handler)
                 .on('theme', handler)
