@@ -26,9 +26,7 @@ angular.module('laboard-frontend')
                         .get()
                         .then(
                             function (issue) {
-                                self.add(issue);
-
-                                deferred.resolve(issue);
+                                deferred.resolve(self.add(issue));
                             },
                             deferred.reject
                         );
@@ -151,9 +149,7 @@ angular.module('laboard-frontend')
                             .customPUT(issue, 'move')
                             .then(
                                 function(issue) {
-                                    self.add(issue);
-
-                                    deferred.resolve(issue);
+                                    deferred.resolve(self.add(issue));
                                 },
                                 deferred.reject
                             );
@@ -169,9 +165,7 @@ angular.module('laboard-frontend')
                             .customPUT(issue, 'theme')
                             .then(
                                 function(issue) {
-                                    self.add(issue);
-
-                                    deferred.resolve(issue);
+                                    deferred.resolve(self.add(issue));
                                 },
                                 function(err) {
                                     deferred.reject(err);
@@ -189,9 +183,7 @@ angular.module('laboard-frontend')
                             .customPUT(issue, 'close')
                             .then(
                                 function(issue) {
-                                    self.unadd(issue);
-
-                                    deferred.resolve(issue);
+                                    deferred.resolve(self.unadd(issue));
                                 },
                                 function(err) {
                                     deferred.reject(err);

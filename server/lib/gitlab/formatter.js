@@ -3,7 +3,7 @@ var  _ = require('lodash'),
 
 module.exports = {
     formatIssueFromGitlab: function(issue) {
-        issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone']);
+        issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone', 'state']);
         issue.column = null;
         issue.theme = null;
 
