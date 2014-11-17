@@ -203,19 +203,15 @@ angular.module('laboard-frontend')
                 };
 
             var handler = function(data) {
+                data.issue = repository.one(data.issue.id);
+
                 if (data.issue.state === 'closed') {
                     repository.unadd(data.issue);
-                } else {
-                    repository.add(data.issue);
                 }
             };
 
             $socket
-                .on('update', function(data) {
-                    if (data.object_attributes) {
-                        repository.fetchOn(data.object_attributes.id);
-                    }
-                })
+                .on('update', handler)
                 .on('move', handler)
                 .on('theme', handler)
                 .on('edit', handler)
