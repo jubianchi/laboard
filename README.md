@@ -36,6 +36,8 @@ Then clone the source repository and run `gulp`:
 ```sh
 $ git clone https://gitlab.com/jubianchi/laboard.git
 $ cd laboard
+$ npm install
+$ bower install
 $ gulp app
 ```
 
