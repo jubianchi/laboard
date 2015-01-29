@@ -18,7 +18,7 @@ module.exports = function(router, container) {
             if (req.body.username) {
                 container.get('gitlab').login(req.body.username, req.body.password, req, callback);
             } else {
-                container.get('gitlab').auth(req.body.token, req, callback);
+                container.get('gitlab').auth(req.body.password, req, callback);
             }
         }
     );
