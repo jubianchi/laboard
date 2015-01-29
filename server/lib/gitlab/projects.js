@@ -1,19 +1,21 @@
-var projects = module.exports = function projects(client, formatter) {
+var _ = require('lodash'),
+    projects = module.exports = function projects(client, formatter) {
         this.client = client;
         this.formatter = formatter;
     };
 
 projects.prototype = {
-    url: function(namespace, project) {
-        var base = '/projects',
-            url = namespace;
+    url: function(namespace, project, base) {
+        var url = namespace;
+
+        base = base || '/projects';
 
         if (!namespace && !project) {
             return base;
         }
 
         if (project) {
-            url = namespace + '%2F' + project;
+            url += '%2F' + project;
         }
 
         return base + '/' + url;
@@ -38,9 +40,15 @@ projects.prototype = {
         return this.client.get(
             token,
             url + '/members',
-            function(err, resp, body) {
-                callback(err, resp, body);
-            }
+            function(err, resp, project_members) {
+                return this.client.get(
+                    token,
+                    this.url(namespace, null, '/groups') + '/members',
+                    function(err, resp, group_members) {
+                        callback(err, resp, _.uniq(project_members.concat(group_members), 'id'));
+                    }
+                );
+            }.bind(this)
         );
     },
 
