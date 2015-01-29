@@ -45,6 +45,7 @@ angular.module('laboard-frontend')
                 $root.loggedin = false;
                 $root.user = null;
 
+                $socket.disconnect();
                 $state.go('login');
             });
 

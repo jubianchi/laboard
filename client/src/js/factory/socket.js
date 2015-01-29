@@ -21,7 +21,11 @@ angular.module('laboard-frontend')
 
             return {
                 connect: function() {
-                    socket = $window.io.connect($location.protocol() + '://' + $location.host() + ':' + ($root.LABOARD_CONFIG.socketIoPort || $location.port()));
+                    if (socket) {
+                        socket.connect();
+                    } else {
+                        socket = $window.io.connect($location.protocol() + '://' + $location.host() + ':' + ($root.LABOARD_CONFIG.socketIoPort || $location.port()));
+                    }
 
                     socket.on('connect', function() {
                         $root.$broadcast('socket.ready', socket);
@@ -34,6 +38,15 @@ angular.module('laboard-frontend')
                     socket.on('reconnect', function() {
                         $root.$broadcast('socket.ready', socket);
                     });
+                },
+
+                disconnect: function() {
+                    Object.keys(handlers).forEach(function(event) {
+                        socket.removeAllListeners(event);
+                    });
+
+                    socket.disconnect();
+                    socket.close();
                 },
 
                 on: function(event, callback) {
