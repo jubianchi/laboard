@@ -1,32 +1,40 @@
 <div data-navbar class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <img src="/assets/images/logo_inverse.png"/>
             <a target="_blank" class="navbar-brand" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}">{{ project.path_with_namespace }}</a>
         </div>
 
-        <form class="navbar-form navbar-left" data-ng-show="project" data-ng-include="'home/partials/search.html'"></form>
+        <div class="collapse navbar-collapse" id="navbar">
+            <form class="navbar-form navbar-left" data-ng-show="project" data-ng-include="'home/partials/search.html'"></form>
 
-        <div class="navbar-left">
-            <button data-ng-show="project" data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+            <div class="nav navbar-nav navbar-left">
+                <button data-ng-show="project" data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+            </div>
+
+            <div class="nav navbar-nav navbar-left" data-ui-view="menu"></div>
+
+            <ul class="nav navbar-nav navbar-right" data-ng-show="loggedin">
+                <li class="dropdown">
+                    <a data-toggle="dropdown">
+                        <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
+                        {{ user.name }}
+                        <b class="fa fa-caret-down"></b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="#" class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-
-        <div class="nav navbar-nav navbar-left" data-ui-view="menu"></div>
-
-        <ul class="nav navbar-nav navbar-right" data-ng-show="loggedin">
-            <li class="dropdown">
-                <a data-toggle="dropdown">
-                    <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
-                    {{ user.name }}
-                    <b class="fa fa-caret-down"></b>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                    <li>
-                        <a href="#" class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
     </div>
 </div>
 

@@ -37,7 +37,15 @@ angular.module('laboard-frontend')
                 link: function($scope, $element, $attrs) {
                     var resizeHeight = function() {
                             var height = $(window).height(),
-                                width = $('.column-container').width();
+                                width = $('.column-container').width(),
+                                navbar = $('.navbar-collapse.in').height() || 0;
+
+                            if ($(window).width() < 768) {
+                                height -= navbar;
+                                $('.column-container').css('padding-top', navbar);
+                            } else {
+                                $('.column-container').css('padding-top', 0);
+                            }
 
                             $('[data-column]', $element)
                                 .css('height', height - (50 + (width > $(window).width() ? 5 : 0)))
@@ -65,6 +73,9 @@ angular.module('laboard-frontend')
 
                     $(window).resize(resize);
                     $root.$on('column.ready', resize);
+
+                    $('.navbar-collapse').on('shown.bs.collapse', resize);
+                    $('.navbar-collapse').on('hidden.bs.collapse', resize);
 
                     $scope.$watch(
                         function() {
