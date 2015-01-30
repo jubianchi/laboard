@@ -230,6 +230,7 @@ angular.module('laboard-frontend')
                 .on('update', handler)
                 .on('move', handler)
                 .on('theme', handler)
+                .on('star', handler)
                 .on('edit', handler)
                 .on('close', handler);
 

@@ -1,7 +1,8 @@
 <div class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix" data-ng-prevent-drag>
+        <i class="fa fa-star" data-ng-if="issue.starred"></i>
         <a class="pull-left" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">
-            <i class="fa fa-star" data-ng-if="issue.starred"></i> <strong>#{{ issue.iid }}</strong> {{ issue.title }}
+            <strong>#{{ issue.iid }}</strong> {{ issue.title }}
         </a>
         <div class="btn-group" data-authorize="developer">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">

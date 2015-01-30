@@ -67,10 +67,25 @@
       overflow: hidden;
       max-width: 85%;
       white-space: nowrap;
+      position: relative;
+      z-index: 10;
     }
 
     .btn-group {
       .pull-right;
+    }
+
+    & > .fa-star {
+      .pull-left;
+
+      position: relative;
+      top: 10px;
+      font-size: 2.5em;
+      line-height: 0px;
+      left: -15px;
+      opacity: .3;
+      z-index: 9;
+      transform: rotate(15deg);
     }
   }
 
