@@ -20,20 +20,18 @@
 
             <div class="nav navbar-nav navbar-left" data-ui-view="menu"></div>
 
-            <ul class="nav navbar-nav navbar-right" data-ng-show="loggedin">
-                <li class="dropdown">
-                    <a data-toggle="dropdown">
-                        <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
-                        {{ user.name }}
-                        <b class="fa fa-caret-down"></b>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li>
-                            <a href="#" class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <div class="nav navbar-nav navbar-right" data-ng-show="loggedin">
+                <button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
+                    <img class="avatar" data-gravatar-src="user.email" data-gravatar-size="100">
+                    {{ user.name }}
+                    <b class="fa fa-caret-down"></b>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="#" class="pointer" data-ui-sref="logout"><i class="fa fa-sign-out"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
