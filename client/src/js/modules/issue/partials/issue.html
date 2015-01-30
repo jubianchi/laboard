@@ -1,7 +1,7 @@
-<div class="issue" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
+<div class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix" data-ng-prevent-drag>
         <a class="pull-left" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">
-            <strong>#{{ issue.iid }}</strong> {{ issue.title }}
+            <i class="fa fa-star" data-ng-if="issue.starred"></i> <strong>#{{ issue.iid }}</strong> {{ issue.title }}
         </a>
         <div class="btn-group" data-authorize="developer">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
@@ -15,9 +15,10 @@
                 <li><a data-ng-click="theme('warning')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada text-warning"></i> Yellow</a></li>
                 <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-danger"></i> Red</a></li>
                 <li class="divider"></li>
+                <li><a data-ng-click="star(!!!issue.starred)" class="faa-parent animated-hover"><i class="fa faa-tada animated-hover" data-ng-class="{'fa-star': !!!issue.starred, 'fa-star-o': !!issue.starred}"></i> <span data-ng-if="!!!issue.starred">Star</span><span data-ng-if="!!issue.starred">Unstar</span></a></li>
                 <li><a data-ng-click="unpin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin</a></li>
                 <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
-                <li><a data-ng-click="close()" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover text-danger"></i> Close</a></li>
+                <li data-ng-if="issue.state != 'closed'"><a data-ng-click="close()" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close</a></li>
             </ul>
         </div>
     </div>

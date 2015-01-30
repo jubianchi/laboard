@@ -8,7 +8,7 @@ angular.module('laboard-frontend')
                 issue.to = $scope.column.title;
 
                 if (
-                    ($scope.column.limit > 0 && $scope.column.limit <= $filter('column')($issues.$objects, $scope.column).length) ||
+                    ($scope.isFull) ||
                     (issue.from === issue.to || !issue.to || !issue.from) ||
                     (!from.canGoBackward && $scope.column.position < from.position)
                 ) {
@@ -158,6 +158,20 @@ angular.module('laboard-frontend')
                         }
                     });
             };
+
+            $scope.count = 0;
+            $scope.isFull = false;
+            $scope.$watch(
+                function() {
+                    return $filter('column')($filter('search')($issues.$objects, $root.globalSearch), $scope.column).filter(function(issue) {
+                        return issue.state !== 'closed';
+                    }).length;
+                },
+                function(actual) {
+                    $scope.count = actual;
+                    $scope.isFull = ($scope.column.limit > 0 && $scope.column.limit <= actual);
+                }
+            );
 
             $scope.droppable = $authorization.authorize('developer');
             $root.$broadcast('column.ready');

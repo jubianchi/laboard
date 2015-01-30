@@ -4,6 +4,7 @@
     "port": <%= serverPort %>,
     "column_prefix": "column:",
     "theme_prefix": "theme:",
+    "board_prefix": "board:",
     "mysql": {
         "host": "localhost",
         "user": "example",

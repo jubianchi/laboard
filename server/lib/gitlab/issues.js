@@ -1,8 +1,8 @@
-var issues = module.exports = function issues(client, projects, formatter, version) {
+var issues = module.exports = function issues(client, projects, formatter, container) {
         this.client = client;
         this.projects = projects;
         this.formatter = formatter;
-        this.version = version;
+        this.container = container;
     };
 
 issues.prototype = {
@@ -36,7 +36,8 @@ issues.prototype = {
 
     all: function(token, namespace, project, callback, params) {
         var url = this.url(namespace, project),
-            format = this.formatter.formatIssueFromGitlab;
+            format = this.formatter.formatIssueFromGitlab,
+            prefix = this.container.get('config').board_prefix;
 
         return this.client.get(
             token,
@@ -46,7 +47,7 @@ issues.prototype = {
                 body = body
                     .filter(
                         function (issue) {
-                            return issue.state !== 'closed';
+                            return issue.state !== 'closed' || issue.labels.indexOf(prefix + 'starred') > -1;
                         }
                     )
                     .map(format);

@@ -298,6 +298,44 @@ module.exports = function(router, container) {
         }
     );
 
+    router.authenticated.put('/projects/:ns/:name/issues/:id/star',
+        container.get('authorization')('developer'),
+        function(req, res) {
+            var issue = req.body,
+                starred_label = container.get('config').board_prefix + 'starred';
+            delete issue.access_token;
+
+            issue.labels = issue.labels.filter(function(label) { return label !== starred_label; });
+
+            if (issue.starred) {
+                issue.labels.push(starred_label);
+            }
+
+            container.get('gitlab.issues').persist(
+                req.user.private_token,
+                req.params.ns,
+                req.params.name,
+                issue,
+                callback(
+                    req,
+                    res,
+                    function(body) {
+                        container.get('server.websocket').broadcast(
+                            'issue.star',
+                            {
+                                namespace: req.params.ns,
+                                project: req.params.name,
+                                issue: body
+                            }
+                        );
+
+                        res.response.ok(body);
+                    }
+                )
+            );
+        }
+    );
+
     router.authenticated.put('/projects/:ns/:name/issues/:id/close',
         container.get('authorization')('developer'),
         function(req, res) {

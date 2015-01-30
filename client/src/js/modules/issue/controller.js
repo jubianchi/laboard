@@ -30,6 +30,12 @@ angular.module('laboard-frontend')
                 $issues.theme($scope.issue);
             };
 
+            $scope.star = function(starred) {
+                $scope.issue.starred = typeof starred === 'undefined' ? true : starred;
+
+                $issues.star($scope.issue);
+            };
+
             var modal;
             $scope.assign = function() {
                 var issue = $scope.issue;

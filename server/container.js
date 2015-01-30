@@ -128,7 +128,8 @@ jimple
         return new Issues(
             container.get('gitlab'),
             container.get('gitlab.projects'),
-            container.get('gitlab.formatter')
+            container.get('gitlab.formatter'),
+            container
         );
     })
     .define('mysql', function(container) {

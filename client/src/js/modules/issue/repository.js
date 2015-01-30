@@ -174,6 +174,30 @@ angular.module('laboard-frontend')
 
                         return deferred.promise;
                     },
+                    star: function(issue) {
+                        var self = this,
+                            deferred = $q.defer();
+
+                        $rest.all('projects/' + $root.project.path_with_namespace)
+                            .one('issues', issue.iid)
+                            .customPUT(issue, 'star')
+                            .then(
+                            function(issue) {
+                                if (issue.state === 'closed') {
+                                    self.unadd(issue);
+                                } else {
+                                    self.add(issue);
+                                }
+
+                                deferred.resolve(issue);
+                            },
+                            function(err) {
+                                deferred.reject(err);
+                            }
+                        );
+
+                        return deferred.promise;
+                    },
                     close: function(issue) {
                         var self = this,
                             deferred = $q.defer();
@@ -196,7 +220,7 @@ angular.module('laboard-frontend')
 
             var handler = function(data) {
                 repository.one(data.issue.id).then(function(issue) {
-                    if (issue.state === 'closed') {
+                    if (issue.state === 'closed' && issue.starred === false) {
                         repository.unadd(issue);
                     }
                 });

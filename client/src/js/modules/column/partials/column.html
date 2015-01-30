@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <strong>{{column.title}}</strong>
 
-        <counter singular="issue" plural="issues" max="column.limit" value="(project.issues.$objects | column:column | search:globalSearch).length"></counter>
+        <counter singular="issue" plural="issues" max="column.limit" value="count"></counter>
 
         <div class="btn-group" data-ng-prevent-drag="true">
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div class="panel-body" data-ng-class="{full: column.limit > 0 && column.limit <= (project.issues.$objects|column:column).length}" data-ng-drop="{{droppable}}" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
-        <div data-ng-repeat="issue in project.issues.$objects | column:column | search:globalSearch | orderBy:'-updated_at' track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
+    <div class="panel-body" data-ng-class="{full: isFull}" data-ng-drop="{{droppable}}" data-ng-drop-success="drop($data)" data-loading="project.issues.$objects">
+        <div data-ng-repeat="issue in project.issues.$objects | column:column | search:globalSearch | orderIssues track by $id(issue)" data-ng-include="'issue/partials/issue.html'"></div>
     </div>
 </div>

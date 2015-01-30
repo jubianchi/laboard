@@ -6,6 +6,7 @@ module.exports = {
         issue = _.pick(issue, ['id', 'iid', 'title', 'created_at', 'updated_at', 'assignee', 'author', 'labels', 'milestone', 'state']);
         issue.column = null;
         issue.theme = null;
+        issue.starred = false;
 
         (issue.labels || []).forEach(function(label, key) {
             var regExCol = new RegExp("^" + container.get('config').column_prefix),
@@ -18,6 +19,11 @@ module.exports = {
 
             if (regExTheme.test(label)) {
                 issue.theme = label.replace(regExTheme, '');
+                delete issue.labels[key];
+            }
+
+            if (label === container.get('config').board_prefix + 'starred') {
+                issue.starred = true;
                 delete issue.labels[key];
             }
         });
@@ -33,11 +39,15 @@ module.exports = {
         }
 
         if (issue.column && issue.labels.indexOf(container.get('config').column_prefix + issue.column) === -1) {
-            issue.labels.push(container.get('config').column_prefix + issue.column)
+            issue.labels.push(container.get('config').column_prefix + issue.column);
         }
 
         if (issue.theme && issue.labels.indexOf(container.get('config').theme_prefix + issue.theme) === -1) {
-            issue.labels.push(container.get('config').theme_prefix + issue.theme)
+            issue.labels.push(container.get('config').theme_prefix + issue.theme);
+        }
+
+        if (issue.starred && issue.labels.indexOf('board:starred') === -1) {
+            issue.labels.push('board:starred');
         }
 
         if (issue.labels.length === 0) {
