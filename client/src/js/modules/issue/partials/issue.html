@@ -28,7 +28,7 @@
 
         <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
             <div class="overlay" data-ng-click="assign()" data-authorize="developer">
-                <span>+</span>
+                <span><i class="fa fa-user"></i></span>
             </div>
             <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
             <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
