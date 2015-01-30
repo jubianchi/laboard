@@ -3,6 +3,23 @@
   margin-bottom: 0;
   border-radius: 0;
 
+  .badge {
+    .pull-left;
+
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 15px 15px 0 15px;
+    background-color: @panel-success-text;
+    opacity: .5;
+  }
+
+  &.disconnected {
+    .badge {
+      background-color: @panel-danger-text;
+    }
+  }
+
   .navbar-brand {
     line-height: @font-size-large;
     font-weight: bold;
@@ -65,6 +82,10 @@
       z-index: @zindex-dropdown - 1;
 
       .navbar-form {
+        border: none;
+        padding: 0;
+        margin-bottom: 0;
+
         .form-control {
           width: 100%;
 
@@ -93,15 +114,6 @@
             margin-right: 7px;
           }
         }
-      }
-    }
-
-    &.navbar-inverse {
-      .navbar-collapse {
-        border-top: none;
-        border-color: @navbar-inverse-border;
-        border-bottom: 1px solid @navbar-inverse-border;
-        background-color: @navbar-inverse-bg;
       }
     }
   }

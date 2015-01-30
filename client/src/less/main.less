@@ -1,34 +1,62 @@
-// TwBS
-@import "../../../bower_components/bootstrap/less/bootstrap";
-
-@font-size-base: 13px;
-@font-family-sans-serif: 'Source Sans Pro', sans-serif;
-
-@line-height-base: 20px;
-@line-height-computed: 20px;
-
-@headings-font-weight: 300;
-
-@font-size-h1: floor((@font-size-base * 2.2));
-@font-size-h2: floor((@font-size-base * 1.8));
-@font-size-h3: ceil((@font-size-base * 1.4));
-@font-size-h4: ceil((@font-size-base * 1.25));
-@font-size-h5: @font-size-base;
-@font-size-h6: ceil((@font-size-base * 0.85));
-
-@border-radius-base: 2px;
-@border-radius-large: 2px;
-@border-radius-small: 2px;
-
-@grid-columns: 15;
-@grid-gutter-width: 0;
-
-@panel-body-padding: 5px;
-
 // Font Awesome
 @import "../../../bower_components/font-awesome/less/font-awesome";
 
-@fa-font-path: "../font";
+// TwBS
+@import "../../../bower_components/bootstrap/less/variables";
+@import "variables";
+
+@screen-sm: 1024px;
+@screen-md: 1248px;
+@screen-lg: 1456px;
+
+@import "../../../bower_components/bootstrap/less/mixins";
+
+// Reset
+@import "../../../bower_components/bootstrap/less/normalize";
+@import "../../../bower_components/bootstrap/less/print";
+
+// Core CSS
+@import "../../../bower_components/bootstrap/less/scaffolding";
+@import "../../../bower_components/bootstrap/less/type";
+//@import "../../../bower_components/bootstrap/less/code";
+@import "../../../bower_components/bootstrap/less/grid";
+@import "../../../bower_components/bootstrap/less/tables";
+@import "../../../bower_components/bootstrap/less/forms";
+@import "../../../bower_components/bootstrap/less/buttons";
+
+// Components
+@import "../../../bower_components/bootstrap/less/component-animations";
+//@import "../../../bower_components/bootstrap/less/glyphicons";
+@import "../../../bower_components/bootstrap/less/dropdowns";
+@import "../../../bower_components/bootstrap/less/button-groups";
+@import "../../../bower_components/bootstrap/less/input-groups";
+@import "../../../bower_components/bootstrap/less/navs";
+@import "../../../bower_components/bootstrap/less/navbar";
+//@import "../../../bower_components/bootstrap/less/breadcrumbs";
+//@import "../../../bower_components/bootstrap/less/pagination";
+//@import "../../../bower_components/bootstrap/less/pager";
+@import "../../../bower_components/bootstrap/less/labels";
+@import "../../../bower_components/bootstrap/less/badges";
+//@import "../../../bower_components/bootstrap/less/jumbotron";
+//@import "../../../bower_components/bootstrap/less/thumbnails";
+@import "../../../bower_components/bootstrap/less/alerts";
+//@import "../../../bower_components/bootstrap/less/progress-bars";
+//@import "../../../bower_components/bootstrap/less/media";
+@import "../../../bower_components/bootstrap/less/list-group";
+@import "../../../bower_components/bootstrap/less/panels";
+//@import "../../../bower_components/bootstrap/less/wells";
+@import "../../../bower_components/bootstrap/less/close";
+
+// Components w/ JavaScript
+@import "../../../bower_components/bootstrap/less/modals";
+//@import "../../../bower_components/bootstrap/less/tooltip";
+//@import "../../../bower_components/bootstrap/less/popovers";
+//@import "../../../bower_components/bootstrap/less/carousel";
+
+// Utility classes
+@import "../../../bower_components/bootstrap/less/utilities";
+@import "../../../bower_components/bootstrap/less/responsive-utilities";
+
 
 @import "scrollbar";
 @import "buttons";

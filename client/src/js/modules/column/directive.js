@@ -40,7 +40,7 @@ angular.module('laboard-frontend')
                                 width = $('.column-container').width(),
                                 navbar = $('.navbar-collapse.in').height() || 0;
 
-                            if ($(window).width() < 768) {
+                            if ($('.navbar-toggle:visible').size() > 0) {
                                 height -= navbar;
                                 $('.column-container').css('padding-top', navbar);
                             } else {
