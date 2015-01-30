@@ -159,6 +159,16 @@ angular.module('laboard-frontend')
                     });
             };
 
+            $scope.starAll = function(starred) {
+                starred = typeof starred === 'undefined' ? true : !!starred;
+
+                $filter('column')($filter('search')($issues.$objects, $root.globalSearch), $scope.column).forEach(function(issue) {
+                    issue.starred = starred;
+
+                    $issues.star(issue);
+                });
+            };
+
             $scope.count = 0;
             $scope.isFull = false;
             $scope.$watch(

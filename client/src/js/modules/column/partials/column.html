@@ -14,6 +14,8 @@
                 <li data-authorize="master"><a data-ng-click="move(-1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-left faa-horizontal"></i> Left</a></li>
                 <li data-authorize="master"><a data-ng-click="move(+1)" class="faa-parent animated-hover"><i class="fa fa-caret-square-o-right faa-horizontal"></i> Right</a></li>
                 <li class="divider" data-authorize="master"></li>
+                <li><a data-authorize="developer" data-ng-click="starAll()" class="faa-parent animated-hover"><i class="fa fa-star faa-tada animated-hover"></i> Star all</a></li>
+                <li><a data-authorize="developer" data-ng-click="starAll(false)" class="faa-parent animated-hover"><i class="fa fa-star-o faa-tada animated-hover"></i> Unstar all</a></li>
                 <li data-authorize="master"><a data-ng-click="pin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada"></i> Pin issues</a></li>
                 <li data-authorize="reporter"><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
                 <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>

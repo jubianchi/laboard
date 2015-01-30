@@ -31,7 +31,7 @@ angular.module('laboard-frontend')
             };
 
             $scope.star = function(starred) {
-                $scope.issue.starred = typeof starred === 'undefined' ? true : starred;
+                $scope.issue.starred = typeof starred === 'undefined' ? true : !!starred;
 
                 $issues.star($scope.issue);
             };
