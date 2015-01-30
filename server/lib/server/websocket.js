@@ -109,9 +109,9 @@ websocket.prototype = {
         return this;
     },
 
-    broadcast: function(event, data) {
-        this.websocket.sockets.sockets.forEach(function(socket) {
-            socket.emit(event, data);
-        });
+    emit: function(event, data) {
+        if (this.websocket) {
+            this.websocket.emit(event, data);
+        }
     }
 };

@@ -17,7 +17,7 @@ module.exports = function(router, container) {
 
     router.post('/projects/:ns/:name/issues/hook',
         function(req, res) {
-            container.get('server.websocket').broadcast(
+            container.get('websocket.emitter').emit(
                 'issue.update',
                 {
                     namespace: req.params.ns,
@@ -156,7 +156,7 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
-                        container.get('server.websocket').broadcast(
+                        container.get('websocket.emitter').emit(
                             'issue.edit',
                             {
                                 namespace: req.params.ns,
@@ -222,7 +222,7 @@ module.exports = function(router, container) {
                                 ]
                             );
 
-                            container.get('server.websocket').broadcast(
+                            container.get('websocket.emitter').emit(
                                 'issue.move',
                                 {
                                     namespace: req.params.ns,
@@ -279,7 +279,7 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
-                            container.get('server.websocket').broadcast(
+                            container.get('websocket.emitter').emit(
                                 'issue.theme',
                                 {
                                     namespace: req.params.ns,
@@ -320,7 +320,7 @@ module.exports = function(router, container) {
                     req,
                     res,
                     function(body) {
-                        container.get('server.websocket').broadcast(
+                        container.get('websocket.emitter').emit(
                             'issue.star',
                             {
                                 namespace: req.params.ns,
@@ -362,7 +362,7 @@ module.exports = function(router, container) {
                             ]
                         );
 
-                        container.get('server.websocket').broadcast(
+                        container.get('websocket.emitter').emit(
                             'issue.close',
                             {
                                 namespace: req.params.ns,

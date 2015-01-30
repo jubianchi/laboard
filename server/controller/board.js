@@ -2,20 +2,7 @@ var _ = require('lodash'),
     fs = require('fs');
 
 module.exports = function(router, container) {
-    var config = container.get('config'),
-        callback = function(req, res, callback) {
-            return function (err, resp, body) {
-                if (err) {
-                    return res.error(err);
-                }
-
-                if (resp.statusCode !== 200) {
-                    return res.error(body, resp.statusCode);
-                }
-
-                return callback(body);
-            };
-        };
+    var config = container.get('config');
 
     router.authenticated.get('/projects/:ns/:name/columns',
         function (req, res) {
@@ -89,7 +76,7 @@ module.exports = function(router, container) {
 
                     columns[column.title].color = label.color;
 
-                    container.get('server.websocket').broadcast(
+                    container.get('websocket.emitter').emit(
                         'column.new',
                         {
                             namespace: req.params.ns,
@@ -168,7 +155,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('server.websocket').broadcast(
+                container.get('websocket.emitter').emit(
                     'column.edit',
                     {
                         namespace: req.params.ns,
@@ -205,7 +192,7 @@ module.exports = function(router, container) {
 
                 columns[req.params.column].color = req.body.color;
 
-                container.get('server.websocket').broadcast(
+                container.get('websocket.emitter').emit(
                     'column.move',
                     {
                         namespace: req.params.ns,
@@ -239,7 +226,7 @@ module.exports = function(router, container) {
 
                 fs.writeFileSync(file, JSON.stringify(columns));
 
-                container.get('server.websocket').broadcast(
+                container.get('websocket.emitter').emit(
                     'column.remove',
                     {
                         namespace: req.params.ns,

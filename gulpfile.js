@@ -58,10 +58,10 @@ gulp.task('libs:mock', function() {
 
 gulp.task('libs', function(cb) {
     exec(
-        'cd bower_components/node-semver && make semver.browser.js',
+        'cd bower_components/node-semver && ( cat head.js.txt; cat semver.js | egrep -v \'^ *\\/\\* nomin \\*\\/\' | perl -pi -e \'s/debug\\([^\\)]+\\)//g\'; cat foot.js.txt ) > semver.browser.js',
         function (err, stdout, stderr) {
-            console.log(stdout);
-            console.log(stderr);
+            if (stdout) console.log(stdout);
+            if (stderr) console.log(stderr);
 
             gulp.src(libs)
                 .pipe(concat('vendor.js'))
@@ -325,7 +325,7 @@ gulp.task('test', ['config', 'cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('app', ['config', 'vendor', 'less', 'js', 'html', 'images']);
 gulp.task('app:dev', ['config', 'vendor:dev', 'less', 'js:dev', 'html', 'images']);
 
-gulp.task('watch', ['server'], function() {
+gulp.task('watch', function() {
     var watched = {
         js: js.concat(['client/src/**/*.html']),
         libs: libs.concat(['bower_components/node-semver/semver.js']),
@@ -349,7 +349,7 @@ gulp.task('server', ['app:dev'], function() {
         middleware: function(connect, opt) {
             var container = require('./server/container');
 
-            require('./server');
+            require('./bin/server');
 
             return [
                 function(req, res, next) {
@@ -360,4 +360,4 @@ gulp.task('server', ['app:dev'], function() {
     })
 });
 
-gulp.task('default', ['app:dev', 'watch']);
+gulp.task('default', ['app:dev', 'server', 'watch']);

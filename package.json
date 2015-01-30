@@ -26,7 +26,8 @@
     "request": "^2.39.0",
     "socket.io": "1.2.0",
     "socket.io-redis": "^0.1.3",
-    "winston": "^0.7.3"
+    "winston": "^0.7.3",
+    "socket.io-emitter": "^0.2.0"
   },
   "devDependencies": {
     "atoum.js": "~0.0.11",

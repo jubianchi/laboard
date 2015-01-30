@@ -1,0 +1,56 @@
+data:
+    image: busybox
+    volumes:
+        - .:/app
+        - ./data/log:/var/log/laboard
+        - ./data/run:/var/run/laboard
+        - ./data/redis:/data
+        - ./docker/haproxy:/usr/local/etc/haproxy:ro
+
+redis:
+    image: redis
+    volumes_from:
+        - data
+
+api:
+    image: laboard/laboard:latest
+    command: ["--log", "/var/log/laboard/api.log", "--pid", "/var/run/laboard/api.pid", "--name", "api", "start", "bin/api.js", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
+    volumes_from:
+        - data
+    links:
+        - redis:redis
+
+static:
+    image: laboard/laboard:latest
+    command: ["--log", "/var/log/laboard/static.log", "--pid", "/var/run/laboard/static.pid", "--name", "static", "start", "bin/static.js"]
+    volumes_from:
+        - data
+
+websocket:
+    image: laboard/laboard:latest
+    command: ["--log", "/var/log/laboard/websocket.log", "--pid", "/var/run/laboard/websocket.pid", "--name", "websocket", "start", "bin/websocket.js", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
+    volumes_from:
+        - data
+    links:
+        - redis:redis
+
+websocket2:
+    image: laboard/laboard:latest
+    command: ["--log", "/var/log/laboard/websocket2.log", "--pid", "/var/run/laboard/websocket2.pid", "--name", "websocket2", "start", "bin/websocket.js", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
+    volumes_from:
+        - data
+    links:
+        - redis:redis
+
+haproxy:
+    image: haproxy
+    volumes_from:
+        - data
+    links:
+        - websocket:websocket
+        - websocket2:websocket2
+        - static:static
+        - api:api
+    ports:
+        - 8080:80
+        - 8181:81

@@ -85,12 +85,12 @@ jimple
 
         return router;
     })
-    .share('server.websocket', function(container) {
+    .share('websocket.server', function(container) {
         var Websocket = require('./lib/server/websocket');
 
         return new Websocket(container.get('gitlab'), container.get('gitlab.projects'), container.get('logger'));
     })
-    .share('server.websocket.adapter', function(container) {
+    .share('websocket.server.adapter', function(container) {
         var redis = require('socket.io-redis');
 
         if (!container.get('config').redis) {
@@ -98,6 +98,13 @@ jimple
         }
 
         return redis({ host: container.get('config').redis.host, port: container.get('config').redis.port });
+    })
+    .share('websocket.emitter', function(container) {
+        if (!container.get('config').redis) {
+            return container.get('websocket.server');
+        }
+
+        return require('socket.io-emitter')({ host: container.get('config').redis.host, port: container.get('config').redis.port });
     })
     .share('server.http', function(container) {
         var Server = require('./lib/server/http');
@@ -163,21 +170,25 @@ jimple
             application.use(container.get(name));
         });
 
-        container.get('auth').setup(application);
-        container.get('router').setup(application);
-
         return application;
     })
     .share('server', function(container) {
         var http = container.get('server.http'),
+            app = container.get('app'),
             server = http.start(container.get('app')).server;
 
-        container.get('server.websocket').start(server, container.get('server.websocket').start(server, container.get('server.websocket.adapter')));
+        container.get('auth').setup(app);
+        container.get('router').setup(app);
+
+        container.get('websocket.server').start(
+            server,
+            container.get('websocket.server.adapter')
+        );
 
         return http;
     })
     .share('socket', function(container) {
-        return container.get('server.websocket').websocket;
+        return container.get('websocket.server').websocket;
     })
     .share('http.client', function(container) {
         var request = require('request');
@@ -193,5 +204,5 @@ jimple
     .share('http.body.url', jimple.protect(require('body-parser').urlencoded({ extended: true })), ['middleware'])
     .share('http.body.json', jimple.protect(require('body-parser').json()), ['middleware'])
     .share('http.response', jimple.protect(require('./lib/middleware/response.js')), ['middleware'])
-    .share('static', jimple.protect(express.static(path.join(__dirname, '..', 'client', 'public'))), ['middleware'])
+    .share('static', jimple.protect(express.static(path.join(__dirname, '..', 'client', 'public'))))
 ;
