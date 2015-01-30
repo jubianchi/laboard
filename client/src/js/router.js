@@ -46,6 +46,20 @@ angular.module('laboard-frontend')
                         },
                         security: true
                     })
+                        .state('home.project.query', {
+                            url: "/q/:query",
+                            views: {
+                                '@home': {
+                                    templateUrl: 'project/partials/project.html',
+                                    controller: 'ProjectController'
+                                },
+                                'menu': {
+                                    templateUrl: 'project/partials/menu.html',
+                                    controller: 'ProjectMenuController'
+                                }
+                            },
+                            security: true
+                        })
                         .state('home.project.metrics', {
                             url: "/metrics",
                             views: {

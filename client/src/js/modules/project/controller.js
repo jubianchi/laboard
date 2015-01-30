@@ -74,6 +74,10 @@ angular.module('laboard-frontend')
             $scope.bootstrap = function() {
                 $root.LABOARD_CONFIG.defaultColumns.forEach($columns.persist, $columns);
             };
+
+            if ($params.query) {
+                $root.globalSearch = $params.query;
+            }
         }
     ])
     .controller('ProjectMenuController', [
