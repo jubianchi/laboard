@@ -9,10 +9,6 @@ jimple
     .share('config', function() {
         var config = require('../config/server.json');
 
-        if (fs.existsSync(config.data_dir) === false) {
-            fs.mkdirSync(config.data_dir);
-        }
-
         if (!config.column_prefix) {
             config.column_prefix = 'column:';
         }
@@ -85,6 +81,36 @@ jimple
 
         return router;
     })
+    .share('redis', function(container) {
+        var redis = require('redis'),
+            client = redis.createClient(container.get('config').redis.port, container.get('config').redis.host);
+
+        return client;
+    })
+    .share('redis.pub', function(container) {
+        var redis = require('redis'),
+            client = redis.createClient(
+                container.get('config').redis.port,
+                container.get('config').redis.host,
+                {
+                    return_buffers: true
+                }
+            );
+
+        return client;
+    })
+    .share('redis.sub', function(container) {
+        var redis = require('redis'),
+            client = redis.createClient(
+                container.get('config').redis.port,
+                container.get('config').redis.host,
+                {
+                    detect_buffers: true
+                }
+            );
+
+        return client;
+    })
     .share('websocket.server', function(container) {
         var Websocket = require('./lib/server/websocket');
 
@@ -93,18 +119,13 @@ jimple
     .share('websocket.server.adapter', function(container) {
         var redis = require('socket.io-redis');
 
-        if (!container.get('config').redis) {
-            return;
-        }
-
-        return redis({ host: container.get('config').redis.host, port: container.get('config').redis.port });
+        return redis({
+            pubClient: container.get('redis.pub'),
+            subClient: container.get('redis.sub')
+        });
     })
     .share('websocket.emitter', function(container) {
-        if (!container.get('config').redis) {
-            return container.get('websocket.server');
-        }
-
-        return require('socket.io-emitter')({ host: container.get('config').redis.host, port: container.get('config').redis.port });
+        return require('socket.io-emitter')(container.get('redis.pub'));
     })
     .share('server.http', function(container) {
         var Server = require('./lib/server/http');

@@ -4,6 +4,9 @@ RUN npm install -g pm2 gulp bower
 
 ADD . /app
 
+RUN mkdir -p /var/log/laboard
+RUN mkdir -p /var/run/laboard
+
 VOLUME /var/log/laboard
 VOLUME /var/run/laboard
 
@@ -23,7 +26,7 @@ RUN npm install --production && \
 RUN bower cache clean --allow-root && \
     npm uninstall -g gulp bower && \
     npm cache clean && \
-    rm -rf /tmp/npm*
+    (rm -rf /tmp/* || true)
 
 ENTRYPOINT ["pm2", "--no-daemon"]
 CMD ["--log", "/var/log/laboard/laboard.log", "--pid", "/var/run/laboard/laboard.pid", "--name", "laboard", "start", "bin/server.js"]

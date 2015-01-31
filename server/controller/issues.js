@@ -210,17 +210,17 @@ module.exports = function(router, container) {
                         req,
                         res,
                         function(body) {
-                            container.get('mysql').execute(
-                                'INSERT INTO moves VALUES(?, ?, ?, ?, ?, ?)',
-                                [
-                                    req.params.ns,
+                            var key = [req.params.ns,
                                     req.params.name,
-                                    issue.id,
-                                    from,
-                                    to || '__unpin__',
-                                    new Date()
-                                ]
-                            );
+                                    'columns',
+                                    to
+                                ],
+                                date = new Date();
+
+                            ['getFullYear', 'getMonth', 'getDate'].forEach(function(part) {
+                                key.push(date[part]());
+                                container.get('redis').sadd(key.join(':'), issue.id);
+                            });
 
                             container.get('websocket.emitter').emit(
                                 'issue.move',

@@ -12,6 +12,14 @@ redis:
     volumes_from:
         - data
 
+commander:
+    image: tenstartups/redis-commander
+    command: ["--redis-host", "redis", "--redis-port", "6379"]
+    links:
+        - redis:redis
+    ports:
+        - 8282:8081
+
 api:
     image: laboard/laboard:latest
     command: ["--log", "/var/log/laboard/api.log", "--pid", "/var/run/laboard/api.pid", "--name", "api", "start", "bin/api.js", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
@@ -36,7 +44,7 @@ websocket:
 
 websocket2:
     image: laboard/laboard:latest
-    command: ["--log", "/var/log/laboard/websocket2.log", "--pid", "/var/run/laboard/websocket2.pid", "--name", "websocket2", "start", "bin/websocket.js", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
+    command: ["--log", "/var/log/laboard/websocket2.log", "--pid", "/var/run/laboard/websocket2.pid", "--name", "websocket2", "start", "bin/websocket.js", "--instances", "2", "--watch", "--ignore-watch", "client node_modules bower_components tmp vendor data docker"]
     volumes_from:
         - data
     links:
