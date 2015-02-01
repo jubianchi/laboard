@@ -158,3 +158,28 @@ h1, h2, h3, h4, h5, h6 {
     padding-top: 5px;
   }
 }
+
+#overlay {
+  z-index: 900!important;
+  opacity: 0.5;
+
+  + div {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    overflow-y: scroll;
+    z-index: 950!important;
+  }
+}
+
+pre, code {
+  background-color: @gray-lighter;
+  padding: 2px;
+}
+
+pre {
+  padding: 5px;
+}

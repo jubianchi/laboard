@@ -2,6 +2,7 @@
   .panel;
 
   margin: @panel-body-padding;
+  z-index: 1050;
 
   &[class*='panel-'] {
     .panel;
@@ -65,7 +66,7 @@
     & > a {
       text-overflow: ellipsis;
       overflow: hidden;
-      max-width: 85%;
+      max-width: 80%;
       white-space: nowrap;
       position: relative;
       z-index: 10;
@@ -110,7 +111,7 @@
     }
   }
 
-  &:hover:not(.dragging) {
+  &:hover:not(.dragging):not(.zoom):not(.unzooming):not(.zooming) {
     .panel-body {
       -webkit-transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
       transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
@@ -121,6 +122,58 @@
 
     .panel-footer {
       border-top-width: 1px;
+    }
+  }
+
+  .btn-zoom .fa-compress {
+    display: none;
+  }
+
+  .btn-zoom .fa-expand {
+    display: inline;
+  }
+
+  .shortdesc {
+    display: block;
+  }
+
+  .description {
+    display: none;
+  }
+
+  &.zooming, &.unzooming, &.zoom {
+    height: auto!important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+    .btn-zoom .fa-compress {
+      display: inline;
+    }
+
+    .btn-zoom .fa-expand {
+      display: none;
+    }
+
+    .shortdesc {
+      display: none;
+    }
+
+    .description {
+      display: block;
+    }
+  }
+
+  &.zoom {
+    .panel-body {
+      padding: @panel-body-padding;
+      height: 600px;
+      overflow: auto;
+    }
+  }
+
+  &.unzooming {
+    .panel-body {
+      overflow: hidden;
+      height: 0;
     }
   }
 

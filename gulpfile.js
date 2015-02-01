@@ -34,6 +34,7 @@ var libs = [
     'bower_components/es5-shim/es5-shim.js',
     'bower_components/jquery/dist/jquery.js',
     'bower_components/lodash/dist/lodash.js',
+    'bower_components/marked/lib/marked.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-route/angular-route.js',
     'bower_components/angular-ui-router/release/angular-ui-router.js',
@@ -41,6 +42,7 @@ var libs = [
     'bower_components/angular-gravatar/build/md5.js',
     'bower_components/angular-gravatar/build/angular-gravatar.js',
     'bower_components/angular-loading-bar/build/loading-bar.js',
+    'bower_components/angular-marked/angular-marked.js',
     'bower_components/moment/moment.js',
     'bower_components/authenticateJS/build/authenticate.js',
     'bower_components/bootstrap/dist/js/bootstrap.js',
@@ -50,7 +52,8 @@ var libs = [
     'bower_components/socket.io-client/socket.io.js',
     'bower_components/node-semver/semver.browser.js',
     'bower_components/highcharts/highcharts-all.js',
-    'bower_components/highcharts-ng/dist/highcharts-ng.js'
+    'bower_components/highcharts-ng/dist/highcharts-ng.js',
+    'bower_components/highlightjs/highlight.pack.js'
 ];
 gulp.task('libs:mock', function() {
     libs.push('bower_components/angular-mocks/angular-mocks.js');
@@ -69,8 +72,11 @@ gulp.task('libs', function(cb) {
 
             gulp.src([
                 'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
-                'bower_components/angular-loading-bar/build/loading-bar.css'
+                'bower_components/angular-loading-bar/build/loading-bar.css',
+                'bower_components/highlightjs/styles/default.css',
+                'bower_components/highlightjs/styles/github.css'
             ])
+                .pipe(concat('vendor.css'))
                 .pipe(gulp.dest('client/public/assets/styles'));
 
             gulp.src([

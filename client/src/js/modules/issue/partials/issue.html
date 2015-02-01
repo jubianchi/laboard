@@ -1,10 +1,14 @@
-<div class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
+<div data-zoomable class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix" data-ng-prevent-drag>
         <i class="fa fa-star" data-ng-if="issue.starred"></i>
         <a class="pull-left" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">
             <strong>#{{ issue.iid }}</strong> {{ issue.title }}
         </a>
         <div class="btn-group" data-authorize="developer">
+            <button type="button" class="btn btn-xs btn-default btn-zoom">
+                <i class="fa fa-expand"></i>
+                <i class="fa fa-compress"></i>
+            </button>
             <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
@@ -34,7 +38,8 @@
             <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
             <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
         </div>
-        <p>{{ issue.title }}</p>
+        <p class="shortdesc">{{ issue.title }}</p>
+        <p class="description" marked="issue.description" data-ng-prevent-drag></p>
     </div>
     <div class="panel-footer" data-ng-prevent-drag>
         <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>

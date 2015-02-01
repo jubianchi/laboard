@@ -7,15 +7,24 @@ angular.module('laboard-frontend', [
     'authenticate.js',
     'chieffancypants.loadingBar',
     'ngDraggable',
-    'highcharts-ng'
+    'highcharts-ng',
+    'hc.marked'
 ]);
 
 angular.module('laboard-frontend')
     .config([
-        'cfpLoadingBarProvider',
-        function(cfpLoadingBarProvider) {
+        'cfpLoadingBarProvider', 'markedProvider',
+        function(cfpLoadingBarProvider, markedProvider) {
             cfpLoadingBarProvider.includeSpinner = false;
             cfpLoadingBarProvider.includeBar = true;
+
+            markedProvider.setOptions({
+                gfm: true,
+                tables: true,
+                highlight: function (code) {
+                    return hljs.highlightAuto(code).value;
+                }
+            });
         }
     ]);
 
