@@ -24,7 +24,6 @@ describe('module: column', function() {
             ColumnsRepository.add(column);
 
             expect(column.position).toBe(0);
-            expect(column.theme).toBe('default');
             expect(column.closable).toBe(false);
             expect(column.issues.length).toBe(0);
         }));
