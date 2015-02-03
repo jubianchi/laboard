@@ -43,7 +43,7 @@ labels.prototype = {
                 if (err) {
                     deferred.reject(err);
                 } else {
-                    if (resp.statusCode !== 200) {
+                    if (resp.statusCode !== 201) {
                         deferred.reject(resp);
                     } else {
                         deferred.resolve(body);

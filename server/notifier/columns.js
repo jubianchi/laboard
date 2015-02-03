@@ -7,7 +7,7 @@ var q = require('q'),
                 column: column
             };
 
-            Object.keys(args).forEach(function(key) {
+            Object.keys(args || {}).forEach(function(key) {
                 data[key] = args[key];
             });
 

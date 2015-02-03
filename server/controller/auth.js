@@ -17,7 +17,7 @@ module.exports = function(router, container) {
                 promise = container.get('gitlab').auth(req.body.password);
             }
 
-            promise.then(callback, res.error).fail(res.error);
+            promise.then(callback).fail(res.error);
         }
     );
 
@@ -44,11 +44,9 @@ module.exports = function(router, container) {
 
                         if (resp.statusCode !== 200) {
                             res.error(body, resp.statusCode);
-
-                            return;
+                        } else {
+                            res.response.ok(body);
                         }
-
-                        res.response.ok(body);
                     }
                 );
             } else {
