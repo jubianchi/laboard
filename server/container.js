@@ -2,7 +2,6 @@ var Jimple = require("./lib/jimple"),
     fs = require('fs'),
     path = require('path'),
     express = require('express'),
-    mysql = require('mysql'),
     jimple = module.exports = new Jimple();
 
 jimple
@@ -153,28 +152,6 @@ jimple
             container.get('gitlab.formatter'),
             container
         );
-    })
-    .define('mysql', function(container) {
-        var connection = mysql.createConnection(container.get('config').mysql);
-
-        connection.execute = function(sql, params, cb) {
-            connection.connect();
-
-            if (typeof params === "function") {
-              cb = params;
-              params = [];
-            }
-
-            cb = cb || function() {};
-
-            connection.query(sql, params, function(err, rows) {
-              cb(err, rows);
-            });
-
-            connection.end();
-        };
-
-        return connection;
     })
     .share('app', function(container) {
         var application = express();
