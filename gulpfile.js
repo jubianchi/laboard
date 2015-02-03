@@ -112,7 +112,6 @@ gulp.task('cache', function() {
 
 var js = [
     'client/src/js/**/*.js',
-    'config/client.js',
     'tmp/templates.js'
 ];
 
@@ -121,6 +120,11 @@ gulp.task('js:mock', function() {
 });
 
 gulp.task('js', ['config', 'cache'], function() {
+    gulp.src(['config/client.js'])
+        .pipe(rename('config.js'))
+        .pipe(gulp.dest('client/public/assets/js'))
+        .pipe(connect.reload());
+
     gulp.src(js)
         .pipe(concat('app.js'))
         .pipe(gulp.dest('client/public/assets/js'))
