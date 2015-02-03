@@ -1,14 +1,12 @@
-var gitlab = module.exports = function gitlab(url, http) {
-    this.base = url;
-    this.http = http;
-};
+var q = require('q'),
+    gitlab = module.exports = function gitlab(url, http) {
+        this.base = url;
+        this.http = http;
+    };
 
 gitlab.prototype = {
-    login: function(username, password, req, done) {
-        if (typeof req === 'function') {
-            done = req;
-            req = null;
-        }
+    login: function(username, password) {
+        var deferred = q.defer();
 
         this.http(
             {
@@ -24,65 +22,38 @@ gitlab.prototype = {
             },
             function(err, resp, body) {
                 if (err) {
-                    done(err);
-
-                    return;
-                }
-
-                if (resp.statusCode !== 201) {
-                    if (req) {
-                        req.res.status(resp.statusCode);
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 201) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(JSON.parse(body));
                     }
-
-                    try {
-                        done(JSON.parse(body));
-                    } catch(e) {
-                        done({
-                            status: resp.statusCode
-                        });
-                    }
-
-                    return;
                 }
-
-                done(null, JSON.parse(body));
             }
-        )
+        );
+
+        return deferred.promise;
     },
-    auth: function(token, req, done) {
-        if (typeof req === 'function') {
-            done = req;
-            req = null;
-        }
+    auth: function(token) {
+        var deferred = q.defer();
 
         this.http.get(
             this.base + '/user?private_token=' + token,
             function (err, resp, body) {
                 if (err) {
-                    done(err);
-
-                    return;
-                }
-
-                if (resp.statusCode !== 200) {
-                    if (req) {
-                        req.res.status(resp.statusCode);
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(JSON.parse(body));
                     }
-
-                    try {
-                        done(JSON.parse(body));
-                    } catch(e) {
-                        done({
-                            status: resp.statusCode
-                        });
-                    }
-
-                    return;
                 }
-
-                done(null, JSON.parse(body));
             }
         );
+
+        return deferred.promise;
     },
     url: function(token, url, params) {
         var query = '',

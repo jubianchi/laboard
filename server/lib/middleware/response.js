@@ -2,14 +2,20 @@ var response = function (res) {
         return function (items, code) {
             code = code || 200;
 
-            res.status(code).end(JSON.stringify(items));
+            res.status(code).end(JSON.stringify(items || []));
         }
     },
     error = function (res) {
         return function (err, code) {
             code = code || 500;
 
-            res.status(err.code || code).end(JSON.stringify(err));
+            if (!err) {
+                err = { code: code };
+            }
+
+            err.code = err.code || code;
+
+            res.status(err.code).end(JSON.stringify(err));
         }
     };
 

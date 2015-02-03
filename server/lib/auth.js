@@ -10,7 +10,9 @@ var auth = module.exports = function auth(url, gitlab) {
                     passReqToCallback: true
                 },
                 function(req, token, done) {
-                    gitlab.auth(token.private_token, req, done);
+                    gitlab.auth(token.private_token).then(function(token) {
+                        done(null, token)
+                    });
                 }
             )
         );

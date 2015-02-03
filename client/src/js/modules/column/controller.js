@@ -80,8 +80,8 @@ angular.module('laboard-frontend')
 
                             $scope.save = function () {
                                 column.closable = $scope.closable == 1;
+                                column.canGoBackward = $scope.canGoBackward == 1;
                                 column.limit = $scope.limit;
-                                column.canGoBackward = $scope.canGoBackward;
 
                                 $columns.persist(column)
                                     .then(

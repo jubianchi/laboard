@@ -1,4 +1,5 @@
-var issues = module.exports = function issues(client, projects, formatter, container) {
+var q = require('q'),
+    issues = module.exports = function issues(client, projects, formatter, container) {
         this.client = client;
         this.projects = projects;
         this.formatter = formatter;
@@ -21,71 +22,101 @@ issues.prototype = {
         return base + '/' + id;
     },
 
-    one: function(token, namespace, project, id, callback) {
-        var url = this.url(namespace, project, id),
-            format = this.formatter.formatIssueFromGitlab;
+    one: function(token, namespace, project, id) {
+        var deferred = q.defer(),
+            url = this.url(namespace, project, id);
 
-        return this.client.get(
+        this.client.get(
             token,
             url,
             function(err, resp, body) {
-                callback(err, resp, format(body));
-            }
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(this.formatter.formatIssueFromGitlab(body));
+                    }
+                }
+            }.bind(this)
         );
+
+        return deferred.promise;
     },
 
-    all: function(token, namespace, project, callback, params) {
+    all: function(token, namespace, project, params) {
         var url = this.url(namespace, project),
-            format = this.formatter.formatIssueFromGitlab,
-            prefix = this.container.get('config').board_prefix;
+            deferred = q.defer(),
+            page = 0,
+            issues = [],
+            fetch = function() {
+                params = params || {};
+                params.page = ++page;
+                params.per_page = 2;
 
-        return this.client.get(
-            token,
-            url,
-            params,
-            function(err, resp, body) {
-                body = body
-                    .filter(
-                        function (issue) {
-                            return issue.state !== 'closed' || issue.labels.indexOf(prefix + 'starred') > -1;
+                this.client.get(
+                    token,
+                    url,
+                    params,
+                    function(err, resp, body) {
+                        if (err) {
+                            deferred.reject(err);
+                        } else {
+                            if (resp.statusCode !== 200) {
+                                deferred.reject(resp);
+                            } else {
+                                issues = issues.concat(
+                                    body
+                                        .filter(function (issue) {
+                                            return issue.state !== 'closed' || issue.labels.indexOf(this.container.get('config').board_prefix + 'starred') > -1;
+                                        }.bind(this))
+                                        .map(this.formatter.formatIssueFromGitlab)
+                                );
+
+                                if (resp.links.next) {
+                                    fetch();
+                                } else {
+                                    deferred.resolve(issues);
+                                }
+                            }
                         }
-                    )
-                    .map(format);
+                    }.bind(this)
+                );
 
-                callback(err, resp, body);
-            }
-        );
+                return deferred.promise;
+            }.bind(this);
+
+        return fetch();
     },
 
-    persist: function(token, namespace, project, issue, callback) {
+    persist: function(token, namespace, project, issue) {
         var url = this.url(namespace, project, issue.id),
-            format = this.formatter.formatIssueFromGitlab,
-            formatOut = this.formatter.formatIssueToGitlab;
+            deferred = q.defer();
 
-        return this.client.put(
+        this.client.put(
             token,
             url,
-            formatOut(issue),
+            this.formatter.formatIssueToGitlab(issue),
             function(err, resp, body) {
-                callback(err, resp, format(body));
-            }
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(this.formatter.formatIssueFromGitlab(body));
+                    }
+                }
+            }.bind(this)
         );
+
+        return deferred.promise;
     },
 
-    close: function(token, namespace, project, issue, callback) {
-        var url = this.url(namespace, project, issue.id),
-            format = this.formatter.formatIssueFromGitlab,
-            formatOut = this.formatter.formatIssueToGitlab;
-
+    close: function(token, namespace, project, issue) {
         issue.state_event = 'close';
 
-        return this.client.put(
-            token,
-            url,
-            formatOut(issue),
-            function(err, resp, body) {
-                callback(err, resp, format(body));
-            }
-        );
+        return this.persist(token, namespace, project, issue);
     }
 };

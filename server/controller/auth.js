@@ -1,13 +1,7 @@
 module.exports = function(router, container) {
     router.post('/login',
         function(req, res) {
-            var callback = function (err, token) {
-                if (err) {
-                    res.error(err);
-
-                    return;
-                }
-
+            var callback = function (token) {
                 var expire = new Date();
                 expire.setDate(expire.getDate() + 7);
 
@@ -15,11 +9,15 @@ module.exports = function(router, container) {
                 res.response.ok(token);
             };
 
+            var promise;
+
             if (req.body.username) {
-                container.get('gitlab').login(req.body.username, req.body.password, req, callback);
+                promise = container.get('gitlab').login(req.body.username, req.body.password);
             } else {
-                container.get('gitlab').auth(req.body.password, req, callback);
+                promise = container.get('gitlab').auth(req.body.password);
             }
+
+            promise.then(callback, res.error).fail(res.error);
         }
     );
 
@@ -54,18 +52,14 @@ module.exports = function(router, container) {
                     }
                 );
             } else {
-                res.error.unauthorized({
-                    message: 'Unauthorized'
-                });
+                res.error.unauthorized();
             }
         }
     );
 
     router.get('/login/failed',
         function(req, res) {
-            res.error.unauthorized({
-                message: 'Unauthorized'
-            });
+            res.error.unauthorized();
         }
     );
 };

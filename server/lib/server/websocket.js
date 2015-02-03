@@ -30,56 +30,39 @@ var cookie = require('cookie'),
                     return next(new Error('Unauthorized'));
                 }
 
-                gitlab.auth(token.private_token, function(err, body) {
-                    socket.token = body;
+                gitlab.auth(token.private_token)
+                    .then(function(body) {
+                        var deferred = q.defer();
 
-                    if (!socket.token || !socket.token.private_token) {
-                        return next(new Error('Unauthorized'));
-                    }
+                        socket.token = body;
 
-                    var page = 0,
-                        all = [],
-                        fetch = function(deferred) {
-                            projects.all(
-                                socket.token.private_token,
-                                function (err, resp, body) {
-                                    if (err) {
-                                        deferred.reject();
-                                    } else {
-                                        all = all.concat(body);
+                        if (!socket.token || !socket.token.private_token) {
+                            deferred.resolve(new Error('Unauthorized'));
+                        } else {
+                            deferred.resolve(socket);
+                        }
 
-                                        if (resp.links.next) {
-                                            fetch(deferred);
-                                        } else {
-                                            deferred.resolve(all);
-                                        }
-                                    }
-                                },
-                                {
-                                    page: (++page)
-                                }
-                            );
+                        return deferred.promise;
+                    })
+                    .then(
+                        function(socket) {
+                            return projects.all(socket.token.private_token);
+                        },
+                        next
+                    )
+                    .then(function(projects) {
+                        socket.token.projects = _.pluck(projects, 'path_with_namespace');
 
-                            return deferred.promise;
+                        var emit = socket.emit;
+
+                        socket.emit = function(event, data) {
+                            if (socket.token.projects.indexOf(data.namespace + '/' + data.project) > -1) {
+                                emit.apply(socket, Array.prototype.slice.call(arguments));
+                            }
                         };
 
-                    fetch(q.defer())
-                        .then(
-                            function(projects) {
-                                socket.token.projects = _.pluck(projects, 'path_with_namespace');
-
-                                var emit = socket.emit;
-
-                                socket.emit = function(event, data) {
-                                    if (socket.token.projects.indexOf(data.namespace + '/' + data.project) > -1) {
-                                        emit.apply(socket, Array.prototype.slice.call(arguments));
-                                    }
-                                };
-
-                                next();
-                            }
-                        );
-                });
+                        next();
+                    });
             }
         );
 

@@ -1,60 +1,47 @@
-var _ = require('lodash');
+var q = require('q'),
+    _ = require('lodash');
 
 module.exports = function(router, container) {
     var config = container.get('config');
 
     router.authenticated.get('/projects/:ns/:name/columns',
         function (req, res) {
-            container.get('redis').hget(
-                'laboard:' + req.params.ns + ':' + req.params.name, 'columns',
-                function(err, columns) {
-                    if (err) {
-                        res.error(err, 500);
-
-                        return;
-                    }
-
+            q.all([
+                q.ninvoke(container.get('redis'), 'hget', 'laboard:' + req.params.ns + ':' + req.params.name, 'columns'),
+                container.get('gitlab.labels').all(req.user.private_token, req.params.ns, req.params.name)
+            ])
+                .spread(function(columns, labels) {
                     columns = JSON.parse(columns) || [];
 
-                    container.get('gitlab.labels').all(
-                        req.user.private_token,
-                        req.params.ns,
-                        req.params.name,
-                        function(err, resp, labels) {
-                            columns = _.values(columns).map(function(column) {
-                                var label;
+                    columns = _.values(columns).map(function(column) {
+                        var label;
 
-                                if (labels) {
-                                    label = _.find(labels, { name: config.column_prefix + column.title.toLowerCase() });
-                                }
-
-                                if (!label) {
-                                    label = {
-                                        name: config.column_prefix + column.title.toLowerCase(),
-                                        color: '#E5E5E5'
-                                    };
-
-                                    container.get('gitlab.labels').persist(
-                                        req.user.private_token,
-                                        req.params.ns,
-                                        req.params.name,
-                                        label,
-                                        function(req, res, label) {
-                                            column.color = label.color;
-                                        }
-                                    );
-                                } else {
-                                    column.color = label.color;
-                                }
-
-                                return column;
-                            });
-
-                            res.response.ok(_.values(columns));
+                        if (labels) {
+                            label = _.find(labels, { name: config.column_prefix + column.title.toLowerCase() });
                         }
-                    );
-                }
-            );
+
+                        if (!label) {
+                            label = {
+                                name: config.column_prefix + column.title.toLowerCase(),
+                                color: '#E5E5E5'
+                            };
+
+                            container.get('gitlab.labels').persist(req.user.private_token, req.params.ns, req.params.name, label)
+                                .then(function(label) {
+                                    column.color = label.color;
+                                });
+                        } else {
+                            column.color = label.color;
+                        }
+
+                        return column;
+                    });
+
+                    console.log(columns);
+
+                    return _.values(columns);
+                })
+                .then(res.response.ok);
         }
     );
 
@@ -63,12 +50,18 @@ module.exports = function(router, container) {
         function(req, res) {
             var column = req.body,
                 createColumn = function(label) {
-                    container.get('redis').hget(
-                        'laboard:' + req.params.ns + ':' + req.params.name, 'columns',
-                        function(err, columns) {
+                    return q.ninvoke(container.get('redis'), 'hget', 'laboard:' + req.params.ns + ':' + req.params.name, 'columns')
+                        .then(function(columns) {
+                            var deferred = q.defer();
+
                             columns = JSON.parse(columns) || {};
 
-                            if (!columns[column.title]) {
+                            if (columns[column.title]) {
+                                deferred.reject({
+                                    code: 409,
+                                    message: 'Conflict'
+                                });
+                            } else {
                                 columns[column.title] = {
                                     title: column.title,
                                     closable: !!column.closable,
@@ -77,58 +70,41 @@ module.exports = function(router, container) {
                                     limit: column.limit ? (column.limit < 0 ? 0 : parseInt(column.limit, 10)) : 0
                                 };
 
-                                container.get('redis').hset(
-                                    'laboard:' + req.params.ns + ':' + req.params.name, 'columns',
-                                    JSON.stringify(columns),
-                                    function(err) {
-                                        if (err) {
-                                            res.error(err, 500);
-
-                                            return;
-                                        }
-
-                                        columns[column.title].color = label.color;
-
-                                        container.get('websocket.emitter').emit(
-                                            'column.new',
-                                            {
-                                                namespace: req.params.ns,
-                                                project: req.params.name,
-                                                column: columns[column.title]
-                                            }
-                                        );
-
-                                        res.response.created(columns[column.title]);
-                                    }
-                                )
-                            } else {
-                                res.error.conflict({
-                                    message: 'Conflict'
-                                });
+                                deferred.resolve(columns);
                             }
-                        }
-                    );
+
+                            return deferred.promise;
+                        })
+                        .then(function(columns) {
+                            var deferred = q.defer();
+
+                            q.ninvoke(container.get('redis'), 'hset', 'laboard:' + req.params.ns + ':' + req.params.name, 'columns', JSON.stringify(columns))
+                                .then(function() {
+                                    columns[column.title].color = label.color;
+
+                                    deferred.resolve(columns[column.title]);
+                                });
+
+                            return deferred.promise;
+                        });
                 };
 
+            if (!column.title) {
+                res.error({ message: 'Bad Request' }, 400);
+            }
 
-            container.get('gitlab.labels').all(
-                req.user.private_token,
-                req.params.ns,
-                req.params.name,
-                function(err, resp, labels) {
+            container.get('gitlab.labels').all(req.user.private_token, req.params.ns, req.params.name)
+                .then(function(labels) {
                     var label;
-
-                    if (!column.title) {
-                        res.error({
-                            message: 'Conflict'
-                        }, 400);
-
-                        return;
-                    }
 
                     if (labels) {
                         label = _.find(labels, { name: config.column_prefix + column.title.toLowerCase() });
                     }
+
+                    return label;
+                })
+                .then(function(label) {
+                    var deferred = q.defer();
 
                     if (!label) {
                         label = {
@@ -136,20 +112,28 @@ module.exports = function(router, container) {
                             color: '#E5E5E5'
                         };
 
-                        container.get('gitlab.labels').persist(
-                            req.user.private_token,
-                            req.params.ns,
-                            req.params.name,
-                            label,
-                            function(req, res, label) {
-                                createColumn(label);
-                            }
-                        );
+                        container.get('gitlab.labels').persist(req.user.private_token, req.params.ns, req.params.name, label)
+                            .then(deferred.resolve, deferred.reject);
                     } else {
-                        createColumn(label);
+                        deferred.resolve(label);
                     }
-                }
-            );
+
+                    return deferred.promise;
+                })
+                .then(createColumn)
+                .then(function(column) {
+                    container.get('websocket.emitter').emit(
+                        'column.new',
+                        {
+                            namespace: req.params.ns,
+                            project: req.params.name,
+                            column: column
+                        }
+                    );
+
+                    res.response.created(column);
+                })
+                .fail(res.error);
         }
     );
 

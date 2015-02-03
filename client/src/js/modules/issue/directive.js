@@ -17,7 +17,7 @@ angular.module('laboard-frontend')
                             if (!$element.originalBounds.cont) {
                                 $element.originalBounds.cont = $('<div/>');
                                 $element.originalBounds.cont.click(function(e) {
-                                    if($(e.target).is($element.originalBounds.cont) && $element.zoomed) {
+                                    if ($(e.target).is($element.originalBounds.cont) && $element.zoomed) {
                                         unzoom();
                                     }
                                 });

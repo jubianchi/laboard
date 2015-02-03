@@ -9,26 +9,26 @@ module.exports = {
         issue.starred = false;
 
         (issue.labels || []).forEach(function(label, key) {
-            var regExCol = new RegExp("^" + container.get('config').column_prefix),
-                regExTheme = new RegExp("^" + container.get('config').theme_prefix);
+                var regExCol = new RegExp("^" + container.get('config').column_prefix),
+                    regExTheme = new RegExp("^" + container.get('config').theme_prefix);
 
-            if (regExCol.test(label)) {
-                issue.column = label.replace(regExCol, '');
-                delete issue.labels[key];
-            }
+                if (regExCol.test(label)) {
+                    issue.column = label.replace(regExCol, '');
+                    delete issue.labels[key];
+                }
 
-            if (regExTheme.test(label)) {
-                issue.theme = label.replace(regExTheme, '');
-                delete issue.labels[key];
-            }
+                if (regExTheme.test(label)) {
+                    issue.theme = label.replace(regExTheme, '');
+                    delete issue.labels[key];
+                }
 
-            if (label === container.get('config').board_prefix + 'starred') {
-                issue.starred = true;
-                delete issue.labels[key];
-            }
-        });
+                if (label === container.get('config').board_prefix + 'starred') {
+                    issue.starred = true;
+                    delete issue.labels[key];
+                }
+            });
 
-        issue.labels = (issue.labels || []).filter(function(v) { return v && v.length > 0; });
+        issue.labels = issue.labels.filter(function(v) { return v && v.length > 0; });
 
         return issue;
     },
@@ -65,12 +65,16 @@ module.exports = {
         project.access_level = 10;
 
         if (project.permissions) {
-            if (project.permissions.project_access && project.permissions.project_access.access_level > project.access_level) {
-                project.access_level = project.permissions.project_access.access_level;
+            var access = project.permissions.project_access || {};
+
+            if (access.access_level > project.access_level) {
+                project.access_level = access.access_level;
             }
 
-            if (project.permissions.group_access && project.permissions.group_access.access_level > project.access_level) {
-                project.access_level = project.permissions.group_access.access_level;
+            access =  project.permissions.group_access || {};
+
+            if (access.access_level > project.access_level) {
+                project.access_level = access.access_level;
             }
         }
 

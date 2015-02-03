@@ -39,32 +39,26 @@ jimple
                 var authorized = !!req.user;
 
                 if (!authorized) {
-                    res.error.forbidden({});
+                    res.error.forbidden();
                 } else {
-                    container.get('gitlab.projects').one(
-                        req.user.private_token,
-                        req.params.ns,
-                        req.params.name,
-                        function(err, resp, body) {
-                            if (err) {
-                                res.error(err);
-                            } else {
+                    container.get('gitlab.projects').one(req.user.private_token, req.params.ns, req.params.name)
+                        .then(
+                            function(project) {
                                 authorized = authorized && (
-                                    (level === 'guest' && body.access_level >= 10) ||
-                                    (level === 'reporter' && body.access_level >= 20) ||
-                                    (level === 'developer' && body.access_level >= 30) ||
-                                    (level === 'master' && body.access_level >= 40) ||
-                                    (level === 'owner' && body.access_level >= 50)
-                                );
+                                    (level === 'guest' && project.access_level >= 10) ||
+                                        (level === 'reporter' && project.access_level >= 20) ||
+                                        (level === 'developer' && project.access_level >= 30) ||
+                                        (level === 'master' && project.access_level >= 40) ||
+                                        (level === 'owner' && project.access_level >= 50)
+                                    );
 
                                 if (authorized) {
                                     next();
                                 } else {
-                                    res.error.forbidden({});
+                                    res.error.forbidden();
                                 }
                             }
-                        }
-                    );
+                        );
                 }
             };
         }

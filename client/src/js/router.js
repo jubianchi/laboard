@@ -60,20 +60,6 @@ angular.module('laboard-frontend')
                             },
                             security: true
                         })
-                        .state('home.project.metrics', {
-                            url: "/metrics",
-                            views: {
-                                '@home': {
-                                    templateUrl: 'metrics/partials/metrics.html',
-                                    controller: 'MetricsController'
-                                },
-                                'menu@home': {
-                                    templateUrl: 'metrics/partials/menu.html',
-                                    controller: 'MetricsMenuController'
-                                }
-                            },
-                            security: true
-                        })
             ;
         }
     ]);

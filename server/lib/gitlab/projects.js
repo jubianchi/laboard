@@ -1,4 +1,5 @@
-var projects = module.exports = function projects(client, formatter) {
+var q = require('q'),
+    projects = module.exports = function projects(client, formatter) {
         this.client = client;
         this.formatter = formatter;
     };
@@ -19,56 +20,92 @@ projects.prototype = {
         return base + '/' + url;
     },
 
-    one: function(token, namespace, project, callback) {
+    one: function(token, namespace, project) {
         var url = this.url(namespace, project),
-            format = this.formatter.formatProjectFromGitlab;
+            deferred = q.defer();
 
-        return this.client.get(
+        this.client.get(
             token,
             url,
             function(err, resp, body) {
-                callback(err, resp, format(body));
-            }
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(this.formatter.formatProjectFromGitlab(body));
+                    }
+                }
+            }.bind(this)
         );
+
+        return deferred.promise;
     },
 
-    members: function(token, namespace, project, callback) {
-        var url = this.url(namespace, project);
+    members: function(token, namespace, project) {
+        var url = this.url(namespace, project),
+            deferred = q.defer();
 
-        return this.client.get(
+        this.client.get(
             token,
             url + '/members',
             function(err, resp, body) {
-                callback(err, resp, body);
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(body);
+                    }
+                }
             }
         );
+
+        return deferred.promise;
     },
 
-    all: function(token, callback, params) {
+    all: function(token, params) {
         var url = this.url(),
-            format = this.formatter.formatProjectFromGitlab;
+            deferred = q.defer(),
+            page = 0,
+            projects = [],
+            fetch = function() {
+                params = params || {};
+                params.page = ++page;
+                params.per_page = 2;
 
-        params = params || {};
+                this.client.get(
+                    token,
+                    url,
+                    params,
+                    function(err, resp, body) {
+                        if (err) {
+                            deferred.reject(err);
+                        } else {
+                            if (resp.statusCode !== 200) {
+                                deferred.reject(resp);
+                            } else {
+                                projects = projects.concat(
+                                    body
+                                        .filter(function (project) { return !!project.issues_enabled; })
+                                        .map(this.formatter.formatProjectFromGitlab)
+                                );
 
-        if (!params.per_page) {
-            params.per_page = 100;
-        }
-
-        return this.client.get(
-            token,
-            url,
-            params,
-            function(err, resp, body) {
-                body = body
-                    .filter(
-                        function (project) {
-                            return !!project.issues_enabled;
+                                if (resp.links.next) {
+                                    fetch();
+                                } else {
+                                    deferred.resolve(projects);
+                                }
+                            }
                         }
-                    )
-                    .map(format);
+                    }.bind(this)
+                );
 
-                callback(err, resp, body);
-            }
-        );
+                return deferred.promise;
+            }.bind(this);
+
+        return fetch();
     }
 };

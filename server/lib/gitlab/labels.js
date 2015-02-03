@@ -1,28 +1,57 @@
-var projects = module.exports = function projects(client) {
-    this.client = client;
-};
+var q = require('q'),
+    labels = module.exports = function labels(client) {
+        this.client = client;
+    };
 
-projects.prototype = {
+labels.prototype = {
     url: function(namespace, project) {
         return '/projects/' + namespace + '%2F' + project + '/labels';
     },
 
-    all: function(token, namespace, project, callback) {
-        return this.client.get(
-            token,
-            this.url(namespace, project),
-            callback
-        );
-    },
+    all: function(token, namespace, project) {
+        var url = this.url(namespace, project),
+            deferred = q.defer();
 
-    persist: function(token, namespace, project, label, callback) {
-        return this.client.post(
+        this.client.get(
             token,
-            this.url(namespace, project),
-            label,
+            url,
             function(err, resp, body) {
-                callback(err, resp, body);
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(body);
+                    }
+                }
             }
         );
+
+        return deferred.promise;
+    },
+
+    persist: function(token, namespace, project, label) {
+        var url = this.url(namespace, project),
+            deferred = q.defer();
+
+        this.client.post(
+            token,
+            url,
+            label,
+            function(err, resp, body) {
+                if (err) {
+                    deferred.reject(err);
+                } else {
+                    if (resp.statusCode !== 200) {
+                        deferred.reject(resp);
+                    } else {
+                        deferred.resolve(body);
+                    }
+                }
+            }
+        );
+
+        return deferred.promise;
     }
 };

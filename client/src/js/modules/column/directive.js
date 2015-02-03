@@ -19,12 +19,11 @@ function lumi(color, A) {
 
 function torgb(color) {
     return {
-        R: parseInt(color.substring(1,3),16),
-        G: parseInt(color.substring(3,5),16),
-        B: parseInt(color.substring(5,7),16)
+        R: parseInt(color.substring(1, 3), 16),
+        G: parseInt(color.substring(3, 5), 16),
+        B: parseInt(color.substring(5, 7), 16)
     };
 }
-
 
 angular.module('laboard-frontend')
     .directive('columns', [
