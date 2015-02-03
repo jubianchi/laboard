@@ -122,17 +122,9 @@ module.exports = function(router, container) {
                 })
                 .then(createColumn)
                 .then(function(column) {
-                    container.get('websocket.emitter').emit(
-                        'column.new',
-                        {
-                            namespace: req.params.ns,
-                            project: req.params.name,
-                            column: column
-                        }
-                    );
-
-                    res.response.created(column);
+                    return container.get('notifier.columns').notifyNew(req.params.ns, req.params.name, column);
                 })
+                .then(res.response.created)
                 .fail(res.error);
         }
     );
@@ -171,14 +163,7 @@ module.exports = function(router, container) {
 
                                 columns[req.params.column].color = column.color;
 
-                                container.get('websocket.emitter').emit(
-                                    'column.edit',
-                                    {
-                                        namespace: req.params.ns,
-                                        project: req.params.name,
-                                        column: columns[req.params.column]
-                                    }
-                                );
+                                container.get('notifier.columns').notifyEdit(req.params.ns, req.params.name, column);
 
                                 res.response.ok(columns[req.params.column]);
                             }
@@ -211,7 +196,11 @@ module.exports = function(router, container) {
                         }
 
                         columns = JSON.parse(columns) || {};
-                        columns[req.params.column].position = req.body.position;
+
+                        var from = columns[req.params.column].position,
+                            to = req.body.position;
+
+                        columns[req.params.column].position = to;
 
                         container.get('redis').hset(
                             'laboard:' + req.params.ns + ':' + req.params.name, 'columns',
@@ -225,16 +214,7 @@ module.exports = function(router, container) {
 
                                 columns[req.params.column].color = req.body.color;
 
-                                container.get('websocket.emitter').emit(
-                                    'column.move',
-                                    {
-                                        namespace: req.params.ns,
-                                        project: req.params.name,
-                                        from: columns[req.params.column].position,
-                                        to: req.body.position,
-                                        column: columns[req.params.column]
-                                    }
-                                );
+                                container.get('notifier.columns').notifyMove(req.params.ns, req.params.name, columns[req.params.column], from, to);
 
                                 res.response.ok(columns[req.params.column]);
                             }
@@ -274,14 +254,7 @@ module.exports = function(router, container) {
                                     return;
                                 }
 
-                                container.get('websocket.emitter').emit(
-                                    'column.remove',
-                                    {
-                                        namespace: req.params.ns,
-                                        project: req.params.name,
-                                        column: column
-                                    }
-                                );
+                                container.get('notifier.columns').notifyRemove(req.params.ns, req.params.name, column);
 
                                 res.response.ok(column);
                             }

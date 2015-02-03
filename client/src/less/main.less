@@ -160,7 +160,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #overlay {
-  z-index: 900!important;
+  z-index: @zindex-dropdown + 50!important;
   opacity: 0.5;
 
   + div {
@@ -171,7 +171,7 @@ h1, h2, h3, h4, h5, h6 {
     right: 0;
     overflow: auto;
     overflow-y: scroll;
-    z-index: 950!important;
+    z-index: @zindex-dropdown + 50!important;
   }
 }
 

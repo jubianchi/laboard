@@ -195,10 +195,7 @@ jimple
         container.get('auth').setup(app);
         container.get('router').setup(app);
 
-        container.get('websocket.server').start(
-            server,
-            container.get('websocket.server.adapter')
-        );
+        container.get('websocket.server').start(server, container.get('websocket.server.adapter'));
 
         return http;
     })
@@ -209,6 +206,16 @@ jimple
         var request = require('request');
 
         return request.defaults(container.get('config').request || {});
+    })
+    .share('notifier.issues', function(container) {
+        var notifier = require('./notifier/issues');
+
+        return new notifier(container.get('websocket.emitter'));
+    })
+    .share('notifier.columns', function(container) {
+        var notifier = require('./notifier/columns');
+
+        return new notifier(container.get('websocket.emitter'));
     })
     .share('controller.auth', jimple.protect(require('./controller/auth')), ['controller'])
     .share('controller.board', jimple.protect(require('./controller/board')), ['controller'])
