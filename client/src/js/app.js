@@ -18,9 +18,27 @@ angular.module('laboard-frontend')
             cfpLoadingBarProvider.includeSpinner = false;
             cfpLoadingBarProvider.includeBar = true;
 
+            var renderer = new marked.Renderer();
+            renderer.listitem = function(text) {
+                var pattern = /^\s*\[( |x)\]/,
+                    checkedPattern = /^\s*\[x\]/;
+
+                if (pattern.exec(text)) {
+                    var attr = ' type="checkbox" disabled="disabled"';
+
+                    if (checkedPattern.exec(text)) {
+                        attr += ' checked="checked"';
+                    }
+                    text = '<input' + attr + '/> ' + text.replace(pattern, '');
+                }
+
+                return '<li>' + text + '</li>'
+            };
+
             markedProvider.setOptions({
                 gfm: true,
                 tables: true,
+                renderer: renderer,
                 highlight: function (code) {
                     return hljs.highlightAuto(code).value;
                 }
