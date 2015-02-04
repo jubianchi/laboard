@@ -57,7 +57,8 @@ jimple
                                     res.error.forbidden();
                                 }
                             }
-                        );
+                        )
+                        .fail(res.error);
                 }
             };
         }
