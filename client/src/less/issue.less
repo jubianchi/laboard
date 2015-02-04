@@ -104,6 +104,7 @@
     height: 0;
     padding: 0 @panel-body-padding;
     overflow: hidden;
+    text-overflow: ellipsis;
 
     p {
       text-overflow: ellipsis;
@@ -145,6 +146,12 @@
     height: auto!important;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     z-index: @zindex-dropdown + 100;
+    margin-bottom: 30px;
+
+    .panel-body {
+      min-height: 75px;
+      padding: @panel-body-padding;
+    }
 
     .btn-zoom .fa-compress {
       display: inline;
@@ -153,6 +160,13 @@
     .btn-zoom .fa-expand {
       display: none;
     }
+  }
+
+  &.zoom {
+    .panel-body {
+      height: auto;
+      overflow: auto;
+    }
 
     .shortdesc {
       display: none;
@@ -160,14 +174,6 @@
 
     .description {
       display: block;
-    }
-  }
-
-  &.zoom {
-    .panel-body {
-      padding: @panel-body-padding;
-      height: 600px;
-      overflow: auto;
     }
   }
 
