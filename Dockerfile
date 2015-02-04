@@ -1,11 +1,16 @@
 FROM hwestphal/nodebox
 
-RUN npm install -g pm2 gulp bower
+ENV NODE_ENV=production
 
-ADD . /app
+RUN mkdir -p /app/client/public && \
+    mkdir -p /var/log/laboard && \
+    mkdir -p /var/run/laboard
 
-RUN mkdir -p /var/log/laboard
-RUN mkdir -p /var/run/laboard
+ADD ./bin /app/bin
+ADD ./config /app/config
+ADD ./server /app/server
+ADD ./client/public /app/client/public
+ADD ./package.json /app/package.json
 
 VOLUME /var/log/laboard
 VOLUME /var/run/laboard
@@ -16,15 +21,10 @@ RUN sed -i 's?x86_64/packages/?x86_64/generic/packages/?' /etc/opkg.conf && \
     opkg-cl update && \
     opkg-cl upgrade
 
-RUN npm install --production && \
-    npm dedupe && \
-    bower install --production --allow-root && \
-    gulp app && \
-    rm -rf bower_components && \
-    ls -lha
+RUN npm install -g pm2 && \
+    npm install
 
-RUN bower cache clean --allow-root && \
-    npm uninstall -g gulp bower && \
+RUN npm dedupe && \
     npm cache clean && \
     (rm -rf /tmp/* || true)
 

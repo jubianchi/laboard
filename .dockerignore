@@ -1,7 +1,11 @@
 .git
 .vagrant
+bower_components
+covershot
 data
 docker
+node_modules
+server-cov
 tests
 tmp
 vendor
