@@ -144,7 +144,6 @@
 
   &.zooming, &.unzooming, &.zoom {
     height: auto!important;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     z-index: @zindex-dropdown + 100;
     margin-bottom: 30px;
 
@@ -162,10 +161,13 @@
     }
   }
 
-  &.zoom {
+  &.zooming, &.zoom {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  &.zoom, &.unzooming {
     .panel-body {
       height: auto;
-      overflow: auto;
     }
 
     .shortdesc {
@@ -177,10 +179,16 @@
     }
   }
 
+  &.zoom .panel-body {
+    overflow: auto;
+  }
+
   &.unzooming {
+    animation: shadowRemove 0.5s;
+    -webkit-animation: shadowRemove 0.5s ease-out;
+
     .panel-body {
       overflow: hidden;
-      height: 0;
     }
   }
 
@@ -199,6 +207,15 @@
     &:hover {
       opacity: 1;
     }
+  }
+}
+
+@keyframes shadowRemove {
+  from {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
   }
 }
 

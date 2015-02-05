@@ -15,7 +15,7 @@ Feature: View project board
   Scenario: Should not be able to add column
     Then I should not see "Create a new column"
 
-  Scenario: Should not be able to deop a column
+  Scenario: Should not be able to drop a column
     When I open the menu of the "Sandbox" column
     Then I should not see "Drop"
 

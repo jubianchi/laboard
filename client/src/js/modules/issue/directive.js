@@ -60,33 +60,47 @@ angular.module('laboard-frontend')
 
                             $element
                                 .removeClass('zoom')
-                                .addClass('unzooming')
-                                .animate({
-                                    left: (viewportWidth - $element.originalBounds.width) / 2,
-                                    width: $element.originalBounds.width
-                                }, 300)
-                                .animate({
-                                    left: $element.originalBounds.left,
-                                    top: $element.originalBounds.top,
-                                    width: $element.originalBounds.width,
-                                    height: $element.originalBounds.height
-                                }, 300, function() {
-                                    $('.panel-body', $element).css('height', '');
-                                    $element
-                                        .appendTo($element.originalBounds.parent)
-                                        .css({
-                                            position: '',
-                                            left: '',
-                                            top: '',
-                                            width: '',
-                                            height: ''
-                                        })
-                                        .removeClass('unzooming');
+                                .addClass('unzooming');
 
-                                    $element.originalBounds.cont.remove();
-                                    $('.panel-body', $element).attr('data-ng-prevent-drag', null);
-                                    $('#overlay').removeClass('modal-backdrop fade in');
-                                });
+                            $('.panel-body', $element).animate({
+                                height: 0,
+                                'min-height': 0,
+                                'padding': 0
+                            }, 1, function() {
+                                $element
+                                    .delay(250)
+                                    .animate({
+                                        left: (viewportWidth - $element.originalBounds.width) / 2,
+                                        width: $element.originalBounds.width
+                                    }, 300)
+                                    .animate({
+                                        left: $element.originalBounds.left - 5,
+                                        top: $element.originalBounds.top - 5,
+                                        width: $element.originalBounds.width,
+                                        height: $element.originalBounds.height
+                                    }, 300, function() {
+                                        $('.panel-body', $element).css('height', '');
+                                        $element
+                                            .appendTo($element.originalBounds.parent)
+                                            .css({
+                                                position: '',
+                                                left: '',
+                                                top: '',
+                                                width: '',
+                                                height: ''
+                                            })
+                                            .removeClass('unzooming');
+
+                                        $element.find('.panel-body').css({
+                                            'min-height': '',
+                                            'padding': ''
+                                        });
+
+                                        $element.originalBounds.cont.remove();
+                                        $('.panel-body', $element).attr('data-ng-prevent-drag', null);
+                                        $('#overlay').removeClass('modal-backdrop fade in');
+                                    });
+                            });
 
                             $element.zoomed = false;
                         };
