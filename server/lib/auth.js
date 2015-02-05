@@ -12,7 +12,7 @@ var auth = module.exports = function auth(url, gitlab) {
                 function(req, token, done) {
                     gitlab.auth(token.private_token).then(function(token) {
                         done(null, token)
-                    });
+                    }).fail(req.res.error.unauthorized);
                 }
             )
         );
