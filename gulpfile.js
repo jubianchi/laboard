@@ -335,8 +335,31 @@ gulp.task('test', ['config', 'cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
 gulp.task('app', ['config', 'vendor', 'less', 'js', 'html', 'images']);
 gulp.task('app:dev', ['config', 'vendor:dev', 'less', 'js:dev', 'html', 'images']);
 
+
+gulp.task('gulp', function(cb) {
+    var child_gulp,
+        spawn = function() {
+            if(child_gulp) {
+                child_gulp.kill();
+            }
+
+            child_gulp = require('child_process').spawn(
+                'gulp',
+                Array.prototype.slice.call(process.argv, 2),
+                {
+                    stdio: 'inherit'
+                }
+            );
+
+            cb();
+        };
+
+    spawn();
+});
+
 gulp.task('watch', function() {
     var watched = {
+        gulp: 'gulpfile.js',
         js: js.concat(['client/src/**/*.html']),
         libs: libs.concat(['bower_components/node-semver/semver.js']),
         less: ['client/src/less/**/*.less'],
