@@ -9,9 +9,6 @@
     "type": "git",
     "url": "https://gitlab.com/jubianchi/laboard.git"
   },
-  "scripts": {
-    "start": "node server"
-  },
   "dependencies": {
     "body-parser": "^1.0.2",
     "cookie": "^0.1.2",
