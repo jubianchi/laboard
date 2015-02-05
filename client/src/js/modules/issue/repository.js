@@ -182,19 +182,19 @@ angular.module('laboard-frontend')
                             .one('issues', issue.iid)
                             .customPUT(issue, 'star')
                             .then(
-                            function(issue) {
-                                if (issue.state === 'closed') {
-                                    self.unadd(issue);
-                                } else {
-                                    self.add(issue);
-                                }
+                                function(issue) {
+                                    if (issue.state === 'closed') {
+                                        self.unadd(issue);
+                                    } else {
+                                        self.add(issue);
+                                    }
 
-                                deferred.resolve(issue);
-                            },
-                            function(err) {
-                                deferred.reject(err);
-                            }
-                        );
+                                    deferred.resolve(issue);
+                                },
+                                function(err) {
+                                    deferred.reject(err);
+                                }
+                            );
 
                         return deferred.promise;
                     },

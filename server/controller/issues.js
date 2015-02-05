@@ -133,7 +133,7 @@ module.exports = function(router, container) {
 
             container.get('gitlab.issues').persist(req.user.private_token, req.params.ns, req.params.name, issue)
                 .then(function(issue) {
-                    return container.get('notifier.issues').notifyStar(req.params.ns, req.params.name, issue, before, after);
+                    return container.get('notifier.issues').notifyStar(req.params.ns, req.params.name, issue);
                 })
                 .then(res.response.ok)
                 .fail(res.error);
@@ -147,7 +147,7 @@ module.exports = function(router, container) {
 
             container.get('gitlab.issues').close(req.user.private_token, req.params.ns, req.params.name, req.body)
                 .then(function(issue) {
-                    return container.get('notifier.issues').notifyClose(req.params.ns, req.params.name, issue, before, after);
+                    return container.get('notifier.issues').notifyClose(req.params.ns, req.params.name, issue);
                 })
                 .then(res.response.ok)
                 .fail(res.error)

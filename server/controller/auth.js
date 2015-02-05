@@ -28,7 +28,7 @@ module.exports = function(router, container) {
         }
     );
 
-    router.authenticated.get('/login/check',
+    router.get('/login/check',
         function(req, res) {
             if (req.cookies.access_token) {
                 container.get('http.client').get(

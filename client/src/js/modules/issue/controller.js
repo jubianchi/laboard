@@ -3,7 +3,7 @@ angular.module('laboard-frontend')
         '$scope', '$rootScope', 'Restangular', 'ColumnsRepository', '$modal', 'IssuesRepository', 'AuthorizationFactory',
         function($scope, $rootScope, Restangular, ColumnsRepository, $modal, $issues, $authorization) {
             $scope.close = function() {
-                $issues.close($scope.issue)
+                $issues.close($scope.issue);
             };
 
             $scope.unpin = function() {
@@ -27,13 +27,17 @@ angular.module('laboard-frontend')
 
                 $scope.issue.after = theme;
 
-                $issues.theme($scope.issue);
+                $issues.theme($scope.issue).then(null, function() {
+                    $scope.issue.theme = $scope.issue.before;
+                });
             };
 
             $scope.star = function(starred) {
                 $scope.issue.starred = typeof starred === 'undefined' ? true : !!starred;
 
-                $issues.star($scope.issue);
+                $issues.star($scope.issue).then(null, function() {
+                    $scope.issue.starred = !$scope.issue.starred;
+                });
             };
 
             var modal;
