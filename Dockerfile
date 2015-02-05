@@ -1,25 +1,27 @@
 FROM hwestphal/nodebox
 
+RUN sed -i 's?x86_64/packages/?x86_64/generic/packages/?' /etc/opkg.conf && \
+    opkg-cl update && \
+    opkg-cl upgrade
+
 ENV NODE_ENV=production
 
 RUN mkdir -p /app/client/public && \
+    mkdir -p /app/config && \
     mkdir -p /var/log/laboard && \
     mkdir -p /var/run/laboard
 
-ADD ./bin /app/bin
-ADD ./config /app/config
-ADD ./server /app/server
-ADD ./client/public /app/client/public
-ADD ./package.json /app/package.json
+COPY ./bin /app/bin
+COPY ./server /app/server
+COPY ./client/public /app/client/public
+COPY ./package.json /app/package.json
+COPY ./config/client.js-dist /app/client/public/assets/js/config.js
+COPY ./config/server.json-dist /app/config/server.json
 
 VOLUME /var/log/laboard
 VOLUME /var/run/laboard
 
 WORKDIR /app
-
-RUN sed -i 's?x86_64/packages/?x86_64/generic/packages/?' /etc/opkg.conf && \
-    opkg-cl update && \
-    opkg-cl upgrade
 
 RUN npm install -g pm2 && \
     npm install
@@ -30,3 +32,5 @@ RUN npm dedupe && \
 
 ENTRYPOINT ["pm2", "--no-daemon"]
 CMD ["--log", "/var/log/laboard/laboard.log", "--pid", "/var/run/laboard/laboard.pid", "--name", "laboard", "start", "bin/server.js"]
+
+EXPOSE 8080

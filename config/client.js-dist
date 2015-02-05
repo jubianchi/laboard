@@ -2,8 +2,8 @@ angular.module('laboard-frontend')
     .constant(
         'LABOARD_CONFIG',
         {
-            gitlabUrl: '<%= gitlabUrl %>',
-            socketIoPort: <%= serverPort %>,
+            gitlabUrl: 'https://gitlab.com',
+            socketIoPort: 8080,
             defaultColumns: [
                 {
                     title: 'Sandbox',

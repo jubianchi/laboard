@@ -1,6 +1,6 @@
 {
-    "gitlab_url": "<%= gitlabUrl %>",
-    "port": <%= serverPort %>,
+    "gitlab_url": "https://gitlab.com",
+    "port": 8080,
     "column_prefix": "column:",
     "theme_prefix": "theme:",
     "board_prefix": "board:",
