@@ -83,6 +83,7 @@ angular.module('laboard-frontend')
 
                         column.position = column.position || this.all.length;
                         column.closable = column.closable == true;
+                        column.unpinned = column.unpinned == true;
                         column.issues = column.issues || [];
 
                         this.$objects = this.$objects || [];

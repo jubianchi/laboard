@@ -21,9 +21,16 @@
                 <li><a data-ng-click="theme('danger')" class="faa-parent animated-hover"><i class="fa fa-circle faa-tada animated-hover text-danger"></i> Red</a></li>
                 <li class="divider"></li>
                 <li><a data-ng-click="star(!!!issue.starred)" class="faa-parent animated-hover"><i class="fa faa-tada animated-hover" data-ng-class="{'fa-star': !!!issue.starred, 'fa-star-o': !!issue.starred}"></i> <span data-ng-if="!!!issue.starred">Star</span><span data-ng-if="!!issue.starred">Unstar</span></a></li>
-                <li><a data-ng-click="unpin()" class="faa-parent animated-hover"><i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin</a></li>
+                <li data-ng-if="!$root.project.unpinned">
+                    <a data-ng-click="unpin()" class="faa-parent animated-hover">
+                        <i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin
+                    </a>
+                </li>
                 <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
-                <li data-ng-if="issue.state != 'closed'"><a data-ng-click="close()" class="faa-parent animated-hover" data-ng-if="column.closable"><i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close</a></li>
+                <li data-ng-if="issue.state != 'closed' && column.closable">
+                    <a data-ng-click="close()" class="faa-parent animated-hover">
+                        <i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close</a>
+                </li>
             </ul>
         </div>
     </div>

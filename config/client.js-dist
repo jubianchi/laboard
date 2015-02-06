@@ -7,7 +7,8 @@ angular.module('laboard-frontend')
             defaultColumns: [
                 {
                     title: 'Sandbox',
-                    position: 0
+                    position: 0,
+                    unpinned: true
                 },
                 {
                     title: 'Backlog',

@@ -1,12 +1,15 @@
 angular.module('laboard-frontend')
     .filter('column', [
-        '$filter', '$rootScope',
+        '$rootScope',
         function () {
             return function(issues, column) {
                 if (!issues) { return []; }
 
                 return _.filter(issues, function(issue) {
-                    return issue.column === column.title.toLowerCase();
+                    return (
+                        issue.column === column.title.toLowerCase() ||
+                        (!issue.column && column.unpinned)
+                    );
                 });
             };
         }

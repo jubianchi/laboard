@@ -62,11 +62,28 @@
             </div>
         </div>
 
+        <div class="form-group" data-ng-if="!$root.project.unpinned || title == $root.project.unpinned">
+            <label for="title" class="col-sm-3 control-label">Include unpinned issues</label>
+            <div class="col-sm-9">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="unpinned" value="1" data-ng-click="limit = 0" data-ng-model="$parent.unpinned"/>
+                        Yes
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="unpinned" value="0" data-ng-model="$parent.unpinned"/>
+                        No
+                    </label>
+                </div>
+            </div>
+        </div>
 
         <div class="form-group">
             <label for="title" class="col-sm-3 control-label">Limit</label>
             <div class="col-sm-9">
-                <input class="form-control" type="number" name="limit" value="0" data-ng-model="limit"/>
+                <input class="form-control" type="number" name="limit" value="0" data-ng-model="limit" data-ng-disabled="unpinned == 1"/>
             </div>
         </div>
     </form>

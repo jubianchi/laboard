@@ -66,7 +66,8 @@ angular.module('laboard-frontend')
                 var column = $scope.column,
                     closable = column.closable,
                     limit = column.limit,
-                    canGoBackward = column.canGoBackward;
+                    canGoBackward = column.canGoBackward,
+                    unpinned = column.unpinned;
 
                 $modal
                     .open({
@@ -77,11 +78,21 @@ angular.module('laboard-frontend')
                             $scope.title = column.title;
                             $scope.limit = column.limit ? (column.limit < 0 ? 0 : parseInt(column.limit, 10)) : 0;
                             $scope.canGoBackward = column.canGoBackward ? 1 : 0;
+                            $scope.unpinned = column.unpinned ? 1 : 0;
 
                             $scope.save = function () {
                                 column.closable = $scope.closable == 1;
                                 column.canGoBackward = $scope.canGoBackward == 1;
+                                column.unpinned = $scope.unpinned == 1;
                                 column.limit = $scope.limit;
+
+                                if (column.unpinned) {
+                                    $root.project.unpinned = column.title;
+                                } else {
+                                    if ($root.project.unpinned === column.title) {
+                                        $root.project.unpinned = null;
+                                    }
+                                }
 
                                 $columns.persist(column)
                                     .then(
@@ -90,6 +101,7 @@ angular.module('laboard-frontend')
                                             column.closable = closable;
                                             column.limit = limit;
                                             column.canGoBackward = canGoBackward;
+                                            column.unpinned = unpinned;
 
                                             $modalInstance.dismiss('error');
                                         }
@@ -182,6 +194,10 @@ angular.module('laboard-frontend')
                     $scope.isFull = ($scope.column.limit > 0 && $scope.column.limit <= actual);
                 }
             );
+
+            if ($scope.column.unpinned) {
+                $root.project.unpinned = $scope.column.title;
+            }
 
             $scope.droppable = $authorization.authorize('developer');
             $root.$broadcast('column.ready');

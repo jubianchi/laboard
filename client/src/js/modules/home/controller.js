@@ -1,7 +1,7 @@
 angular.module('laboard-frontend')
     .controller('HomeController', [
-        '$rootScope', '$scope', '$modal', '$state', '$stateParams', 'ProjectsRepository', 'ProjectManager',
-        function ($root, $scope, $modal, $state, $params, $projects, $projectManager) {
+        '$rootScope', '$scope', '$state', 'ProjectsRepository', 'ProjectManager',
+        function ($root, $scope, $state, $projects, $projectManager) {
             $scope.switchProject = function () {
                 $projectManager.prompt()
                     .then(
@@ -29,8 +29,8 @@ angular.module('laboard-frontend')
 
 angular.module('laboard-frontend')
     .controller('SearchController', [
-        '$rootScope', '$scope', '$modal', '$state', '$stateParams', 'ProjectsRepository', 'ProjectManager',
-        function ($root, $scope, $modal, $state, $params, $projects, $projectManager) {
+        '$rootScope', '$scope',
+        function ($root, $scope) {
             $scope.items = [];
             $scope.showDropdown = false;
 
