@@ -104,20 +104,9 @@ module.exports = function(cucumber) {
     });
 
     cucumber.Then(/I should not see the "([^"]*)" column$/, function (title, next) {
-        var condition = function () {
-            return element(by.cssContainingText('.column .panel-heading', title))
-                .isDisplayed();
-        };
-
-        browser.wait(condition, 10, 'No column with title "' + title + '" seen after 10 seconds')
-            .then(
-                function () {
-                    next(new Error('Column "' + title + '" was seen in page'));
-                },
-                function () {
-                    next();
-                }
-            );
+        expect(element(by.cssContainingText('.column .panel-heading', title)).isPresent())
+            .to.become(false)
+            .and.notify(next);
     });
 
     cucumber.Then(/the "([^"]*)" column should have the "([^"]*)" theme$/, function(title, theme, next) {

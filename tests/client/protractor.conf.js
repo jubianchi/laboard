@@ -3,15 +3,25 @@ module.exports.config = {
     getPageTimeout: 11000,
     allScriptsTimeout: 11000,
     seleniumServerJar: '../../node_modules/protractor/selenium/selenium-server-standalone-2.42.2.jar',
+    rootElement: 'body',
+
+    onPrepare: function() {
+        browser.manage().window().setSize(1024, 768);
+    },
 
     specs: [
         '../tests/features/**/*.feature'
     ],
 
-    capabilities: {
-        browserName: 'phantomjs',
-        'phantomjs.binary.path': require('phantomjs').path
-    },
+    multiCapabilities: [
+        {
+            browserName: 'phantomjs',
+            'phantomjs.binary.path': require('phantomjs').path
+        },
+        {
+            'browserName': 'chrome'
+        }
+    ],
 
     framework: 'cucumber',
 

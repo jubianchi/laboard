@@ -15,13 +15,10 @@ Feature: Search
     And issue #42 of "foo/bar" is in the "Todo" column
     And issue #1337 of "foo/bar" is in the "Todo" column
     And I am not "master" on project "foo/bar"
-    And I go to laboard
     And I login with token "foobar"
+    And I select the project "foo/bar"
 
   Scenario: Search suggestion
-    Given I go to laboard
-    And I click on "foo/bar"
-
     When I focus on ".navbar-form input"
     Then I should see "Search issue number" in ".navbar-form .dropdown-menu"
     Then I should see "Search milestones" in ".navbar-form .dropdown-menu"
@@ -50,9 +47,6 @@ Feature: Search
     Then I should not see a ".navbar-form .dropdown-menu" element
 
   Scenario: Search issue
-    Given I go to laboard
-    And I click on "foo/bar"
-
     When I search for "3"
     Then I should see the issue #13 in the "Sandbox" column
     And I should see the issue #1337 in the "Todo" column

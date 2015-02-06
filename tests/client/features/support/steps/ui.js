@@ -20,6 +20,12 @@ module.exports = function(cucumber) {
             .and.notify(next);
     });
 
+    cucumber.Then(/I should see a "([^"]*)" button/, function(text, next) {
+        expect(element(by.buttonText(text)).isDisplayed())
+            .to.eventually.equal(true)
+            .and.notify(next);
+    });
+
     cucumber.Then(/I should see "([^"]*)" in "([^"]*)"$/, function(text, elem, next) {
         expect(element(by.css(elem)).getText())
             .to.eventually.match(new RegExp(text))
@@ -51,5 +57,35 @@ module.exports = function(cucumber) {
 
         browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
             .then(function() { next(); });
+    });
+
+    cucumber.Then(/I should see a modal dialog with title "([^"]*)"/, function(text, next) {
+        var modal,
+            condition = function() {
+                modal = element(by.css('.modal-dialog'));
+
+                return modal.isDisplayed();
+            };
+
+        browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
+            .then(function() {
+                expect(modal.element(by.cssContainingText('.modal-header', text)).isDisplayed())
+                    .to.eventually.equal(true)
+                    .and.notify(next);
+            });
+    });
+
+    cucumber.Then(/I should see a "([^"]*)" field$/, function(text, next) {
+        expect(element(by.cssContainingText('label', text)).isDisplayed())
+            .to.eventually.equal(true)
+            .and.notify(function() {
+                element(by.cssContainingText('label', text)).then(function(label) {
+                    label.getAttribute('for').then(function(attr) {
+                        expect(element(by.css('input#' + attr)).isDisplayed())
+                            .to.eventually.equal(true)
+                            .and.notify(next);
+                    });
+                });
+            });
     });
 };

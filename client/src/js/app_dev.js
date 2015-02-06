@@ -54,6 +54,18 @@ var mock = {
             return [200, data];
         });
 
+        this.backend.whenDELETE(/\/columns/).respond(function(method, url, data, headers) {
+            var matches = url.match(/([^\/]+)\/([^\/]+)\/columns\/([^\/]+)$/),
+                ns = matches[1],
+                project = matches[2],
+                name = matches[3],
+                column = self.columns[ns + "/" + project][name];
+
+            delete self.columns[ns + "/" + project][name];
+
+            return [200, column];
+        });
+
         this.backend.whenGET(/\/columns$/).respond(function(method, url, data, headers) {
             var parts = url.split('/'),
                 namespace = parts[2],
@@ -118,7 +130,8 @@ var mock = {
         this.users[token] = {
             username: username,
             email: email,
-            name: (name || username)
+            name: (name || username),
+            token: token
         };
     },
 
@@ -127,8 +140,8 @@ var mock = {
             path_with_namespace: namespace + '/' + name
         };
 
-        this.columns[namespace + '/' + name] = [];
-        this.issues[namespace + '/' + name] = [];
+        this.columns[namespace + '/' + name] = {};
+        this.issues[namespace + '/' + name] = {};
     },
 
     addColumn: function(project, name) {

@@ -6,22 +6,19 @@ Feature: Select project
 
   Background:
     Given user "test" has token "foobar"
-    And I go to laboard
 
   Scenario: User has no project
     When I login with token "foobar"
-    Then I should see a ".modal-dialog" element
-    And I should see "0 project" in ".modal-header"
+    Then I should see a modal dialog with title "0 project"
 
   Scenario: User has some projects
     Given project "foo" exists in namespace "bar"
     And project "bar" exists in namespace "foo"
 
     When I login with token "foobar"
-    Then I should see a ".modal-dialog" element
-    And I should see "2 projects" in ".modal-header"
+    Then I should see a modal dialog with title "2 projects"
     And I should see "foo/bar" in ".modal-body"
     And I should see "bar/foo" in ".modal-body"
 
-    When I click on "foo/bar"
+    When I select the project "foo/bar"
     Then I should be on "/foo/bar"

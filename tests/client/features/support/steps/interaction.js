@@ -7,21 +7,18 @@ module.exports = function(cucumber) {
         var fallback = function() {
                 var elements = by.cssContainingText('a,button,[type=button],[type=submit],[data-ng-click],label', text);
 
-                element(elements)
-                    .click()
-                    .then(next);
+                return element(elements).click();
             };
 
-        $$('[data-tooltip="' + text + '"],[value="' + text + '"]')
+        return $$('[data-tooltip="' + text + '"],[value="' + text + '"]')
             .then(
                 function(elements) {
                     if (elements.length === 0) {
-                        fallback();
+                        return fallback();
                     } else {
-                        elements[0].click().then(next);
+                        return elements[0].click().then(next);
                     }
-                },
-                fallback
+                }
             );
     };
 
@@ -39,7 +36,7 @@ module.exports = function(cucumber) {
     };
 
     cucumber.When(/I click on "([^"]*)"$/, function(text, next) {
-        browser.clickOn(text, next);
+        browser.clickOn(text).then(next);
     });
 
     cucumber.When(/I focus on "([^"]*)"$/, function(text, next) {

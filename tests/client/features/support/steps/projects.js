@@ -1,3 +1,6 @@
+var chai = require('chai'),
+    expect = chai.expect;
+
 module.exports = function(cucumber) {
     cucumber.Given(/^project "([^"]*)" exists in namespace "([^"]*)"/, function(project, namespace, next) {
         browser
@@ -15,5 +18,23 @@ module.exports = function(cucumber) {
         browser
             .executeScript('mock.addIssue(\'' + project + '\', ' + iid + ', \'' + title + '\');')
             .then(next);
+    });
+
+    cucumber.Given(/^I select the project "([^"]*)"/, function(project, next) {
+        var modal,
+            condition = function() {
+                modal = element(by.css('.modal-dialog'));
+
+                return modal.isDisplayed();
+            };
+
+        browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
+            .then(function() {
+                expect(modal.element(by.cssContainingText('.modal-header', 'Project')).isDisplayed())
+                    .to.eventually.equal(true)
+                    .and.notify(function() {
+                        modal.element(by.cssContainingText('td', project)).click().then(next);
+                    });
+            });
     });
 };

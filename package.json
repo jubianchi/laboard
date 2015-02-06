@@ -52,6 +52,7 @@
     "karma-jasmine": "~0.2.2",
     "karma-jasmine-html-reporter": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-chrome-launcher": "~0.1",
     "karma-story-reporter": "^0.2.2",
     "mocha": "^1.21.4",
     "phantomjs": "^1.9.7-15",

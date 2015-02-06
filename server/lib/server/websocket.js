@@ -62,7 +62,8 @@ var cookie = require('cookie'),
                         };
 
                         next();
-                    });
+                    })
+                    .fail(next);
             }
         );
 

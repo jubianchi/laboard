@@ -1,7 +1,8 @@
-Feature: Laboard
+Feature: Application
 
   As a Gitlab user
-  I should be able to use Laboard
+  I should be able to reach Laboard
+  In order to authenticate
 
   Scenario: Homepage
     When I go to laboard

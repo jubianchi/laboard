@@ -3,17 +3,17 @@ var chai = require('chai'),
 
 module.exports = function(cucumber) {
     browser.goToHomepage = function() {
-        return browser.get('#/').then(function() {
+        return browser.get('http://127.0.0.1:4242/index_dev.html#/').then(function() {
             return browser.navigate().refresh();
         });
     };
 
     browser.goTo = function(url) {
-        return browser.navigate().to('#' + url);
+        return browser.navigate().to('http://127.0.0.1:4242/index_dev.html#' + url);
     };
 
     cucumber.Given(/^I am on laboard$/, function(next) {
-        browser.goToHomepage(next);
+        browser.goToHomepage().then(next);
     });
 
     cucumber.When(/^I go to laboard$/, function(next) {

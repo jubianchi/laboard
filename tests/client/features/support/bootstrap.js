@@ -13,8 +13,6 @@ module.exports = function() {
     require('./steps/ui.js')(this);
     require('./screenshots.js')(this);
 
-    browser.manage().window().setSize(1024, 768);
-
     this.BeforeScenario(function(e, next) {
         browser.goToHomepage().then(next);
     });
@@ -22,4 +20,6 @@ module.exports = function() {
     this.AfterScenario(function (e, next) {
         browser.logout().then(next);
     });
+
+    require('./screenshots')(this);
 };

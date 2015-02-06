@@ -1,16 +1,15 @@
 Feature: New project board
 
-  As a Laboard user & project master
-  I should be able to create a project's board
+  As a Gitlab project master
+  I should be able to create a project board
   In order to manage my issues
 
   Background:
     Given user "test" has token "foobar"
     And project "bar" exists in namespace "foo"
     And I am "master" on project "foo/bar"
-    And I go to laboard
     And I login with token "foobar"
-    And I click on "foo/bar"
+    And I select the project "foo/bar"
 
   Scenario: Project has no column
     Then I should see "No column"

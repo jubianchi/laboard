@@ -1,7 +1,7 @@
 Feature: View project issues
 
   As a Laboard user
-  I should be able to view project's issues
+  I should be able to view project issues
 
   Background:
     Given user "test" has token "foobar"
@@ -9,14 +9,10 @@ Feature: View project issues
     And project "foo/bar" has column "Sandbox"
     And project "foo/bar" has column "Todo"
     And I am not "master" on project "foo/bar"
-    And I go to laboard
     And I login with token "foobar"
 
   Scenario: Project has no issues
-    Given I am not "master" on project "foo/bar"
-    And I go to laboard
-
-    When I click on "foo/bar"
+    When I select the project "foo/bar"
     Then the "Sandbox" column should be empty
     And the "Todo" column should be empty
 

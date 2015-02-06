@@ -1,7 +1,8 @@
 Feature: Manage project board
 
-  As a Laboard user & project master
-  I should be able to manage a project's board
+  As a Gitlab project master
+  I should be able to edit a project board
+  In order to manage column
 
   Background:
     Given user "test" has token "foobar"
@@ -9,9 +10,8 @@ Feature: Manage project board
     And project "foo/bar" has column "Sandbox"
     And project "foo/bar" has column "Todo"
     And I am "master" on project "foo/bar"
-    And I go to laboard
     And I login with token "foobar"
-    And I click on "foo/bar"
+    And I select the project "foo/bar"
 
   Scenario: Adding a column
     When I click on "Create a new column"
@@ -24,7 +24,7 @@ Feature: Manage project board
   Scenario: Dropping a column
     When I open the menu of the "Sandbox" column
     And I click on "Drop" in the menu of the "Sandbox" column
-    Then I should not see the "Todo" column
+    Then I should not see the "Sandbox" column
 
   Scenario: Move column left
     When I open the menu of the "Todo" column

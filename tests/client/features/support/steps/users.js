@@ -3,10 +3,21 @@ module.exports = function(cucumber) {
         return browser.executeScript('mock.reset();');
     };
 
+    cucumber.BeforeScenario(function(e, next) {
+        browser.user = null;
+        browser.users = {};
+
+        next();
+    });
+
     cucumber.Given(/^user "([^"]*)" has token "([^"]*)"/, function(user, token, next) {
         browser
             .executeScript('mock.addUser(\'' + token + '\', \'' + user + '\');')
-            .then(next);
+            .then(function() {
+                browser.users[token] = user;
+
+                next();
+            });
     });
 
     cucumber.Given(/^I am "([^"]*)" on project "([^"]*)"$/, function (role, project, next) {
@@ -33,8 +44,16 @@ module.exports = function(cucumber) {
         browser.goTo('/').then(function() {
             browser.typeTextInElement(token, '#password')
                 .then(function() {
-                    browser.clickOn('Login', next);
+                    browser.clickOn('Login').then(function() {
+                        browser.user = browser.users[token];
+
+                        next();
+                    });
                 });
         });
+    });
+
+    cucumber.When(/I open the user menu$/, function(next) {
+        element(by.cssContainingText('.navbar-btn.dropdown-toggle', browser.user)).click().then(next);
     });
 };
