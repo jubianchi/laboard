@@ -29,13 +29,20 @@ describe('module: column', function() {
             it("should set width", function() {
                 scope.$digest();
 
+                expect(element.find('div[data-column]').css('width')).toBe('50%');
+            });
+
+            it("should set a minimal width when there is too much columns", function() {
+                element.append('<div data-column></div><div data-column></div>');
+                scope.$digest();
+
                 expect(element.find('div[data-column]').css('width')).toBe('300px');
             });
 
             it("should update width when new column is added", function() {
                 scope.$digest();
 
-                expect(element.find('div[data-column]').css('width')).toBe('300px');
+                expect(element.find('div[data-column]').css('width')).toBe('50%');
 
                 element.append('<div data-column></div><div data-column></div>');
                 scope.$digest();
