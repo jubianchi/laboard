@@ -73,17 +73,27 @@ module.exports = function(cucumber) {
     cucumber.Then(/I should see the issue #(\d+) in the "([^"]*)" column$/, function (iid, title, next) {
         browser.findColumn(title)
             .then(function(column) {
-                var condition = function () {
-                    return column.element(by.cssContainingText('.issue .panel-heading', '#' + iid))
-                        .isDisplayed();
-                };
+                expect(column.element(by.cssContainingText('.issue .panel-heading', '#' + iid)).isPresent())
+                    .to.become(true)
+                    .and.notify(next);
+            });
+    });
 
-                browser.wait(condition, 10, 'Issue #' + iid + ' was not seen in ' + title + ' column after 10 seconds')
-                    .then(
-                        function() {
-                            next();
-                        }
-                    );
+    cucumber.Given(/^I select the issue #(\d+)/, function(issue, next) {
+        var modal,
+            condition = function() {
+                modal = element(by.css('.modal-dialog'));
+
+                return modal.isDisplayed();
+            };
+
+        browser.wait(condition, 10, "No modal dialog seen after 10 seconds")
+            .then(function() {
+                expect(modal.element(by.cssContainingText('.modal-header', 'Issues')).isDisplayed())
+                    .to.eventually.equal(true)
+                    .and.notify(function() {
+                        modal.element(by.cssContainingText('td', issue)).click().then(next);
+                    });
             });
     });
 };

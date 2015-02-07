@@ -20,7 +20,7 @@ Feature: View project issues
     Given project "foo/bar" has issue #42 "First"
     And project "foo/bar" has issue #1337 "Second"
 
-    When I click on "foo/bar"
+    When I select the project "foo/bar"
     Then the "Sandbox" column should be empty
     And the "Todo" column should be empty
 
@@ -30,6 +30,6 @@ Feature: View project issues
     And issue #42 of "foo/bar" is in the "Sandbox" column
     And issue #1337 of "foo/bar" is in the "Todo" column
 
-    When I click on "foo/bar"
+    When I select the project "foo/bar"
     Then I should see the issue #42 in the "Sandbox" column
     And I should see the issue #1337 in the "Todo" column

@@ -47,11 +47,11 @@ var mock = {
         });
 
         this.backend.whenPOST(/\/columns$/).respond(function(method, url, data, headers) {
-            return [200, data];
+            return [200, JSON.parse(data)];
         });
 
         this.backend.whenPUT(/\/columns/).respond(function(method, url, data, headers) {
-            return [200, data];
+            return [200, JSON.parse(data)];
         });
 
         this.backend.whenDELETE(/\/columns/).respond(function(method, url, data, headers) {
@@ -96,7 +96,7 @@ var mock = {
             var parts = url.split('/'),
                 namespace = parts[2],
                 project = parts[3],
-                iid = parts[4],
+                iid = parts[5],
                 path = namespace + '/' + project;
 
             if (!self.projects[path]) {
@@ -106,6 +106,26 @@ var mock = {
             if (!self.issues[path][iid]) {
                 return [404];
             }
+
+            return [200, self.issues[path][iid]];
+        });
+
+        this.backend.whenPUT(/\/issues\/.*?\/move/).respond(function(method, url, data, headers) {
+            var parts = url.split('/'),
+                namespace = parts[2],
+                project = parts[3],
+                iid = parts[5],
+                path = namespace + '/' + project;
+
+            if (!self.projects[path]) {
+                return [404];
+            }
+
+            if (!self.issues[path][iid]) {
+                return [404];
+            }
+
+            self.issues[path][iid].column = JSON.parse(data).to.toLowerCase();
 
             return [200, self.issues[path][iid]];
         });
@@ -121,6 +141,10 @@ var mock = {
             }
 
             return [200, self.projects[path]];
+        });
+
+        this.backend.whenGET(/\/labels\//).respond(function(method, url, data, headers) {
+            return [200, []];
         });
 
         this.reset();

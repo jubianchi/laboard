@@ -59,6 +59,10 @@ module.exports = function(cucumber) {
             .then(function() { next(); });
     });
 
+    cucumber.When(/I close the modal dialog$/, function(next) {
+        browser.actions().sendKeys(protractor.Key.ESCAPE).perform().then(next);
+    });
+
     cucumber.Then(/I should see a modal dialog with title "([^"]*)"/, function(text, next) {
         var modal,
             condition = function() {
