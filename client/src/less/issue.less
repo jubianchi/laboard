@@ -99,12 +99,17 @@
   }
 
   .panel-body {
-    -webkit-transition: height .5s, min-height .5s, padding .5s;
-    transition: height .5s, min-height .5s, padding .5s;
-    height: 0;
-    padding: 0 @panel-body-padding;
+    -webkit-transition: height .5s, min-height .5s, max-height .5s;
+    transition: height .5s, min-height .5s, max-height .5s;
+    max-height: 0;
+    padding: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    > div {
+      min-height: 65px;
+      padding: @panel-body-padding;
+    }
 
     p {
       text-overflow: ellipsis;
@@ -114,11 +119,11 @@
 
   &:hover:not(.dragging):not(.zoom):not(.unzooming):not(.zooming) {
     .panel-body {
-      -webkit-transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
-      transition: height .5s, min-height .5s, padding-top .5s, padding-bottom .5s;
-      height: 65px;
+      -webkit-transition: height .5s, min-height .5s, max-height .5s;
+      transition: height .5s, min-height .5s, max-height .5s;
+      padding: 0;
       min-height: 65px;
-      padding: @panel-body-padding;
+      max-height: 130px;
     }
 
     .panel-footer {
@@ -136,6 +141,7 @@
 
   .shortdesc {
     display: block;
+    min-height: 50px;
   }
 
   .description {
@@ -149,7 +155,6 @@
 
     .panel-body {
       min-height: 75px;
-      padding: @panel-body-padding;
     }
 
     .btn-zoom .fa-compress {

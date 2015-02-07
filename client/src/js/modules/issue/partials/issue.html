@@ -35,18 +35,25 @@
         </div>
     </div>
     <div class="panel-body clearfix">
-        <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
-        <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
+        <div>
+            <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
+            <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
 
-        <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
-            <div class="overlay" data-ng-click="assign()" data-authorize="developer">
-                <span><i class="fa fa-user"></i></span>
+            <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
+                <div class="overlay" data-ng-click="assign()" data-authorize="developer">
+                    <span><i class="fa fa-user"></i></span>
+                </div>
+                <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
+                <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
             </div>
-            <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
-            <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
+            <p class="shortdesc">{{ issue.title }}</p>
+
+            <p class="description" marked="issue.description" data-ng-prevent-drag></p>
+
+            <div data-ng-prevent-drag>
+                <span class="label label-default" data-ng-repeat="label in issue.labels">{{label}}</span>
+            </div>
         </div>
-        <p class="shortdesc">{{ issue.title }}</p>
-        <p class="description" marked="issue.description" data-ng-prevent-drag></p>
     </div>
     <div class="panel-footer" data-ng-prevent-drag>
         <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
