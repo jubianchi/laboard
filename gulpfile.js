@@ -364,8 +364,8 @@ gulp.task('gulp', function(cb) {
 gulp.task('watch', function() {
     var watched = {
         gulp: 'gulpfile.js',
-        js: js.concat(['client/src/**/*.html']),
-        libs: libs.concat(['bower_components/node-semver/semver.js']),
+        js: files.js.concat(['client/src/**/*.html']),
+        libs: files.libs.concat(['bower_components/node-semver/semver.js']),
         less: ['client/src/less/**/*.less'],
         fonts: ['bower_components/font-awesome/fonts/*', 'bower_components/bootstrap/fonts/*'],
         html: ['client/src/**/*.html']
