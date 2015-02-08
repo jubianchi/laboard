@@ -24,7 +24,7 @@ angular.module('laboard-frontend')
                     if (socket) {
                         socket.connect();
                     } else {
-                        socket = $window.io.connect($location.protocol() + '://' + $location.host() + ':' + ($root.LABOARD_CONFIG.socketIoPort || $location.port()));
+                        socket = $window.io.connect($location.protocol() + '://' + $location.host() + ':' + $location.port());
                     }
 
                     socket.on('connect', function() {

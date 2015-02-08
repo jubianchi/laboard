@@ -27,29 +27,7 @@ describe('factory: SocketFactory', function() {
         });
     });
 
-    describe('with configuration option', function() {
-        beforeEach(inject(function($rootScope) {
-            $rootScope.LABOARD_CONFIG = {
-                socketIoPort: 1337
-            };
-        }));
-
-        it('should connect to websocket server using configured port', inject(function(SocketFactory) {
-            spyOn(mockWindow.io, 'connect').and.callThrough();
-
-            SocketFactory.connect();
-
-            expect(mockWindow.io.connect).toHaveBeenCalledWith('http://laboard:1337');
-        }));
-    });
-
     describe('without configuration option', function() {
-        beforeEach(inject(function($rootScope) {
-            $rootScope.LABOARD_CONFIG = {
-                socketIoPort: null
-            };
-        }));
-
         it('should connect to websocket server using location port', inject(function(SocketFactory) {
             spyOn(mockWindow.io, 'connect').and.callThrough();
 

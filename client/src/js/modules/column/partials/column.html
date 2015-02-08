@@ -21,8 +21,8 @@
                         <i class="fa fa-thumb-tack faa-tada"></i> Pin issues
                     </a>
                 </li>
-                <li data-authorize="reporter"><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
-                <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
+                <li data-authorize="reporter"><a target="_blank" href="/gitlab/{{ project.path_with_namespace }}/issues/new?issue[label_list]=column:{{ column.title | lowercase }}" class="faa-parent animated-hover"><i class="fa fa-plus faa-tada"></i> New issue</a></li>
+                <li><a target="_blank" href="/gitlab/{{ project.path_with_namespace }}/issues?label_name=column:{{ column.title | lowercase }}&state=opened" class="faa-parent animated-hover"><i class="fa fa-search faa-wrench"></i> View issues</a></li>
             </ul>
         </div>
     </div>

@@ -29,7 +29,7 @@ install:
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo -n | GITLAB_URL=http://127.0.0.1 LABOARD_PORT=8080 gulp app; else true; fi;'
 
 script:
-  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then gulp >/dev/null 2>&1 > /dev/null; else true; fi;' &
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then gulp >/dev/null 2>&1; else true; fi;' &
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sleep 5; else true; fi;'
   - gulp $GULP_COMMAND
 

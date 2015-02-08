@@ -1,8 +1,8 @@
 data:
     image: hwestphal/nodebox
-    working_dir: /app
-    entrypoint: /app/node_modules/gulp/bin/gulp.js
-    command: ["app", "watch"]
+    #working_dir: /app
+    #entrypoint: /app/node_modules/gulp/bin/gulp.js
+    #command: ["app", "watch"]
     volumes:
         - .:/app
         - ./data/log:/var/log/laboard

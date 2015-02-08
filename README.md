@@ -45,7 +45,7 @@ $ gulp app
 
 The Laboard configuration is minimal:
 
-* `config/server.json`:
+* `config/server.js`:
   * `gitlab_url` : The URL to your Gitlab instance (for example `http://gitlab.example.com`)
   * `port`: Port to which the HTTP server is bound
   * `column_prefix`: Prefix for gitlab issue label to map columns, for example an issue in the column _backlog_ will have the label `column:backlog`
@@ -54,10 +54,6 @@ The Laboard configuration is minimal:
   * `redis`: Configuration of the redis server
     * `host`: Hostname of the server
     * `port`: Port to connect to
-
-* `config/client.js`:
-  * `gitlabUrl`: The URL to your Gitlab instance. **This should be the same as for the server** (for example `http://gitlab.example.com`)
-  * `socketIoPort`: The port to which the Socket.io server is bound. When running in production, this will be the same as the HTTP server's port
 
 ## Start
 

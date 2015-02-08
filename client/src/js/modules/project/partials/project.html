@@ -5,7 +5,7 @@
 
         <p data-authorize="master">To get started, <a data-ng-click="addColumn()" class="alert-link">create some columns</a> for your project or <a data-ng-click="bootstrap()" class="alert-link">use the default columns</a>.</p>
 
-        <p data-authorize-unless="master"><a class="alert-link" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}" target="_blank">{{ project.path_with_namespace }}</a> team does not use laboard.</p>
+        <p data-authorize-unless="master"><a class="alert-link" href="/gitlab/{{ project.path_with_namespace }}" target="_blank">{{ project.path_with_namespace }}</a> team does not use laboard.</p>
     </div>
 
     <div data-columns class="column-container clearfix">

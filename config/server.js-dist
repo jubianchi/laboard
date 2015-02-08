@@ -1,0 +1,11 @@
+module.exports = {
+    "gitlab_url": process.env.LABOARD_GITLAB_URL || "https://gitlab.com",
+    "port": process.env.LABOARD_PORT || 8080,
+    "column_prefix": process.env.LABOARD_COLUMN_PREFIX || "column:",
+    "theme_prefix": process.env.LABOARD_THEME_PREFIX || "theme:",
+    "board_prefix": process.env.LABOARD_BOARD_PREFIX || "board:",
+    "redis": {
+        "host": process.env.LABOARD_REDIS_HOST || "redis",
+        "port": process.env.LABOARD_REDIS_PORT || 6379
+    }
+};

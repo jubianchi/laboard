@@ -6,7 +6,7 @@ var Jimple = require("./lib/jimple"),
 
 jimple
     .share('config', function() {
-        var config = require('../config/server.json');
+        var config = require('../config/server');
 
         if (!config.column_prefix) {
             config.column_prefix = 'column:';

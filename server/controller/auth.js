@@ -28,6 +28,12 @@ module.exports = function(router, container) {
         }
     );
 
+    router.get('/gitlab*',
+        function(req, res) {
+            res.redirect(301, container.get('config').gitlab_url + req.params[0]);
+        }
+    );
+
     router.get('/login/check',
         function(req, res) {
             if (req.cookies.access_token) {

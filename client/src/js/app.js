@@ -106,6 +106,5 @@ angular.module('laboard-frontend')
             };
 
             $root.LABOARD_CONFIG = LABOARD_CONFIG;
-            $root.gitlabUrl = LABOARD_CONFIG.gitlabUrl;
         }
     ]);

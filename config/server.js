@@ -1,5 +1,5 @@
-{
-    "gitlab_url": "https://gitlab.com",
+module.exports = {
+    "gitlab_url": "http://192.168.59.3:3000",
     "port": 8080,
     "column_prefix": "column:",
     "theme_prefix": "theme:",
@@ -8,4 +8,4 @@
         "host": "redis",
         "port": 6379
     }
-}
+};

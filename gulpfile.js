@@ -1,14 +1,9 @@
 var gulp = require('gulp'),
     less = require('gulp-less'),
     watch = require('gulp-watch'),
-    connect = require('gulp-connect'),
     concat = require('gulp-concat'),
-    path = require('path'),
     prefix = require('gulp-autoprefixer'),
-    template = require('gulp-template'),
-    data = require('gulp-data'),
     rename = require('gulp-rename'),
-    prompt = require('gulp-prompt'),
     templateCache = require('gulp-angular-templatecache'),
     jscs = require('gulp-jscs'),
     karma = require('karma').server,
@@ -91,8 +86,7 @@ if (process.env.NODE_ENV === 'test') {
 
 gulp.task('fonts', function() {
     gulp.src(files.fonts)
-        .pipe(gulp.dest(directories.assets.fonts))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(directories.assets.fonts));
 });
 
 gulp.task('libs', function(cb) {
@@ -133,34 +127,40 @@ gulp.task('less', function() {
     gulp.src(files.less)
         .pipe(less())
         .pipe(prefix({ cascade: true }))
-        .pipe(gulp.dest(directories.assets.css))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(directories.assets.css));
 });
 
-gulp.task('cache', function() {
+gulp.task('js', function() {
     gulp.src(files.cache)
         .pipe(templateCache('templates.js', { module: 'laboard-frontend' }))
-        .pipe(gulp.dest(directories.tmp))
-        .pipe(connect.reload());
-});
+        .pipe(gulp.dest(directories.tmp));
 
-gulp.task('js', ['config', 'cache'], function() {
     gulp.src(['config/client.js'])
         .pipe(rename('config.js'))
-        .pipe(gulp.dest(directories.assets.js))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(directories.assets.js));
 
     gulp.src(files.js)
         .pipe(concat('app.js'))
-        .pipe(gulp.dest(directories.assets.js))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(directories.assets.js));
 });
 
 gulp.task('html', function() {
     gulp.src(files.html)
-        .pipe(gulp.dest(directories.public))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(directories.public));
 });
+
+gulp.task('config', function(cb) {
+    if (fs.existsSync('config/server.json')) {
+        cb();
+    } else {
+        gulp.src('config/server.json-dist')
+            .pipe(rename('server.json'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    }
+});
+
+gulp.task('webdriver', webdriver);
 
 gulp.task('cs', function() {
     return gulp.src([
@@ -172,7 +172,7 @@ gulp.task('cs', function() {
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 
-gulp.task('karma', ['libs'], function(done) {
+gulp.task('karma', function(done) {
     return karma.start(
         {
             configFile: __dirname + '/tests/client/karma.conf.js',
@@ -183,9 +183,7 @@ gulp.task('karma', ['libs'], function(done) {
     );
 });
 
-gulp.task('webdriver', webdriver);
-
-gulp.task('protractor', ['app', 'webdriver'], function(done) {
+gulp.task('protractor', ['webdriver'], function(done) {
     gulp.src(['./tests/client/features/**/*.feature'])
         .pipe(protractor({
             configFile: __dirname + '/tests/client/protractor.conf.js'
@@ -205,140 +203,6 @@ gulp.task('atoum', function(cb) {
         }
     );
 });
-
-gulp.task('config:server', function(cb) {
-    if (fs.existsSync('config/server.json')) {
-        cb();
-
-        return;
-    }
-
-    var src = gulp.src('config/server.json-dist'),
-        defaults = {
-            gitlabUrl: process.env.GITLAB_URL || 'https://gitlab.com',
-            serverPort: process.env.LABOARD_PORT || 4343,
-            gitlabVersion: process.env.GITLAB_VERSION || '7.4'
-        };
-
-    if (process.stdin.isTTY) {
-        var vars;
-
-        src
-            .pipe(prompt.prompt(
-                [
-                    {
-                        type: 'input',
-                        name: 'gitlabUrl',
-                        message: '[SEVRER] Url of your Gitlab instance',
-                        default: defaults.gitlabUrl
-                    },
-                    {
-                        type: 'list',
-                        name: 'gitlabVersion',
-                        message: '[SEVRER] Version of your Gitlab instance',
-                        choices: ['7.2', '7.3', '7.4'],
-                        default: defaults.gitlabVersion,
-                        validate: function (values) {
-                            return values.length === 1;
-                        }
-                    },
-                    {
-                        type: 'input',
-                        name: 'serverPort',
-                        message: '[SEVRER] Laboard server port',
-                        default: defaults.serverPort,
-                        validate: function (value) {
-                            return parseInt(value, 10) > 0;
-                        }
-                    }
-                ],
-                function (res) {
-                    vars = res;
-                }
-            ))
-            .pipe(data(function () {
-                return vars;
-            }))
-            .pipe(template())
-            .pipe(rename('server.json'))
-            .pipe(gulp.dest('config'))
-            .on('end', cb);
-    } else {
-        src
-            .pipe(template({
-                gitlabUrl: defaults.gitlabUrl,
-                gitlabVersion: defaults.gitlabVersion,
-                serverPort: defaults.serverPort
-            }))
-            .pipe(rename('server.json'))
-            .pipe(gulp.dest('config'))
-            .on('end', cb);
-    }
-});
-
-gulp.task('config:client', ['config:server'], function(cb) {
-    if (fs.existsSync('config/client.js')) {
-        cb();
-
-        return;
-    }
-
-    var defaults = require('./config/server.json'),
-        src = gulp.src('config/client.js-dist');
-
-    defaults.gitlab_url = process.env.GITLAB_URL || defaults.gitlab_url;
-    defaults.port = process.env.LABOARD_PORT || defaults.port;
-
-    if (process.stdin.isTTY) {
-        var vars;
-
-        src
-            .pipe(prompt.prompt(
-                [
-                    {
-                        type: 'input',
-                        name: 'gitlabUrl',
-                        message: '[CLIENT] Url of your Gitlab instance',
-                        default: defaults.gitlab_url || 'https://gitlab.com'
-                    },
-                    {
-                        type: 'input',
-                        name: 'serverPort',
-                        message: '[CLIENT] Laboard server port',
-                        default: defaults.port || 4343,
-                        validate: function (value) {
-                            return parseInt(value, 10) > 0;
-                        }
-                    }
-                ],
-                function (res) {
-                    vars = res;
-                }
-            ))
-            .pipe(data(function () {
-                return vars;
-            }))
-            .pipe(template())
-            .pipe(rename('client.js'))
-            .pipe(gulp.dest('config'))
-            .on('end', cb);
-    } else {
-        src
-            .pipe(template({
-                gitlabUrl: defaults.gitlab_url,
-                serverPort: defaults.port
-            }))
-            .pipe(rename('client.js'))
-            .pipe(gulp.dest('config'))
-            .on('end', cb);
-    }
-});
-
-gulp.task('vendor', ['fonts', 'libs', 'css']);
-gulp.task('config', ['config:server', 'config:client']);
-gulp.task('app', ['config', 'vendor', 'less', 'js', 'html']);
-
-gulp.task('test', ['config', 'cs', 'atoum', 'karma', 'protractor']);
 
 gulp.task('gulp', function(cb) {
     var childGulp,
@@ -364,11 +228,14 @@ gulp.task('gulp', function(cb) {
 gulp.task('watch', function() {
     var watched = {
         gulp: 'gulpfile.js',
-        js: files.js.concat(['client/src/**/*.html']),
+
+        fonts: files.fonts,
         libs: files.libs.concat(['bower_components/node-semver/semver.js']),
-        less: ['client/src/less/**/*.less'],
-        fonts: ['bower_components/font-awesome/fonts/*', 'bower_components/bootstrap/fonts/*'],
-        html: ['client/src/**/*.html']
+        css: files.css,
+
+        less: files.less,
+        js: files.js.concat(files.cache),
+        html: files.html
     };
 
     Object.keys(watched).forEach(function(key) {
@@ -377,22 +244,16 @@ gulp.task('watch', function() {
 });
 
 gulp.task('server', ['app'], function() {
-    connect.server({
-        root: [path.resolve('client/public')],
-        port: 4242,
-        livereload: true,
-        middleware: function(connect, opt) {
-            var container = require('./server/container');
+    var container = require('./server/container');
 
-            require('./bin/server');
+    container.get('app').use(container.get('static'));
 
-            return [
-                function(req, res, next) {
-                    container.get('app').handle(req, res, next);
-                }
-            ]
-        }
-    })
+    try {
+        container.get('server');
+    } catch (e) {}
 });
 
-gulp.task('default', ['app', 'server', 'watch']);
+gulp.task('vendor', ['fonts', 'libs', 'css']);
+gulp.task('app', ['config', 'vendor', 'less', 'js', 'html']);
+gulp.task('test', ['cs', 'app', 'atoum', 'karma', 'protractor']);
+gulp.task('default', ['server', 'watch']);
