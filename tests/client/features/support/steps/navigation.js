@@ -3,11 +3,11 @@ var chai = require('chai'),
 
 module.exports = function(cucumber) {
     browser.goToHomepage = function() {
-        return browser.get('http://127.0.0.1:8080/index_dev.html');
+        return browser.get('http://127.0.0.1:8080/index_test.html');
     };
 
     browser.goTo = function(url) {
-        return browser.navigate().to('http://127.0.0.1:8080/index_dev.html#' + url);
+        return browser.navigate().to('http://127.0.0.1:8080/index_test.html#' + url);
     };
 
     cucumber.Given(/^I am on laboard$/, function(next) {
