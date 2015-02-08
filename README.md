@@ -34,7 +34,7 @@ $ npm install -g bower gulp
 Then clone the source repository and run `gulp`:
 
 ```sh
-$ git clone https://gitlab.com/jubianchi/laboard.git
+$ git clone https://gitlab.com/laboard/laboard.git
 $ cd laboard
 $ npm install
 $ bower install
@@ -63,6 +63,7 @@ Starting the application is really easy:
 $ cd laboard
 $ npm install
 $ bower install
+$ gulp app
 $ fig up
 ```
 
@@ -71,7 +72,20 @@ $ fig up
 If you want to hack into Laboard, first, follow the installation guide. Once you are done, you'll be able to start Laboard 
 locally thanks to [docker](https://www.docker.com/) and [fig](http://www.fig.sh/).
 
-**PRs/MRs/Issues are appreciated**
+Using the `fig up` command you will get an environment with the following containers:
+
+* a `data` container mapping the `.`, `data` and `docker` directories
+* a `redis` container
+* a `commander` container to manage redis (listenning on port `8282`)
+* a `api` container serving the laboard API
+* a `static` container serving the frontend code
+* two `websocket` container serving laboard websocket
+* a `haproxy` container in front of laboard containers
+
+**Every `gulp` related command should be launched on the host machine to avoid side-effects. This includes common tasks
+like `app` or `watch`, and test tasks like `karma` or `test`.
+
+**Before running tests, be sure to define the `NODE_ENV=test`.**
 
 ## License
 
