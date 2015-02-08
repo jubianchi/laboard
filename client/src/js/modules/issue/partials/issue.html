@@ -2,7 +2,7 @@
     <div class="panel-heading clearfix" data-ng-prevent-drag>
         <i class="fa fa-star" data-ng-if="issue.starred"></i>
         <a class="pull-left" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">
-            <strong>#{{ issue.iid }}</strong> {{ issue.title }}
+            <strong>#{{ issue.iid }}</strong> <span data-ng-bind-html="issue.title|reference"></span>
         </a>
         <div class="btn-group" data-authorize="developer">
             <button type="button" class="btn btn-xs btn-default btn-zoom">
@@ -29,7 +29,8 @@
                 <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
                 <li data-ng-if="issue.state != 'closed' && column.closable">
                     <a data-ng-click="close()" class="faa-parent animated-hover">
-                        <i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close</a>
+                        <i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close
+                    </a>
                 </li>
             </ul>
         </div>
@@ -46,9 +47,9 @@
                 <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
                 <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
             </div>
-            <p class="shortdesc">{{ issue.title }}</p>
+            <p class="shortdesc" data-ng-bind-html="issue.title|reference"></p>
 
-            <p class="description" marked="issue.description" data-ng-prevent-drag></p>
+            <p class="description" data-ng-prevent-drag data-ng-bind-html="(issue.description ? issue.description : issue.title)|referenceMarkdown"></p>
 
             <div data-ng-prevent-drag>
                 <span class="label label-default" data-ng-repeat="label in issue.labels">{{label}}</span>

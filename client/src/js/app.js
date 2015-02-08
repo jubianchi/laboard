@@ -35,6 +35,10 @@ angular.module('laboard-frontend')
                 return '<li>' + text + '</li>'
             };
 
+            renderer.image = function(href, title, text) {
+                return '<img src="' + href + '"' + (title ? ' title="' + title + '"' : '') + (text ? ' alt="' + text + '"' : '') + ' class="img-responsive"/>';
+            };
+
             markedProvider.setOptions({
                 gfm: true,
                 tables: true,

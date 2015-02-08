@@ -154,7 +154,10 @@
     margin-bottom: 30px;
 
     .panel-body {
+      -webkit-transition: height .5s, min-height .5s, max-height .5s;
+      transition: height .5s, min-height .5s, max-height .5s;
       min-height: 75px;
+      max-height: 75px;
     }
 
     .btn-zoom .fa-compress {
@@ -164,6 +167,14 @@
     .btn-zoom .fa-expand {
       display: none;
     }
+
+    .shortdesc {
+      display: none;
+    }
+
+    .description {
+      display: block;
+    }
   }
 
   &.zooming, &.zoom {
@@ -172,15 +183,7 @@
 
   &.zoom, &.unzooming {
     .panel-body {
-      height: auto;
-    }
-
-    .shortdesc {
-      display: none;
-    }
-
-    .description {
-      display: block;
+      max-height: none;
     }
   }
 
@@ -198,7 +201,6 @@
   }
 
   &.dragging {
-    width: 300px;
     opacity: 0.5;
     transform: rotate(3deg);
   }

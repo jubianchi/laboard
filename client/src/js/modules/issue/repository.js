@@ -207,7 +207,11 @@ angular.module('laboard-frontend')
                             .customPUT(issue, 'close')
                             .then(
                                 function(issue) {
-                                    deferred.resolve(self.unadd(issue));
+                                    if (!issue.starred) {
+                                        self.unadd(issue)
+                                    }
+
+                                    deferred.resolve(issue);
                                 },
                                 function(err) {
                                     deferred.reject(err);
