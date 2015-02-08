@@ -15,7 +15,7 @@ env:
 
 install:
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -; else true; fi;'
-  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo sh -c \'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list\'; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/google.list; else true; fi;'
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo apt-get update; else true; fi;'
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo apt-get install google-chrome-stable; else true; fi;'
 
