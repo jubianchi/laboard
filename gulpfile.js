@@ -156,7 +156,14 @@ gulp.task('config', function(cb) {
         gulp.src('config/server.json-dist')
             .pipe(rename('server.json'))
             .pipe(gulp.dest('config'))
-            .on('end', cb);
+    }
+
+    if (fs.existsSync('config/client.js')) {
+        cb();
+    } else {
+        gulp.src('config/client.js-dist')
+            .pipe(rename('client.js'))
+            .pipe(gulp.dest('config'))
     }
 });
 
