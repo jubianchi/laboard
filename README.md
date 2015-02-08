@@ -83,7 +83,7 @@ Using the `fig up` command you will get an environment with the following contai
 * a `haproxy` container in front of laboard containers
 
 **Every `gulp` related command should be launched on the host machine to avoid side-effects. This includes common tasks
-like `app` or `watch`, and test tasks like `karma` or `test`.
+like `app` or `watch`, and test tasks like `karma` or `test`.**
 
 **Before running tests, be sure to define the `NODE_ENV=test`.**
 
