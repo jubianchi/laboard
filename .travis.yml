@@ -13,6 +13,10 @@ env:
   - NODE_ENV=test GULP_COMMAND=karma
   - NODE_ENV=test GULP_COMMAND=protractor
 
+before_install:
+  - export DISPLAY=:99.0
+  - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+
 install:
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -; else true; fi;'
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee -a /etc/apt/sources.list.d/google.list; else true; fi;'
