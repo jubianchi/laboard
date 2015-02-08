@@ -9,18 +9,23 @@ matrix:
     - node_js: "0.11"
 
 env:
-  - GULP_COMMAND=atoum
-  - GULP_COMMAND=karma:ci karma
-  - GULP_COMMAND=protractor
+  - NODE_ENV=test GULP_COMMAND=atoum
+  - NODE_ENV=test GULP_COMMAND=karma:ci karma
+  - NODE_ENV=test GULP_COMMAND=protractor
 
 install:
-  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then npm install -g phantomjs@^1.9.7-15 gulp bower; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo sh -c \'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list\'; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo apt-get update; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sudo apt-get install google-chrome-stable; else true; fi;'
+
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then npm install -g gulp bower; else true; fi;'
   - npm install
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then bower install; else true; fi;'
-  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo -n | GITLAB_URL=http://127.0.0.1 LABOARD_PORT=4242 gulp app; else true; fi;'
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then echo -n | GITLAB_URL=http://127.0.0.1 LABOARD_PORT=8080 gulp app; else true; fi;'
 
 script:
-  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then npm start > /dev/null; else true; fi;' &
+  - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then gulp >/dev/null 2>&1 > /dev/null; else true; fi;' &
   - sh -c 'if [ "$GULP_COMMAND" != "atoum" ]; then sleep 5; else true; fi;'
   - gulp $GULP_COMMAND
 
