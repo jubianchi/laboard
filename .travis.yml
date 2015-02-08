@@ -10,7 +10,7 @@ matrix:
 
 env:
   - NODE_ENV=test GULP_COMMAND=atoum
-  - NODE_ENV=test GULP_COMMAND=karma:ci karma
+  - NODE_ENV=test GULP_COMMAND=karma
   - NODE_ENV=test GULP_COMMAND=protractor
 
 install:
