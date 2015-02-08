@@ -23,7 +23,7 @@ COPY ./bin /app/bin
 COPY ./server /app/server
 COPY ./client/public /app/client/public
 COPY ./config/client.js-dist /app/client/public/assets/js/config.js
-COPY ./config/server.json-dist /app/config/server.json
+COPY ./config/server.js-dist /app/config/server.js
 
 WORKDIR /app
 
