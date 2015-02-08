@@ -16,68 +16,100 @@ var gulp = require('gulp'),
     http = require('http'),
     protractor = require("gulp-protractor").protractor,
     webdriver = require("gulp-protractor").webdriver_update,
-    fs = require('fs');
+    fs = require('fs'),
+    files = {
+        fonts: [
+            'bower_components/font-awesome/fonts/*',
+            'bower_components/bootstrap/fonts/*'
+        ],
 
-gulp.task('font-awesome', function() {
-    gulp.src('bower_components/font-awesome/fonts/*')
-        .pipe(gulp.dest('client/public/assets/font'))
+        libs: [
+            'bower_components/es5-shim/es5-shim.js',
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/lodash/dist/lodash.js',
+            'bower_components/marked/lib/marked.js',
+            'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
+            'bower_components/angular-ui-router/release/angular-ui-router.js',
+            'bower_components/restangular/dist/restangular.js',
+            'bower_components/angular-gravatar/build/md5.js',
+            'bower_components/angular-gravatar/build/angular-gravatar.js',
+            'bower_components/angular-loading-bar/build/loading-bar.js',
+            'bower_components/angular-marked/angular-marked.js',
+            'bower_components/moment/moment.js',
+            'bower_components/authenticateJS/build/authenticate.js',
+            'bower_components/bootstrap/dist/js/bootstrap.js',
+            'bower_components/angular-draggable/ngDraggable.js',
+            'bower_components/angular-bootstrap/ui-bootstrap.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            'bower_components/socket.io-client/socket.io.js',
+            'bower_components/node-semver/semver.browser.js',
+            'bower_components/highcharts/highcharts-all.js',
+            'bower_components/highcharts-ng/dist/highcharts-ng.js',
+            'bower_components/highlightjs/highlight.pack.js'
+        ],
+
+        js: [
+            'client/src/js/**/*.js',
+            'data/tmp/templates.js'
+        ],
+
+        css: [
+            'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
+            'bower_components/angular-loading-bar/build/loading-bar.css',
+            'bower_components/highlightjs/styles/default.css',
+            'bower_components/highlightjs/styles/github.css'
+        ],
+
+        less: [
+            'client/src/less/main.less'
+        ],
+
+        cache: [
+            'client/src/js/modules/**/partials/**/*.html'
+        ],
+
+        html: [
+            'client/src/index.html'
+        ]
+    },
+    directories = {
+        assets: {
+            fonts: 'client/public/assets/font',
+            js: 'client/public/assets/js',
+            css: 'client/public/assets/styles'
+        },
+        tmp: 'data/tmp',
+        public: 'client/public'
+    };
+
+if (process.env.NODE_ENV === 'test') {
+    files.libs.push('bower_components/angular-mocks/angular-mocks.js');
+    files.js.push('client/src/app_test.js');
+    files.html = 'client/src/index_test.html';
+}
+
+gulp.task('fonts', function() {
+    gulp.src(files.fonts)
+        .pipe(gulp.dest(directories.assets.fonts))
         .pipe(connect.reload());
-});
-
-gulp.task('bootstrap', function() {
-    gulp.src('bower_components/bootstrap/fonts/*')
-        .pipe(gulp.dest('client/public/assets/font'))
-        .pipe(connect.reload());
-});
-
-var libs = [
-    'bower_components/es5-shim/es5-shim.js',
-    'bower_components/jquery/dist/jquery.js',
-    'bower_components/lodash/dist/lodash.js',
-    'bower_components/marked/lib/marked.js',
-    'bower_components/angular/angular.js',
-    'bower_components/angular-route/angular-route.js',
-    'bower_components/angular-ui-router/release/angular-ui-router.js',
-    'bower_components/restangular/dist/restangular.js',
-    'bower_components/angular-gravatar/build/md5.js',
-    'bower_components/angular-gravatar/build/angular-gravatar.js',
-    'bower_components/angular-loading-bar/build/loading-bar.js',
-    'bower_components/angular-marked/angular-marked.js',
-    'bower_components/moment/moment.js',
-    'bower_components/authenticateJS/build/authenticate.js',
-    'bower_components/bootstrap/dist/js/bootstrap.js',
-    'bower_components/angular-draggable/ngDraggable.js',
-    'bower_components/angular-bootstrap/ui-bootstrap.js',
-    'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-    'bower_components/socket.io-client/socket.io.js',
-    'bower_components/node-semver/semver.browser.js',
-    'bower_components/highcharts/highcharts-all.js',
-    'bower_components/highcharts-ng/dist/highcharts-ng.js',
-    'bower_components/highlightjs/highlight.pack.js'
-];
-gulp.task('libs:mock', function() {
-    libs.push('bower_components/angular-mocks/angular-mocks.js');
 });
 
 gulp.task('libs', function(cb) {
     exec(
         'cd bower_components/node-semver && ( cat head.js.txt; cat semver.js | egrep -v \'^ *\\/\\* nomin \\*\\/\' | perl -pi -e \'s/debug\\([^\\)]+\\)//g\'; cat foot.js.txt ) > semver.browser.js',
         function (err, stdout, stderr) {
-            if (stdout) console.log(stdout);
-            if (stderr) console.log(stderr);
+            if (stdout) {
+                console.log(stdout);
+            }
 
-            gulp.src(libs)
+            if (stderr) {
+                console.log(stderr);
+            }
+
+            gulp.src(files.libs)
                 .pipe(concat('vendor.js'))
-                .pipe(gulp.dest('client/public/assets/js'));
-
-            gulp.src([
-                'bower_components/font-awesome-animation/dist/font-awesome-animation.css',
-                'bower_components/angular-loading-bar/build/loading-bar.css',
-                'bower_components/highlightjs/styles/default.css',
-                'bower_components/highlightjs/styles/github.css'
-            ])
-                .pipe(concat('vendor.css'))
-                .pipe(gulp.dest('client/public/assets/styles'));
+                .pipe(gulp.dest(directories.assets.js));
 
             gulp.src([
                 'bower_components/nyancat/nyancat.gif',
@@ -91,84 +123,69 @@ gulp.task('libs', function(cb) {
     );
 });
 
-gulp.task('libs:dev', ['libs:mock', 'libs']);
+gulp.task('css', function() {
+    gulp.src(files.css)
+        .pipe(concat('vendor.css'))
+        .pipe(gulp.dest(directories.assets.css));
+});
 
 gulp.task('less', function() {
-    gulp.src('client/src/less/main.less')
+    gulp.src(files.less)
         .pipe(less())
         .pipe(prefix({ cascade: true }))
-        .pipe(gulp.dest('client/public/assets/styles'))
+        .pipe(gulp.dest(directories.assets.css))
         .pipe(connect.reload());
 });
 
 gulp.task('cache', function() {
-    gulp.src('client/src/js/modules/**/partials/**/*.html')
-        .pipe(templateCache('templates.js', {
-            module: 'laboard-frontend'
-        }))
-        .pipe(gulp.dest('tmp'))
+    gulp.src(files.cache)
+        .pipe(templateCache('templates.js', { module: 'laboard-frontend' }))
+        .pipe(gulp.dest(directories.tmp))
         .pipe(connect.reload());
-});
-
-var js = [
-    'client/src/js/**/*.js',
-    'tmp/templates.js'
-];
-
-gulp.task('js:mock', function() {
-    js.push('client/src/app_dev.js');
 });
 
 gulp.task('js', ['config', 'cache'], function() {
     gulp.src(['config/client.js'])
         .pipe(rename('config.js'))
-        .pipe(gulp.dest('client/public/assets/js'))
+        .pipe(gulp.dest(directories.assets.js))
         .pipe(connect.reload());
 
-    gulp.src(js)
+    gulp.src(files.js)
         .pipe(concat('app.js'))
-        .pipe(gulp.dest('client/public/assets/js'))
+        .pipe(gulp.dest(directories.assets.js))
         .pipe(connect.reload());
 });
-
-gulp.task('js:dev', ['js:mock', 'js']);
 
 gulp.task('html', function() {
-    gulp.src(['client/src/*.html'])
-        .pipe(gulp.dest('client/public'))
-        .pipe(connect.reload());
-});
-
-gulp.task('images', function() {
-    gulp.src('client/src/images/**/*')
-        .pipe(gulp.dest('client/public/assets/images'))
+    gulp.src(files.html)
+        .pipe(gulp.dest(directories.public))
         .pipe(connect.reload());
 });
 
 gulp.task('cs', function() {
-    return gulp.src(['client/src/js/**/*.js', 'tests/**/*.js', 'server/**/*.js'])
+    return gulp.src([
+            'client/src/js/**/*.js',
+            'tests/**/*.js',
+            'server/**/*.js',
+            'gulpfile.js'
+        ])
         .pipe(jscs(__dirname + '/.jscsrc'));
 });
 
-var autoWatch = true;
-gulp.task('karma', ['libs:dev'], function(done) {
+gulp.task('karma', ['libs'], function(done) {
     return karma.start(
         {
             configFile: __dirname + '/tests/client/karma.conf.js',
-            autoWatch: autoWatch,
-            singleRun: !autoWatch
+            autoWatch: false,
+            singleRun: true
         },
         done
     );
 });
 
-gulp.task('karma:ci', function() {
-    autoWatch = false;
-});
-
 gulp.task('webdriver', webdriver);
 
-gulp.task('protractor', ['app:dev', 'webdriver'], function(done) {
+gulp.task('protractor', ['app', 'webdriver'], function(done) {
     gulp.src(['./tests/client/features/**/*.feature'])
         .pipe(protractor({
             configFile: __dirname + '/tests/client/protractor.conf.js'
@@ -197,11 +214,10 @@ gulp.task('config:server', function(cb) {
     }
 
     var src = gulp.src('config/server.json-dist'),
-        defaults= {
-            gitlabUrl: process.env['GITLAB_URL'] || 'https://gitlab.com',
-            serverPort: process.env['LABOARD_PORT'] || 4343,
-            gitlabVersion: process.env['GITLAB_VERSION'] || '7.4',
-            dataDir: process.env['LABOARD_DATA_DIR'] || '../data'
+        defaults = {
+            gitlabUrl: process.env.GITLAB_URL || 'https://gitlab.com',
+            serverPort: process.env.LABOARD_PORT || 4343,
+            gitlabVersion: process.env.GITLAB_VERSION || '7.4'
         };
 
     if (process.stdin.isTTY) {
@@ -234,15 +250,6 @@ gulp.task('config:server', function(cb) {
                         validate: function (value) {
                             return parseInt(value, 10) > 0;
                         }
-                    },
-                    {
-                        type: 'input',
-                        name: 'dataDir',
-                        message: '[SEVRER] Laboard data directory',
-                        default: defaults.dataDir,
-                        validate: function (value) {
-                            return fs.existsSync(value);
-                        }
                     }
                 ],
                 function (res) {
@@ -261,8 +268,7 @@ gulp.task('config:server', function(cb) {
             .pipe(template({
                 gitlabUrl: defaults.gitlabUrl,
                 gitlabVersion: defaults.gitlabVersion,
-                serverPort: defaults.serverPort,
-                dataDir: defaults.dataDir
+                serverPort: defaults.serverPort
             }))
             .pipe(rename('server.json'))
             .pipe(gulp.dest('config'))
@@ -280,8 +286,8 @@ gulp.task('config:client', ['config:server'], function(cb) {
     var defaults = require('./config/server.json'),
         src = gulp.src('config/client.js-dist');
 
-    defaults.gitlab_url = process.env['GITLAB_URL'] || defaults.gitlab_url;
-    defaults.port = process.env['LABOARD_PORT'] || defaults.port;
+    defaults.gitlab_url = process.env.GITLAB_URL || defaults.gitlab_url;
+    defaults.port = process.env.LABOARD_PORT || defaults.port;
 
     if (process.stdin.isTTY) {
         var vars;
@@ -328,22 +334,20 @@ gulp.task('config:client', ['config:server'], function(cb) {
     }
 });
 
-gulp.task('vendor', ['font-awesome', 'bootstrap', 'libs']);
-gulp.task('vendor:dev', ['font-awesome', 'bootstrap', 'libs:dev']);
+gulp.task('vendor', ['fonts', 'libs', 'css']);
 gulp.task('config', ['config:server', 'config:client']);
-gulp.task('test', ['config', 'cs', 'atoum', 'karma:ci', 'karma', 'protractor']);
-gulp.task('app', ['config', 'vendor', 'less', 'js', 'html', 'images']);
-gulp.task('app:dev', ['config', 'vendor:dev', 'less', 'js:dev', 'html', 'images']);
+gulp.task('app', ['config', 'vendor', 'less', 'js', 'html']);
 
+gulp.task('test', ['config', 'cs', 'atoum', 'karma', 'protractor']);
 
 gulp.task('gulp', function(cb) {
-    var child_gulp,
+    var childGulp,
         spawn = function() {
-            if(child_gulp) {
-                child_gulp.kill();
+            if (childGulp) {
+                childGulp.kill();
             }
 
-            child_gulp = require('child_process').spawn(
+            childGulp = require('child_process').spawn(
                 'gulp',
                 Array.prototype.slice.call(process.argv, 2),
                 {
@@ -363,10 +367,8 @@ gulp.task('watch', function() {
         js: js.concat(['client/src/**/*.html']),
         libs: libs.concat(['bower_components/node-semver/semver.js']),
         less: ['client/src/less/**/*.less'],
-        'font-awesome': ['bower_components/font-awesome/fonts/*'],
-        bootstrap: ['bower_components/bootstrap/fonts/*'],
-        html: ['client/src/**/*.html'],
-        images: ['client/src/images/**/*']
+        fonts: ['bower_components/font-awesome/fonts/*', 'bower_components/bootstrap/fonts/*'],
+        html: ['client/src/**/*.html']
     };
 
     Object.keys(watched).forEach(function(key) {
@@ -374,7 +376,7 @@ gulp.task('watch', function() {
     });
 });
 
-gulp.task('server', ['app:dev'], function() {
+gulp.task('server', ['app'], function() {
     connect.server({
         root: [path.resolve('client/public')],
         port: 4242,
@@ -393,4 +395,4 @@ gulp.task('server', ['app:dev'], function() {
     })
 });
 
-gulp.task('default', ['app:dev', 'server', 'watch']);
+gulp.task('default', ['app', 'server', 'watch']);

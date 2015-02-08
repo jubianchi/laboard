@@ -13,15 +13,9 @@ module.exports.config = {
         '../tests/features/**/*.feature'
     ],
 
-    multiCapabilities: [
-        {
-            browserName: 'phantomjs',
-            'phantomjs.binary.path': require('phantomjs').path
-        },
-        {
-            'browserName': 'chrome'
-        }
-    ],
+    capabilities: {
+        'browserName': 'chrome'
+    },
 
     framework: 'cucumber',
 
