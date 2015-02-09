@@ -45,7 +45,13 @@ var gulp = require('gulp'),
         ],
 
         js: [
-            'client/src/js/**/*.js',
+            'client/src/js/app.js',
+            'client/src/js/auth.js',
+            'client/src/js/router.js',
+            'client/src/js/directive/**/*.js',
+            'client/src/js/factory/**/*.js',
+            'client/src/js/filter/**/*.js',
+            'client/src/js/modules/**/*.js',
             'data/tmp/templates.js'
         ],
 
@@ -130,18 +136,20 @@ gulp.task('less', function() {
         .pipe(gulp.dest(directories.assets.css));
 });
 
-gulp.task('js', function() {
-    gulp.src(files.cache)
-        .pipe(templateCache('templates.js', { module: 'laboard-frontend' }))
-        .pipe(gulp.dest(directories.tmp));
-
+gulp.task('js', ['config:client'], function() {
     gulp.src(['config/client.js'])
         .pipe(rename('config.js'))
         .pipe(gulp.dest(directories.assets.js));
 
-    gulp.src(files.js)
-        .pipe(concat('app.js'))
-        .pipe(gulp.dest(directories.assets.js));
+
+    gulp.src(files.cache)
+        .pipe(templateCache('templates.js', { module: 'laboard-frontend' }))
+        .pipe(gulp.dest(directories.tmp))
+        .on('end', function() {
+            gulp.src(files.js)
+                .pipe(concat('app.js'))
+                .pipe(gulp.dest(directories.assets.js));
+        })
 });
 
 gulp.task('html', function() {
@@ -149,21 +157,25 @@ gulp.task('html', function() {
         .pipe(gulp.dest(directories.public));
 });
 
-gulp.task('config', function(cb) {
-    if (fs.existsSync('config/server.json')) {
-        cb();
-    } else {
-        gulp.src('config/server.json-dist')
-            .pipe(rename('server.json'))
-            .pipe(gulp.dest('config'))
-    }
-
-    if (fs.existsSync('config/client.js')) {
-        cb();
-    } else {
+gulp.task('config:client', function(cb) {
+    if (!fs.existsSync('config/client.js')) {
         gulp.src('config/client.js-dist')
             .pipe(rename('client.js'))
             .pipe(gulp.dest('config'))
+            .on('end', cb);
+    } else {
+        cb();
+    }
+});
+
+gulp.task('config:server', function(cb) {
+    if (!fs.existsSync('config/server.js')) {
+        gulp.src('config/server.js-dist')
+            .pipe(rename('server.js'))
+            .pipe(gulp.dest('config'))
+            .on('end', cb);
+    } else {
+        cb();
     }
 });
 
@@ -260,6 +272,7 @@ gulp.task('server', ['app'], function() {
     } catch (e) {}
 });
 
+gulp.task('config', ['config:client', 'config:server']);
 gulp.task('vendor', ['fonts', 'libs', 'css']);
 gulp.task('app', ['config', 'vendor', 'less', 'js', 'html']);
 gulp.task('test', ['cs', 'app', 'atoum', 'karma', 'protractor']);
