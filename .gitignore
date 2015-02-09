@@ -1,5 +1,5 @@
 config/client.js
-config/server.json
+config/server.js
 node_modules
 bower_components
 client/public
