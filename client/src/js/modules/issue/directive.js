@@ -5,8 +5,14 @@ angular.module('laboard-frontend')
             return {
                 restrict: 'A',
                 link: function($scope, $element, $attrs) {
-                    var zoom = function() {
-                            var viewportWidth = $(window).width();
+                    var viewportWidth,
+                        escape = function(e) {
+                            if (e.keyCode === 27) {
+                                unzoom();
+                            }
+                        },
+                        zoom = function() {
+                            viewportWidth = $(window).width();
 
                             $element.originalBounds = {
                                 top: $element.offset().top,
@@ -19,10 +25,11 @@ angular.module('laboard-frontend')
                             if (!$element.originalBounds.cont) {
                                 $element.originalBounds.cont = $('<div/>');
                                 $element.originalBounds.cont.click(function(e) {
-                                    if ($(e.target).is($element.originalBounds.cont) && $element.zoomed) {
+                                    if ($(e.target).is($element.originalBounds.cont)) {
                                         unzoom();
                                     }
                                 });
+                                $(document).on('keyup', escape);
                             }
 
                             $('#overlay')
@@ -56,7 +63,7 @@ angular.module('laboard-frontend')
                             $element.zoomed = true;
                         },
                         unzoom = function() {
-                            var viewportWidth = $(window).width();
+                            viewportWidth = $(window).width();
 
                             $element
                                 .removeClass('zoom')
@@ -103,6 +110,7 @@ angular.module('laboard-frontend')
                             });
 
                             $element.zoomed = false;
+                            $(document).unbind('keyup', escape);
                         };
 
                     $('.btn-zoom', $element).click(function() {
