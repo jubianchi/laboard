@@ -121,11 +121,11 @@ angular.module('laboard-frontend')
                         $rest.all('projects/' + project.path_with_namespace + '/labels')
                             .getList()
                             .then(
-                            function (labels) {
-                                deferred.resolve(labels);
-                            },
-                            deferred.reject
-                        );
+                                function (labels) {
+                                    deferred.resolve(labels);
+                                },
+                                deferred.reject
+                            );
 
                         return deferred.promise;
                     }

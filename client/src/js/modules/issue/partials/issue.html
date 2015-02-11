@@ -26,7 +26,7 @@
                         <i class="fa fa-thumb-tack faa-tada animated-hover"></i> Unpin
                     </a>
                 </li>
-                <li><a target="_blank" href="{{ ::gitlabUrl }}/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
+                <li><a target="_blank" href="/gitlab/{{ project.path_with_namespace }}/issues/{{ issue.iid }}/edit" class="faa-parent animated-hover"><i class="fa fa-pencil faa-tada animated-hover"></i> Edit</a></li>
                 <li data-ng-if="issue.state != 'closed' && column.closable">
                     <a data-ng-click="close()" class="faa-parent animated-hover">
                         <i class="fa fa-check-circle-o faa-tada animated-hover"></i> Close
@@ -37,22 +37,25 @@
     </div>
     <div class="panel-body clearfix">
         <div>
-            <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
-            <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
+            <div class="avatars">
+                <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
+                <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
 
-            <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
-                <div class="overlay" data-ng-click="assign()" data-authorize="developer">
-                    <span><i class="fa fa-user"></i></span>
+                <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
+                    <div class="overlay" data-ng-click="assign()" data-authorize="developer">
+                        <span><i class="fa fa-user"></i></span>
+                    </div>
+                    <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
+                    <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
                 </div>
-                <img class="avatar assignee" data-ng-src="{{issue.assignee.avatar_url}}" data-ng-if="issue.assignee.avatar_url"/>
-                <img class="avatar assignee" data-gravatar-src="issue.assignee.email" data-gravatar-size="100" data-ng-if="issue.assignee.email"/>
             </div>
+
             <p class="shortdesc" data-ng-bind-html="issue.title|reference"></p>
 
             <p class="description" data-ng-prevent-drag data-ng-bind-html="(issue.description ? issue.description : issue.title)|referenceMarkdown"></p>
 
-            <div data-ng-prevent-drag>
-                <span class="label label-default" data-ng-repeat="label in issue.labels">{{label}}</span>
+            <div data-ng-prevent-drag class="labels">
+                <span class="label label-default" data-ng-repeat="label in issue.labels" style="background-color: {{ label.color }}">{{ label.name }}</span>
             </div>
         </div>
     </div>

@@ -47,18 +47,22 @@
     }
   }
 
-  .avatar {
-    width: 40px;
-    margin-right: 0px;
+  .avatars {
+    width: 70px;
+    height: 70px;
     float: left;
-    border: 2px solid @panel-default-border;
 
-    &.assignee {
-      position: relative;
-      top: 16px;
-      left: -22px;
-      margin-right: 0;
-      margin-bottom: 10px;
+    .avatar {
+      width: 40px;
+      margin-right: 0px;
+      float: left;
+      border: 2px solid @panel-default-border;
+
+      &.assignee {
+        position: relative;
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
     }
   }
 
@@ -157,7 +161,7 @@
       -webkit-transition: height .5s, min-height .5s, max-height .5s;
       transition: height .5s, min-height .5s, max-height .5s;
       min-height: 75px;
-      max-height: 75px;
+      max-height: 130px;
     }
 
     .btn-zoom .fa-compress {

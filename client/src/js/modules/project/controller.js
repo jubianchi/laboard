@@ -40,7 +40,9 @@ angular.module('laboard-frontend')
                         }
                     );
 
-                $root.project.labels = $projects.labels($root.project);
+                $projects.labels($root.project).then(function(labels) {
+                    $root.project.labels = labels;
+                });
 
                 $columns.all()
                     .then(

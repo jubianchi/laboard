@@ -252,7 +252,7 @@ gulp.task('watch', function() {
         libs: files.libs.concat(['bower_components/node-semver/semver.js']),
         css: files.css,
 
-        less: files.less,
+        less: 'client/src/less/**/*.less',
         js: files.js.concat(files.cache),
         html: files.html
     };
