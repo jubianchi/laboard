@@ -9,9 +9,19 @@ angular.module('laboard-frontend')
                         .getList()
                         .then(
                             function (issues) {
-                                self.$objects = _.sortBy(issues, 'iid');
+                                $root.project.labels.then(function(labels) {
+                                    issues.map(function(issue) {
+                                        issue.labels.forEach(function(label, key) {
+                                            issue.labels[key] = _.find(labels, { name: label });
+                                        });
 
-                                deferred.resolve(issues);
+                                        return issue;
+                                    });
+
+                                    self.$objects = _.sortBy(issues, 'iid');
+
+                                    deferred.resolve(issues);
+                                });
                             },
                             deferred.reject
                         );
@@ -26,7 +36,13 @@ angular.module('laboard-frontend')
                         .get()
                         .then(
                             function (issue) {
-                                deferred.resolve(self.add(issue));
+                                $root.project.labels.then(function(labels) {
+                                    issue.labels.forEach(function(label, key) {
+                                        issue.labels[key] = _.find(labels, { name: label });
+                                    });
+
+                                    deferred.resolve(self.add(issue));
+                                });
                             },
                             deferred.reject
                         );

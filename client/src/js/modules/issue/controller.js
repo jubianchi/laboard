@@ -40,17 +40,6 @@ angular.module('laboard-frontend')
                 });
             };
 
-            $scope.issue.labels.forEach(function(label, key) {
-                if (label.color) {
-                    return;
-                }
-
-                $scope.issue.labels[key] = {
-                    name: label,
-                    color: _.find($rootScope.project.labels, { name: label }).color
-                };
-            });
-
             var modal;
             $scope.assign = function() {
                 var issue = $scope.issue;
