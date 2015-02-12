@@ -50,6 +50,8 @@
     "karma-chrome-launcher": "^0.1.7",
     "karma-story-reporter": "^0.2.2",
     "mocha": "^1.21.4",
-    "protractor": "~1.2.0"
+    "protractor": "~1.2.0",
+    "gulp-uglify": "^1.1.0",
+    "gulp-cssmin": "^0.1.6"
   }
 }

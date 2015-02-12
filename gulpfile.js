@@ -4,6 +4,12 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     prefix = require('gulp-autoprefixer'),
     rename = require('gulp-rename'),
+    uglify = function() {
+        return require('gulp-uglify')({
+            mangle: false
+        })
+    },
+    cssmin = require('gulp-cssmin'),
     templateCache = require('gulp-angular-templatecache'),
     jscs = require('gulp-jscs'),
     karma = require('karma').server,
@@ -107,9 +113,13 @@ gulp.task('libs', function(cb) {
                 console.log(stderr);
             }
 
-            gulp.src(files.libs)
-                .pipe(concat('vendor.js'))
-                .pipe(gulp.dest(directories.assets.js));
+            var src = gulp.src(files.libs).pipe(concat('vendor.js'));
+
+            if (process.env.NODE_ENV === 'production') {
+                src = src.pipe(uglify());
+            }
+
+            src.pipe(gulp.dest(directories.assets.js));
 
             gulp.src([
                 'bower_components/nyancat/nyancat.gif',
@@ -124,31 +134,47 @@ gulp.task('libs', function(cb) {
 });
 
 gulp.task('css', function() {
-    gulp.src(files.css)
-        .pipe(concat('vendor.css'))
-        .pipe(gulp.dest(directories.assets.css));
+    var src = gulp.src(files.css).pipe(concat('vendor.css'));
+
+    if (process.env.NODE_ENV === 'production') {
+        src = src.pipe(cssmin());
+    }
+
+    src.pipe(gulp.dest(directories.assets.css));
 });
 
 gulp.task('less', function() {
-    gulp.src(files.less)
+    var src = gulp.src(files.less)
         .pipe(less())
         .pipe(prefix({ cascade: true }))
-        .pipe(gulp.dest(directories.assets.css));
+
+    if (process.env.NODE_ENV === 'production') {
+        src = src.pipe(cssmin());
+    }
+
+    src.pipe(gulp.dest(directories.assets.css));
 });
 
 gulp.task('js', ['config:client'], function() {
-    gulp.src(['config/client.js'])
-        .pipe(rename('config.js'))
-        .pipe(gulp.dest(directories.assets.js));
+    var src = gulp.src(['config/client.js']).pipe(rename('config.js'));
 
+    if (process.env.NODE_ENV === 'production') {
+        src = src.pipe(uglify());
+    }
+
+    src.pipe(gulp.dest(directories.assets.js));
 
     gulp.src(files.cache)
         .pipe(templateCache('templates.js', { module: 'laboard-frontend' }))
         .pipe(gulp.dest(directories.tmp))
         .on('end', function() {
-            gulp.src(files.js)
-                .pipe(concat('app.js'))
-                .pipe(gulp.dest(directories.assets.js));
+            var src = gulp.src(files.js).pipe(concat('app.js'));
+
+            if (process.env.NODE_ENV === 'production') {
+                src = src.pipe(uglify());
+            }
+
+            src.pipe(gulp.dest(directories.assets.js));
         })
 });
 
@@ -159,8 +185,13 @@ gulp.task('html', function() {
 
 gulp.task('config:client', function(cb) {
     if (!fs.existsSync('config/client.js')) {
-        gulp.src('config/client.js-dist')
-            .pipe(rename('client.js'))
+        var src = gulp.src('config/client.js-dist').pipe(rename('client.js'));
+
+        if (process.env.NODE_ENV === 'production') {
+            src = src.pipe(uglify());
+        }
+
+        src
             .pipe(gulp.dest('config'))
             .on('end', cb);
     } else {
