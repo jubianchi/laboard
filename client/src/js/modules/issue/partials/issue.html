@@ -1,4 +1,4 @@
-<div data-zoomable data-collapsible class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
+<div data-zoomable data-collapsible data-draggable class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix" data-ng-prevent-drag>
         <i class="fa fa-star" data-ng-if="issue.starred"></i>
         <a class="pull-left" href="/gitlab/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">

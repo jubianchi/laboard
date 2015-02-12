@@ -5,9 +5,15 @@
        -o-transition: all .5s;
           transition: all .5s;
 
-  div:nth-last-child(1) {
+  div:first-child {
     .column {
-      border-right: 1px solid @panel-default-border;
+      border-left: none;
+    }
+  }
+
+  div:last-child {
+    .column {
+      border-right: none;
     }
   }
 }
@@ -20,7 +26,7 @@
   border-bottom: none;
   display: inline-block;
   border-width: 1px;
-  border-right: none;
+  border-left: none;
   border-radius: 0;
 
   & > .panel-heading {

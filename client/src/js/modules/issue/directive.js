@@ -143,4 +143,20 @@ angular.module('laboard-frontend')
                 }
             };
         }
+    ])
+    .directive('draggable', [
+        function() {
+            return {
+                restrict: 'A',
+                link: function($scope, $element, $attrs) {
+                    $element.mousedown(function() {
+                        $element.css('width', $element.outerWidth());
+                    });
+
+                    $element.mouseup(function() {
+                        $element.css('width', '');
+                    });
+                }
+            };
+        }
     ]);

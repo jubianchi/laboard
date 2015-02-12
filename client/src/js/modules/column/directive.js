@@ -49,7 +49,7 @@ angular.module('laboard-frontend')
                             $('[data-column]', $element)
                                 .css('height', height - (50 + (width > $(window).width() ? 5 : 0)))
                                 .children('.panel-body')
-                                    .css('height', height - (70 + 48 - (width > $(window).width() ? 0 : 5)));
+                                    .css('height', height - (60 + 48 - (width > $(window).width() ? 0 : 5)));
                         },
                         resizeWidth = function() {
                             var columns = $('[data-column]', $element),
@@ -141,6 +141,10 @@ angular.module('laboard-frontend')
                                 $element.css({
                                     'border-color': color
                                 });
+
+                                var id = $element.attr('id');
+                                document.styleSheets[2].insertRule('#' + id + ' ::-webkit-scrollbar-track { background-color: ' + alpha(color, 0.4) + '; }', 0);
+                                document.styleSheets[2].insertRule('#' + id + ' ::-webkit-scrollbar-thumb { background-color: ' + alpha(color, 0.6) + '; }', 0);
                             }
                         }
                     );

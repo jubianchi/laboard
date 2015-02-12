@@ -1,6 +1,5 @@
 .custom-scrollbar(@width-height: 5px, @bkg: #F5F5F5, @fkg: #C2C2C2) {
   ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: @bkg;
   }
 
@@ -16,7 +15,7 @@
 
   ::-webkit-scrollbar-thumb:vertical:hover,
   ::-webkit-scrollbar-thumb:horizontal:hover {
-    background: darken(@fkg, 30%);
+    background: @fkg;
   }
 
   ::-webkit-scrollbar-button {
