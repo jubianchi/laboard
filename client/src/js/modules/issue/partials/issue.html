@@ -38,8 +38,8 @@
     <div class="panel-body clearfix">
         <div>
             <div class="avatars">
-                <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip="{{issue.author.name}}"/>
-                <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip="{{issue.author.name}}"/>
+                <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip-trigger data-tooltip="{{issue.author.name}}"/>
+                <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip-trigger data-tooltip="{{issue.author.name}}"/>
 
                 <div class="box" data-ng-prevent-drag data-ng-class="{in: !issue.assignee}">
                     <div class="overlay" data-ng-click="assign()" data-authorize="developer">
@@ -60,10 +60,10 @@
         </div>
     </div>
     <div class="panel-footer" data-ng-prevent-drag>
-        <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
+        <moment datetime="issue.created_at" data-tooltip-trigger data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
         <strong>
             {{ issue.milestone.title }}
-            <small><moment datetime="issue.milestone.due_date" data-tooltip="{{ issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>
+            <small><moment datetime="issue.milestone.due_date" data-tooltip-trigger data-tooltip="{{ issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>
         </strong>
     </div>
 </div>

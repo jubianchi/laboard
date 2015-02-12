@@ -29,7 +29,7 @@
                     <strong>#{{ issue.iid }}</strong> - {{ issue.title }}
 
                     <div style="margin-top: 15px;">
-                        Created <moment datetime="issue.created_at" data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
+                        Created <moment datetime="issue.created_at" data-tooltip-trigger data-tooltip="{{ issue.created_at|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment>
                         <strong class="pull-right">
                             {{ issue.milestone.title }}
                             <small><moment datetime="issue.milestone.due_date" data-tooltip="{{ issue.milestone.due_date|date:'EEEE, MMMM d, y HH:mm:ss' }}" data-tooltip-placement="bottom"></moment></small>

@@ -13,8 +13,10 @@ angular.module('laboard-frontend', [
 
 angular.module('laboard-frontend')
     .config([
-        'cfpLoadingBarProvider', 'markedProvider',
-        function(cfpLoadingBarProvider, markedProvider) {
+        'cfpLoadingBarProvider', 'markedProvider', '$tooltipProvider',
+        function(cfpLoadingBarProvider, markedProvider, tooltipProvider) {
+            //tooltipProvider.options({animation: false});
+
             cfpLoadingBarProvider.includeSpinner = false;
             cfpLoadingBarProvider.includeBar = true;
 

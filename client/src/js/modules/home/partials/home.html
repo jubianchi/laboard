@@ -15,7 +15,7 @@
             <form class="navbar-form navbar-left" data-ng-show="project" data-ng-include="'home/partials/search.html'"></form>
 
             <div class="nav navbar-nav navbar-left">
-                <button data-ng-show="project" data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
+                <button data-ng-show="project" data-tooltip-trigger data-tooltip="Switch project" data-tooltip-placement="bottom" type="button" class="btn btn-default navbar-btn" data-ng-click="switchProject()"><i class="fa fa-exchange"></i></button>
             </div>
 
             <div class="nav navbar-nav navbar-left" data-ui-view="menu"></div>
