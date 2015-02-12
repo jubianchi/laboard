@@ -123,4 +123,24 @@ angular.module('laboard-frontend')
                 }
             };
         }
+    ])
+    .directive('collapsible', [
+        function() {
+            return {
+                restrict: 'A',
+                link: function($scope, $element, $attrs) {
+                    var panel = $('.panel-body', $element),
+                        body = $('.issue-body', panel);
+
+                    $element.hover(
+                        function() {
+                            panel.css('max-height', body.outerHeight());
+                        },
+                        function() {
+                            panel.css('max-height', '');
+                        }
+                    );
+                }
+            };
+        }
     ]);

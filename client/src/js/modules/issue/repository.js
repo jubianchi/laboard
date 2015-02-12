@@ -11,8 +11,10 @@ angular.module('laboard-frontend')
                             function (issues) {
                                 $root.project.labels.then(function(labels) {
                                     issues.map(function(issue) {
+                                        issue.tags = [];
+
                                         issue.labels.forEach(function(label, key) {
-                                            issue.labels[key] = _.find(labels, { name: label });
+                                            issue.tags[key] = _.find(labels, { name: label });
                                         });
 
                                         return issue;
@@ -37,8 +39,10 @@ angular.module('laboard-frontend')
                         .then(
                             function (issue) {
                                 $root.project.labels.then(function(labels) {
+                                    issue.tags = [];
+
                                     issue.labels.forEach(function(label, key) {
-                                        issue.labels[key] = _.find(labels, { name: label });
+                                        issue.tags[key] = _.find(labels, { name: label });
                                     });
 
                                     deferred.resolve(self.add(issue));

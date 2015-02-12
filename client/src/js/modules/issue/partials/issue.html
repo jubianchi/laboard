@@ -1,4 +1,4 @@
-<div data-zoomable class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
+<div data-zoomable data-collapsible class="issue {{ issue.state === 'closed' ? 'closed' : ''}}" data-ng-class="'panel-' + (issue.theme || 'default')" data-ng-drag="draggable" data-ng-drag-data="issue" data-ng-drag-success="drag()" data-ng-controller="IssueController">
     <div class="panel-heading clearfix" data-ng-prevent-drag>
         <i class="fa fa-star" data-ng-if="issue.starred"></i>
         <a class="pull-left" href="/gitlab/{{ project.path_with_namespace }}/issues/{{ issue.iid }}" target="_blank">
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="panel-body clearfix">
-        <div>
+        <div class="issue-body">
             <div class="avatars">
                 <img class="avatar" data-ng-src="{{issue.author.avatar_url}}" data-ng-if="issue.author.avatar_url" data-tooltip-trigger data-tooltip="{{issue.author.name}}"/>
                 <img class="avatar" data-gravatar-src="issue.author.email" data-gravatar-size="100" data-ng-if="issue.author.email" data-tooltip-trigger data-tooltip="{{issue.author.name}}"/>
@@ -55,7 +55,7 @@
             <p class="description" data-ng-prevent-drag data-ng-bind-html="(issue.description ? issue.description : issue.title)|referenceMarkdown"></p>
 
             <div data-ng-prevent-drag class="labels">
-                <span class="label label-default" data-ng-repeat="label in issue.labels" style="background-color: {{ label.color }}">{{ label.name }}</span>
+                <span class="label label-default" data-ng-repeat="tag in issue.tags" style="background-color: {{ tag.color }}">{{ tag.name }}</span>
             </div>
         </div>
     </div>
