@@ -11,8 +11,8 @@ A kanban board made for Gitlab
 
 ## Requirements
 
-* nodejs `~ 0.10.26`
-* Gitlab `>= 7.1`
+* nodejs `~ 0.10.26` or docker `>= 1.4.1`
+* Gitlab `> 7.1`
 
 ## How does it work
 
@@ -38,7 +38,6 @@ $ git clone https://gitlab.com/laboard/laboard.git
 $ cd laboard
 $ npm install
 $ bower install
-$ gulp app
 ```
 
 ## Configuration
@@ -57,15 +56,33 @@ The Laboard configuration is minimal:
 
 ## Start
 
-Starting the application is really easy:
+### Docker
+
+If you already have [docker](https://www.docker.com/) installed, starting laboard is a simple one-liner:
 
 ```sh
-$ cd laboard
+$ docker run --name=redis --detach redis
+$ docker run --name=laboard --link=redis:redis --publish=8080:8080 laboard/laboard
+```
+
+Ok, it's a two-liner actually.
+
+
+Laboard should now be reachable using the [http://localhost:8080](http://localhost:8080) URL. If you are running docker through
+[boot2docker](http://boot2docker.io/) you will have to replace `localhost` with the URL of the VM. You can get it by running `boot2docker ip`.
+
+### No docker
+
+If you don't want to install docker on your machine, you will still have to have nodejs installed. And redis.
+Once everything is set up, run the following commands in the laboard's root directory:
+
+```sh
 $ npm install
 $ bower install
-$ gulp app
-$ fig up
+$ node bin/server.js # OR gulp server
 ```
+
+Do not forget to `export NODE_ENV=production` before running the above commands if you are running laboard on a production machine.
 
 ## Hacking
 
