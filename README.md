@@ -1,4 +1,4 @@
-# Laboard [![Build Status](https://semaphoreapp.com/api/v1/projects/3c6af62b-be9e-40ba-bf10-b2f322d137cc/344279/badge.png)](https://semaphoreapp.com/jubianchi/laboard)
+# Laboard [![Build Status](https://semaphoreapp.com/api/v1/projects/3c6af62b-be9e-40ba-bf10-b2f322d137cc/344279/badge.png)](https://semaphoreapp.com/jubianchi/laboard) [![Greenkeeper badge](https://badges.greenkeeper.io/jubianchi/laboard.svg)](https://greenkeeper.io/)
 
 A kanban board made for Gitlab
 
